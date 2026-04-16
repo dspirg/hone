@@ -1,0 +1,79 @@
+# AI Workout App
+
+## What This Is
+
+An AI-powered iPhone workout app that delivers fully personalized training programs to users of all fitness levels. The app combines clean exercise animatic videos with a conversational AI coach that builds custom plans, adapts in real-time, and guides users through every session. Users specify what equipment they have — from nothing to a full gym — and the AI handles the rest.
+
+## Core Value
+
+A conversational AI personal trainer in your pocket — one that knows you, builds your program, coaches you through sessions, and evolves with you as you improve.
+
+## Requirements
+
+### Validated
+
+(None yet — ship to validate)
+
+### Active
+
+- [ ] AI onboarding that captures fitness level, goals, and available equipment to generate a personalized program
+- [ ] AI-generated workout plans that adapt based on user progress and feedback
+- [ ] Conversational AI coach (chat interface) for questions, plan modifications, and motivation
+- [ ] In-session workout experience with exercise animatic videos, timers, and rep/set tracking
+- [ ] Exercise library with animatic-style instructional videos showing proper form
+- [ ] Progress tracking — workout history, streaks, volume, and improvement over time
+- [ ] Real-time adaptive workouts that adjust difficulty based on session performance
+- [ ] Monthly and annual subscription billing with annual discount
+- [ ] Support for all equipment contexts: bodyweight, home gym, full gym
+
+### Out of Scope
+
+- Social/community features — v1 focuses on the individual coaching experience; community adds complexity
+- Live video coaching with real trainers — AI-only for scalability and margin
+- Android version — iPhone first to maintain quality and iteration speed
+- Nutrition tracking — keep focus on training; nutrition is a separate product area
+- Wearable integrations (Apple Watch deep integration) — v1 iPhone app only
+
+## Context
+
+- **Platform**: iOS (iPhone) only for v1
+- **Content**: Exercise animatic videos need to be sourced/licensed — not owned yet; this is a key early dependency
+- **AI**: Full AI stack — personalized plan generation, adaptive real-time adjustments, and conversational coaching chat
+- **Revenue model**: Monthly + annual subscriptions; annual plan offered at a discount to maximize LTV and improve cash flow predictability
+- **Competitive landscape**: Competing against Nike Training Club, Fitbod, Peloton, and others; differentiators are superior AI personalization + clean animatic visuals + real conversational coaching interaction
+- **Target user**: Everyone — all fitness levels, the app adapts to the user's situation
+
+## Constraints
+
+- **Platform**: iOS only — no Android in v1; keeps scope manageable and allows polish
+- **Content dependency**: Exercise animatic videos must be sourced/licensed before the exercise library phase can complete
+- **AI cost**: Per-user AI inference costs factor into pricing — subscription pricing must account for LLM costs at scale
+
+## Key Decisions
+
+| Decision | Rationale | Outcome |
+|----------|-----------|---------|
+| iPhone only for v1 | Focus on one platform to ship faster and iterate | — Pending |
+| Annual + monthly subscriptions | Maximizes LTV with annual discount; predictable revenue | — Pending |
+| Animatic videos over live footage | Cleaner, more professional, avoids real-person production costs | — Pending |
+| AI-only coaching (no live trainers) | Scales without headcount; consistent quality | — Pending |
+
+## Evolution
+
+This document evolves at phase transitions and milestone boundaries.
+
+**After each phase transition** (via `/gsd-transition`):
+1. Requirements invalidated? → Move to Out of Scope with reason
+2. Requirements validated? → Move to Validated with phase reference
+3. New requirements emerged? → Add to Active
+4. Decisions to log? → Add to Key Decisions
+5. "What This Is" still accurate? → Update if drifted
+
+**After each milestone** (via `/gsd-complete-milestone`):
+1. Full review of all sections
+2. Core Value check — still the right priority?
+3. Audit Out of Scope — reasons still valid?
+4. Update Context with current state
+
+---
+*Last updated: 2026-04-16 after initialization*
