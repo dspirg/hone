@@ -35,9 +35,9 @@ Decimal phases appear between their surrounding integers in numeric order.
   5. AI system prompt includes safety guardrails that block medical diagnosis or treatment advice (verified by red-team test prompts before any user-facing AI is live)
 **Plans**: 3 plans
 Plans:
-- [ ] 01-01-PLAN.md — Xcode project scaffold, Supabase backend, core infrastructure
-- [ ] 01-02-PLAN.md — AI safety system prompt and red-team tests
-- [ ] 01-03-PLAN.md — Auth UI, disclaimer, tab bar shell
+- [x] 01-01-PLAN.md — Xcode project scaffold, Supabase backend, core infrastructure
+- [x] 01-02-PLAN.md — AI safety system prompt and red-team tests
+- [x] 01-03-PLAN.md — Auth UI, disclaimer, tab bar shell
 
 ### Phase 2: Exercise Library
 **Goal**: Users can browse, search, and view instructional animatic videos for any exercise; videos cache locally for offline use
