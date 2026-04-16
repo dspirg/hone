@@ -18,9 +18,11 @@ struct WorkoutApp: App {
                     get: { !disclaimerAcknowledged },
                     set: { _ in }
                 )) {
-                    // DisclaimerView placeholder — implemented in Plan 03
-                    // D-07: .interactiveDismissDisabled enforced in DisclaimerView
-                    Text("Disclaimer placeholder")
+                    // D-07: .interactiveDismissDisabled enforced inside DisclaimerView
+                    // Parent owns the @AppStorage write — DisclaimerView is stateless
+                    DisclaimerView(onAcknowledge: {
+                        disclaimerAcknowledged = true
+                    })
                 }
                 .onOpenURL { url in
                     // Pitfall 3: URL scheme workout:// registered in Info.plist CFBundleURLTypes
@@ -39,19 +41,17 @@ struct WorkoutApp: App {
 
 // MARK: - Root Navigation
 // Routes based on appState.isAuthenticated:
-// - Not authenticated: auth screen (Plan 03 replaces placeholder)
-// - Authenticated: main tab bar (Plan 03 replaces placeholder)
+// - Not authenticated: NavigationStack wrapping AuthView
+// - Authenticated: MainTabView (4-tab shell)
 struct ContentView: View {
     @Environment(AppState.self) var appState
 
     var body: some View {
         if appState.isAuthenticated {
-            // MainTabView placeholder — implemented in Plan 03
-            Text("Authenticated - Tab bar coming in Plan 03")
+            MainTabView()
         } else {
             NavigationStack {
-                // AuthView placeholder — implemented in Plan 03
-                Text("Auth screen coming in Plan 03")
+                AuthView()
             }
         }
     }

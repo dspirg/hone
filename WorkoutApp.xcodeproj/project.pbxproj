@@ -15,6 +15,16 @@
 		B001002100000001 /* WorkoutAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001002000000001 /* WorkoutAppUITests.swift */; };
 		B001003100000001 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = B001003000000001 /* Supabase */; };
 		B001003100000002 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = B001003000000002 /* KeychainAccess */; };
+		B00F000100000001 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00F000000000001 /* AuthViewModel.swift */; };
+		B00F000100000002 /* SignInWithAppleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00F000000000002 /* SignInWithAppleButton.swift */; };
+		B00F000100000003 /* PasswordResetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00F000000000003 /* PasswordResetView.swift */; };
+		B00F000100000004 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00F000000000004 /* AuthView.swift */; };
+		B00F000100000005 /* DisclaimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00F000000000005 /* DisclaimerView.swift */; };
+		B00F000100000006 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00F000000000006 /* MainTabView.swift */; };
+		B00F000100000007 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00F000000000007 /* HomeView.swift */; };
+		B00F000100000008 /* TrainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00F000000000008 /* TrainView.swift */; };
+		B00F000100000009 /* CoachView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00F000000000009 /* CoachView.swift */; };
+		B00F00010000000A /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00F00000000000A /* ProfileView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +41,16 @@
 		B001001000000010 /* WorkoutAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WorkoutAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B001002000000001 /* WorkoutAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutAppUITests.swift; sourceTree = "<group>"; };
 		B001002000000010 /* WorkoutAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WorkoutAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B00F000000000001 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		B00F000000000002 /* SignInWithAppleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleButton.swift; sourceTree = "<group>"; };
+		B00F000000000003 /* PasswordResetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordResetView.swift; sourceTree = "<group>"; };
+		B00F000000000004 /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
+		B00F000000000005 /* DisclaimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclaimerView.swift; sourceTree = "<group>"; };
+		B00F000000000006 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		B00F000000000007 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		B00F000000000008 /* TrainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainView.swift; sourceTree = "<group>"; };
+		B00F000000000009 /* CoachView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachView.swift; sourceTree = "<group>"; };
+		B00F00000000000A /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +85,7 @@
 			children = (
 				B001000000000001 /* WorkoutApp.swift */,
 				B001000030000002 /* Core */,
+				B00F000030000001 /* Features */,
 				B001000000000004 /* Assets.xcassets */,
 				B001000000000005 /* Info.plist */,
 				B001000000000006 /* WorkoutApp.entitlements */,
@@ -79,6 +100,55 @@
 				B001000000000003 /* SupabaseClient.swift */,
 			);
 			path = Core;
+			sourceTree = "<group>";
+		};
+		B00F000030000001 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				B00F000030000002 /* Auth */,
+				B00F000030000003 /* Disclaimer */,
+				B00F000030000004 /* Main */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		B00F000030000002 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				B00F000000000001 /* AuthViewModel.swift */,
+				B00F000000000002 /* SignInWithAppleButton.swift */,
+				B00F000000000003 /* PasswordResetView.swift */,
+				B00F000000000004 /* AuthView.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		B00F000030000003 /* Disclaimer */ = {
+			isa = PBXGroup;
+			children = (
+				B00F000000000005 /* DisclaimerView.swift */,
+			);
+			path = Disclaimer;
+			sourceTree = "<group>";
+		};
+		B00F000030000004 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				B00F000000000006 /* MainTabView.swift */,
+				B00F000030000005 /* Tabs */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		B00F000030000005 /* Tabs */ = {
+			isa = PBXGroup;
+			children = (
+				B00F000000000007 /* HomeView.swift */,
+				B00F000000000008 /* TrainView.swift */,
+				B00F000000000009 /* CoachView.swift */,
+				B00F00000000000A /* ProfileView.swift */,
+			);
+			path = Tabs;
 			sourceTree = "<group>";
 		};
 		B001000030000003 /* Config */ = {
@@ -251,6 +321,16 @@
 				B001000100000001 /* WorkoutApp.swift in Sources */,
 				B001000100000002 /* AppState.swift in Sources */,
 				B001000100000003 /* SupabaseClient.swift in Sources */,
+				B00F000100000001 /* AuthViewModel.swift in Sources */,
+				B00F000100000002 /* SignInWithAppleButton.swift in Sources */,
+				B00F000100000003 /* PasswordResetView.swift in Sources */,
+				B00F000100000004 /* AuthView.swift in Sources */,
+				B00F000100000005 /* DisclaimerView.swift in Sources */,
+				B00F000100000006 /* MainTabView.swift in Sources */,
+				B00F000100000007 /* HomeView.swift in Sources */,
+				B00F000100000008 /* TrainView.swift in Sources */,
+				B00F000100000009 /* CoachView.swift in Sources */,
+				B00F00010000000A /* ProfileView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

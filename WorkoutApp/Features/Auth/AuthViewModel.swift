@@ -8,6 +8,7 @@ import CryptoKit
 // Handles all 4 auth flows: email sign-up, email sign-in, password reset, Apple Sign-In
 // Error messages mapped to UI-SPEC Copywriting Contract strings (T-03-02: no raw error leakage)
 @Observable
+@MainActor
 final class AuthViewModel {
 
     // MARK: - State
