@@ -1,0 +1,5 @@
+// Production environment configuration
+// DO NOT COMMIT real values — replace placeholders before production build
+
+SUPABASE_URL = REPLACE_WITH_HOSTED_URL
+SUPABASE_ANON_KEY = REPLACE_WITH_HOSTED_ANON_KEY
