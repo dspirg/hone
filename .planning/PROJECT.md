@@ -12,7 +12,12 @@ A conversational AI personal trainer in your pocket — one that knows you, buil
 
 ### Validated
 
-(None yet — ship to validate)
+- [x] Disclaimer modal with physician-consult hard-block required before app access (SAFE-01) — Validated in Phase 1: Foundation
+- [x] Email/password account creation and sign-in (AUTH-01) — Validated in Phase 1: Foundation
+- [x] Persistent login via Keychain/Supabase session (AUTH-02) — Validated in Phase 1: Foundation
+- [x] Password reset via email link (AUTH-03) — Validated in Phase 1: Foundation
+- [x] Apple Sign-In as primary CTA (AUTH-04) — Validated in Phase 1: Foundation
+- [x] AI safety guardrail system prompt + red-team test documentation (SAFE-02) — Validated in Phase 1: Foundation
 
 ### Active
 
@@ -76,4 +81,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-16 after initialization*
+*Last updated: 2026-04-16 after Phase 1: Foundation complete*
