@@ -59,10 +59,10 @@ All sizes in SwiftUI points. Font is SF Pro (system default via `.font()` modifi
 | Body | 17pt | Regular (400) | 1.5 | `.body` |
 | Label | 15pt | Regular (400) | 1.4 | `.subheadline` |
 | Heading | 22pt | Semibold (600) | 1.2 | `.title2` |
-| Display | 28pt | Bold (700) | 1.1 | `.title` |
+| Display | 28pt | Semibold (600) | 1.1 | `.title` |
 
 **Constraints:**
-- Maximum 2 weights in Phase 1: Regular (400) for body/label, Semibold (600) for headings. Bold (700) is reserved for the Display role only (Welcome message on Home tab).
+- Maximum 2 weights in Phase 1: Regular (400) for body/label, Semibold (600) for headings and display.
 - No italic usage in Phase 1.
 - Dynamic Type: all text must use SwiftUI semantic font tokens (`.body`, `.title2`, etc.) — never fixed pixel values — so iOS accessibility scaling works automatically.
 
@@ -87,7 +87,7 @@ Phase 1 targets a dark-mode-first fitness aesthetic. Colors are defined as seman
 
 Accent reserved for:
 1. "Sign in with Apple" button — styled per Apple requirements (black/white, not accent — system-enforced)
-2. "Continue" / "Create Account" primary CTA button fill
+2. "Sign In" / "Create Account" primary CTA button fill
 3. "I Understand" disclaimer button fill
 4. Active tab bar item icon + label tint
 5. Focused text field border highlight
@@ -130,7 +130,7 @@ Phase 1 delivers exactly these screens/views:
 - Apple Sign-In: `ASAuthorizationAppleIDButton` (`.signIn` style for login state, `.signUp` for sign-up state) — rendered above divider
 - Divider: centered "— or —" in Label style, color `.tertiaryLabel`
 - Email/Password fields: standard SwiftUI `TextField` (email) + `SecureField` (password), labeled above each field in Label style
-- Primary CTA: "Continue" (login state) / "Create Account" (sign-up state) — full-width, accent fill, 52pt height, 12pt corner radius
+- Primary CTA: "Sign In" (login state) / "Create Account" (sign-up state) — full-width, accent fill, 52pt height, 12pt corner radius
 - "Forgot password?": right-aligned below password field, Label size, accent color, login state only
 - Error display: inline below the relevant field in Label size, destructive color — no alert dialogs for field validation
 - Loading state: primary CTA shows `ProgressView` replacing button label; button disabled; Apple button disabled
@@ -167,7 +167,7 @@ Phase 1 delivers exactly these screens/views:
 | Disclaimer CTA | "I Understand" | Default |
 | Auth screen headline (login) | "Welcome back." | Default |
 | Auth screen headline (sign-up) | "Let's get started." | Default |
-| Primary CTA — login state | "Continue" | Default |
+| Primary CTA — login state | "Sign In" | Revised: verb + implicit noun, matches iOS auth conventions |
 | Primary CTA — sign-up state | "Create Account" | Default |
 | Apple Sign-In — login | "Sign in with Apple" | System-enforced (ASAuthorizationAppleIDButton) |
 | Apple Sign-In — sign-up | "Sign up with Apple" | System-enforced (ASAuthorizationAppleIDButton) |
