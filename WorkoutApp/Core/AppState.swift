@@ -5,6 +5,7 @@ import Supabase
 // Observable root state driving auth routing — @Observable macro (Swift 6 / iOS 17+ idiom)
 // Not @ObservableObject — uses Observation framework for finer-grained invalidation
 @Observable
+@MainActor
 final class AppState {
     var isAuthenticated: Bool = false
     var currentUser: User? = nil

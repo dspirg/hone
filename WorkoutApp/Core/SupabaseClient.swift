@@ -1,3 +1,4 @@
+import Foundation
 import Supabase
 
 // MARK: - Supabase Singleton
@@ -11,8 +12,8 @@ let supabase = SupabaseClient(
     options: SupabaseClientOptions(
         auth: .init(
             storage: KeychainLocalStorage(service: Bundle.main.bundleIdentifier!),
-            flowType: .pkce,
-            redirectToURL: URL(string: "workout://auth-callback")
+            redirectToURL: URL(string: "workout://auth-callback"),
+            flowType: .pkce
         )
     )
 )
