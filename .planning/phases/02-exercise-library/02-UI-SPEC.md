@@ -65,9 +65,11 @@ Phase 2 additions (same 2-weight constraint, same 4-size set):
 - Section header (muscle group name in sectioned list): `.subheadline` semibold (600), uppercased via `.textCase(.uppercase)`.
 - Filter chip label: `.subheadline` regular (400).
 - How-to bullet step body text: `.body` regular (400) — standard Body role.
-- Form tips caption: `.caption` regular (400) at 12pt (added as the 4th distinct size for supporting detail; no new weight).
+- Form tips body text: `.subheadline` regular (400) with `.secondary` color — visually differentiated from how-to body text without introducing a new size.
+- Primary muscle group label in exercise list row: `.subheadline` regular (400) with `.secondary` color — visually subordinate to the exercise name without introducing a new size.
 
 **Constraints (inherited from Phase 1):**
+- Maximum 4 sizes: 15pt, 17pt, 22pt, 28pt. No additional sizes.
 - Maximum 2 weights: Regular (400) and Semibold (600). No medium, bold, or italic.
 - All text must use SwiftUI semantic font tokens — never `.system(size: N)` — so iOS accessibility Dynamic Type scaling works automatically.
 
@@ -136,7 +138,7 @@ No new modal sheets, no new tabs, no new flows in this phase.
 
 **Exercise list row:**
 - Height: minimum 60pt (content-driven, not fixed).
-- Layout: leading thumbnail (52pt × 52pt, `.cornerRadius(8)`), trailing VStack with exercise name (`.subheadline` semibold) + primary muscle group label (`.caption`, `.secondary` color).
+- Layout: leading thumbnail (52pt × 52pt, `.cornerRadius(8)`), trailing VStack with exercise name (`.subheadline` semibold) + primary muscle group label (`.subheadline` regular, `.secondary` color).
 - Thumbnail: Mux-served poster frame (async image load). Placeholder while loading: secondary color rounded rect with `dumbbell` SF Symbol centered (`.body` size, `.tertiaryLabel` color).
 - Chevron: system `.chevronRight` trailing disclosure indicator (SwiftUI `List` default).
 - Tap: NavigationStack push to ExerciseDetailView — standard slide-right transition (no custom animation; Claude's Discretion — use SwiftUI default per CONTEXT.md).
@@ -151,7 +153,7 @@ No new modal sheets, no new tabs, no new flows in this phase.
 
 **Layout (top to bottom, within NavigationStack):**
 1. Video player: `AVPlayerViewController` wrapped in `UIViewControllerRepresentable`, full width, `.aspectRatio(16/9, contentMode: .fit)`. Auto-loop enabled. Auto-plays on view appear. Standard AVKit transport controls visible (system default).
-2. Below video (scrollable): exercise name (`.title2` semibold), primary muscle group tag pills (`HStack`, accent fill), `Divider`, 3–5 how-to steps as a numbered `VStack` (`.body` regular, 1.5 line height), `Divider`, form tips section heading ("Form Tips", `.subheadline` semibold), form tips body (`.body` regular).
+2. Below video (scrollable): exercise name (`.title2` semibold), primary muscle group tag pills (`HStack`, accent fill), `Divider`, 3–5 how-to steps as a numbered `VStack` (`.body` regular, 1.5 line height), `Divider`, form tips section heading ("Form Tips", `.subheadline` semibold), form tips body (`.subheadline` regular, `.secondary` color — visually subordinate to how-to body text without adding a new font size).
 3. All scrollable content: horizontal padding `xl` (32pt), matching the established Phase 1 full-screen content padding pattern.
 
 **Video states:**
