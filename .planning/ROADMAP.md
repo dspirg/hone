@@ -48,11 +48,12 @@ Plans:
   2. User can search and filter exercises by muscle group, equipment, and difficulty level
   3. User can open an exercise detail page showing the video, description, muscles worked, and form tips
   4. A video played during a session plays back offline without re-downloading
-**Plans**: 3 plans
+**Plans**: 4 plans
 Plans:
-- [ ] 01-01-PLAN.md — Xcode project scaffold, Supabase backend, core infrastructure
-- [ ] 01-02-PLAN.md — AI safety system prompt and red-team tests
-- [ ] 01-03-PLAN.md — Auth UI, disclaimer, tab bar shell
+- [ ] 02-01-PLAN.md — CoreData stack, Exercise entity, Supabase migration + seed data, ExerciseRepository
+- [ ] 02-02-PLAN.md — ExerciseLibraryView with search, filter chips, sectioned list, TrainView integration
+- [ ] 02-03-PLAN.md — ExerciseDetailView, VideoPlayerView (Mux HLS + seek-to-zero loop), placeholder view
+- [ ] 02-04-PLAN.md — Offline caching (ExerciseCacheManager, 500MB eviction), ProfileView cache size, human verification
 **UI hint**: yes
 
 ### Phase 3: AI Onboarding and Plan Generation
@@ -157,8 +158,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/3 | Planned | - |
-| 2. Exercise Library | 0/TBD | Not started | - |
+| 1. Foundation | 3/3 | Complete | - |
+| 2. Exercise Library | 0/4 | Planned | - |
 | 3. AI Onboarding and Plan Generation | 0/TBD | Not started | - |
 | 4. In-Session Workout Experience | 0/TBD | Not started | - |
 | 5. AI Coach Chat | 0/TBD | Not started | - |
