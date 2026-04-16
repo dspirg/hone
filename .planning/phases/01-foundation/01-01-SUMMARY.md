@@ -204,6 +204,18 @@ All T-01-xx threats from the plan's threat register are mitigated:
 - **Plan 01-03 (auth UI):** Requires this plan's SupabaseClient, AppState, and app entry point — all ready; placeholder views are the extension points
 - **Blockers:** Docker required for `supabase start`; Apple Developer account required for Sign in with Apple (Plan 03 AUTH-04)
 
+## Self-Check: PASSED
+
+- FOUND: WorkoutApp/Core/SupabaseClient.swift (contains KeychainLocalStorage, flowType: .pkce, workout://auth-callback)
+- FOUND: WorkoutApp/Core/AppState.swift (contains @Observable, authStateChanges, .passwordRecovery)
+- FOUND: WorkoutApp/WorkoutApp.swift (contains @main, disclaimerAcknowledged, .onOpenURL, isAuthenticated)
+- FOUND: supabase/migrations/00000000000000_create_profiles.sql (contains CREATE TABLE public.profiles, ENABLE ROW LEVEL SECURITY, SECURITY DEFINER SET search_path, EXCEPTION WHEN OTHERS, on_auth_user_created)
+- FOUND: supabase/config.toml
+- FOUND: WorkoutApp.xcodeproj/project.pbxproj (contains supabase-swift, KeychainAccess references)
+- FOUND: Config/Dev.xcconfig (contains SUPABASE_URL, SUPABASE_ANON_KEY)
+- FOUND: WorkoutApp/Assets.xcassets/AccentColor.colorset/Contents.json (contains 0.420 green component)
+- COMMITS: 3686229, f63849d, ecc206f, 5e9c343, 97c8e6b — all verified in git log
+
 ---
 *Phase: 01-foundation*
 *Completed: 2026-04-16*
