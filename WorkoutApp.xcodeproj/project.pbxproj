@@ -43,6 +43,13 @@
 		B003A00100000005 /* WorkoutApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B003A00000000005 /* WorkoutApp.xcdatamodeld */; };
 		B003A01100000001 /* WorkoutPlanDecodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003A01000000001 /* WorkoutPlanDecodingTests.swift */; };
 		B003A01100000002 /* PlanPromptBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003A01000000002 /* PlanPromptBuilderTests.swift */; };
+		B003B00100000001 /* PlanGenerationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003B00000000001 /* PlanGenerationService.swift */; };
+		B003B00100000002 /* PlanPreviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003B00000000002 /* PlanPreviewViewModel.swift */; };
+		B003B00100000003 /* PlanGenerationLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003B00000000003 /* PlanGenerationLoadingView.swift */; };
+		B003B00100000004 /* PlanPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003B00000000004 /* PlanPreviewView.swift */; };
+		B003B00100000005 /* WorkoutDayCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003B00000000005 /* WorkoutDayCardView.swift */; };
+		B003B00100000006 /* ExerciseRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003B00000000006 /* ExerciseRowView.swift */; };
+		B003B01100000001 /* PlanPreviewViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003B01000000001 /* PlanPreviewViewModelTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -87,6 +94,13 @@
 		B003A00000000005 /* WorkoutApp.xcdatamodeld */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodeld; path = WorkoutApp.xcdatamodeld; sourceTree = "<group>"; };
 		B003A01000000001 /* WorkoutPlanDecodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutPlanDecodingTests.swift; sourceTree = "<group>"; };
 		B003A01000000002 /* PlanPromptBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanPromptBuilderTests.swift; sourceTree = "<group>"; };
+		B003B00000000001 /* PlanGenerationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanGenerationService.swift; sourceTree = "<group>"; };
+		B003B00000000002 /* PlanPreviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanPreviewViewModel.swift; sourceTree = "<group>"; };
+		B003B00000000003 /* PlanGenerationLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanGenerationLoadingView.swift; sourceTree = "<group>"; };
+		B003B00000000004 /* PlanPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanPreviewView.swift; sourceTree = "<group>"; };
+		B003B00000000005 /* WorkoutDayCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDayCardView.swift; sourceTree = "<group>"; };
+		B003B00000000006 /* ExerciseRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseRowView.swift; sourceTree = "<group>"; };
+		B003B01000000001 /* PlanPreviewViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanPreviewViewModelTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -166,10 +180,32 @@
 				B00F000030000003 /* Disclaimer */,
 				B00F000030000004 /* Main */,
 				B003000030000001 /* Onboarding */,
+				B003B00030000001 /* PlanPreview */,
 				B003A00030000001 /* Models */,
 				B003A00030000002 /* CoreData */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		B003B00030000001 /* PlanPreview */ = {
+			isa = PBXGroup;
+			children = (
+				B003B00000000001 /* PlanGenerationService.swift */,
+				B003B00000000002 /* PlanPreviewViewModel.swift */,
+				B003B00000000003 /* PlanGenerationLoadingView.swift */,
+				B003B00000000004 /* PlanPreviewView.swift */,
+				B003B00030000002 /* Components */,
+			);
+			path = PlanPreview;
+			sourceTree = "<group>";
+		};
+		B003B00030000002 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				B003B00000000005 /* WorkoutDayCardView.swift */,
+				B003B00000000006 /* ExerciseRowView.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		B00F000030000002 /* Auth */ = {
@@ -260,6 +296,7 @@
 				B003001000000001 /* OnboardingViewModelTests.swift */,
 				B003A01000000001 /* WorkoutPlanDecodingTests.swift */,
 				B003A01000000002 /* PlanPromptBuilderTests.swift */,
+				B003B01000000001 /* PlanPreviewViewModelTests.swift */,
 			);
 			path = WorkoutAppTests;
 			sourceTree = "<group>";
@@ -461,6 +498,12 @@
 				B003A00100000003 /* CoreDataStack.swift in Sources */,
 				B003A00100000004 /* WorkoutPlanRepository.swift in Sources */,
 				B003A00100000005 /* WorkoutApp.xcdatamodeld in Sources */,
+				B003B00100000001 /* PlanGenerationService.swift in Sources */,
+				B003B00100000002 /* PlanPreviewViewModel.swift in Sources */,
+				B003B00100000003 /* PlanGenerationLoadingView.swift in Sources */,
+				B003B00100000004 /* PlanPreviewView.swift in Sources */,
+				B003B00100000005 /* WorkoutDayCardView.swift in Sources */,
+				B003B00100000006 /* ExerciseRowView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -472,6 +515,7 @@
 				B003001100000001 /* OnboardingViewModelTests.swift in Sources */,
 				B003A01100000001 /* WorkoutPlanDecodingTests.swift in Sources */,
 				B003A01100000002 /* PlanPromptBuilderTests.swift in Sources */,
+				B003B01100000001 /* PlanPreviewViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
