@@ -130,11 +130,12 @@ Plans:
   2. New users receive a free trial period before billing begins
   3. User can purchase a monthly or annual subscription through the paywall without leaving the app
   4. When a user attempts to cancel, they are shown a retention flow offering to pause or apply a discount before completing cancellation
-**Plans**: 3 plans
+**Plans**: 4 plans
 Plans:
-- [ ] 01-01-PLAN.md — Xcode project scaffold, Supabase backend, core infrastructure
-- [ ] 01-02-PLAN.md — AI safety system prompt and red-team tests
-- [ ] 01-03-PLAN.md — Auth UI, disclaimer, tab bar shell
+- [ ] 07-01-PLAN.md — RevenueCat SDK integration, AppState entitlement gating, webhook Edge Function, Supabase migration
+- [ ] 07-02-PLAN.md — PaywallView with feature showcase, pricing cards, purchase flow, BlurredPlanGateView
+- [ ] 07-03-PLAN.md — CancellationRetentionView (pause/discount retention flow), ProfileView with Manage Subscription
+- [ ] 07-04-PLAN.md — Human verification of paywall and retention flow screens
 **UI hint**: yes
 
 ### Phase 8: Adaptive AI
@@ -154,7 +155,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -164,5 +165,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 4. In-Session Workout Experience | 0/TBD | Not started | - |
 | 5. AI Coach Chat | 0/TBD | Not started | - |
 | 6. Progress Tracking | 0/TBD | Not started | - |
-| 7. Subscriptions and Paywall | 0/TBD | Not started | - |
+| 7. Subscriptions and Paywall | 0/4 | Planned | - |
 | 8. Adaptive AI | 0/TBD | Not started | - |
