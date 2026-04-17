@@ -66,11 +66,13 @@ Plans:
   3. The plan includes a visible AI rationale explaining why each exercise was selected
   4. User can ask the AI to regenerate or adjust their plan from the plan view
   5. AI generates equipment-appropriate plans when the user indicates a different equipment context
-**Plans**: 3 plans
+**Plans**: 5 plans
 Plans:
-- [ ] 01-01-PLAN.md — Xcode project scaffold, Supabase backend, core infrastructure
-- [ ] 01-02-PLAN.md — AI safety system prompt and red-team tests
-- [ ] 01-03-PLAN.md — Auth UI, disclaimer, tab bar shell
+- [ ] 03-01-PLAN.md — Data layer: Supabase migrations, Edge Function, WorkoutPlan models, CoreData schema, unit tests
+- [ ] 03-02-PLAN.md — Onboarding UI: 5-card flow, OnboardingViewModel, chip components, progress indicator
+- [ ] 03-03-PLAN.md — SSE streaming pipeline: PlanSSEClient (manual auth), PlanGenerationService, auto-retry
+- [ ] 03-04-PLAN.md — Plan preview UI: loading view, PlanPreviewView, day cards, exercise rows, regen counter
+- [ ] 03-05-PLAN.md — Integration: AppState routing, ContentView third branch, HomeView plan summary, human verification
 **UI hint**: yes
 
 ### Phase 4: In-Session Workout Experience
@@ -82,12 +84,9 @@ Plans:
   2. A rest timer automatically activates between sets with a duration the user can configure
   3. Session logging continues without interruption when the device has no internet connection; data syncs automatically when connectivity is restored
   4. User sees a completion summary at the end of each session showing exercises completed, sets, and reps
-**Plans**: 3 plans
+**Plans**: TBD
 Plans:
-- [ ] 01-01-PLAN.md — Xcode project scaffold, Supabase backend, core infrastructure
-- [ ] 01-02-PLAN.md — AI safety system prompt and red-team tests
-- [ ] 01-03-PLAN.md — Auth UI, disclaimer, tab bar shell
-**UI hint**: yes
+- [ ] TBD
 
 ### Phase 5: AI Coach Chat
 **Goal**: Users can have a persistent conversation with an AI coach that knows their goals, plan, and workout history — and can modify the plan through natural conversation
@@ -98,12 +97,9 @@ Plans:
   2. User can modify their workout plan (swap exercise, reschedule day) by telling the AI coach in plain language
   3. AI coach responses reference the user's profile, current plan, and recent workout history — not generic advice
   4. AI coach sends proactive check-in messages based on the user's recent activity and progress patterns
-**Plans**: 3 plans
+**Plans**: TBD
 Plans:
-- [ ] 01-01-PLAN.md — Xcode project scaffold, Supabase backend, core infrastructure
-- [ ] 01-02-PLAN.md — AI safety system prompt and red-team tests
-- [ ] 01-03-PLAN.md — Auth UI, disclaimer, tab bar shell
-**UI hint**: yes
+- [ ] TBD
 
 ### Phase 6: Progress Tracking
 **Goal**: Users can see their full workout history, streaks, volume trends, and receive notifications when they hit personal records
@@ -114,12 +110,9 @@ Plans:
   2. User can see their current streak, longest streak, and weekly consistency score
   3. User receives an in-app notification when they set a new personal record on an exercise
   4. User can view charts showing workout volume over time, sessions per week, and performance trends
-**Plans**: 3 plans
+**Plans**: TBD
 Plans:
-- [ ] 01-01-PLAN.md — Xcode project scaffold, Supabase backend, core infrastructure
-- [ ] 01-02-PLAN.md — AI safety system prompt and red-team tests
-- [ ] 01-03-PLAN.md — Auth UI, disclaimer, tab bar shell
-**UI hint**: yes
+- [ ] TBD
 
 ### Phase 7: Subscriptions and Paywall
 **Goal**: Users are presented with a compelling paywall after seeing their personalized plan; monthly and annual subscription options are offered with a free trial; a cancellation retention flow is active
@@ -146,11 +139,9 @@ Plans:
   1. After rating a session's difficulty, the user's next workout visibly reflects the adjustment (harder or easier)
   2. After several weeks of sessions, the user's training plan has evolved to reflect accumulated performance data
   3. When a user skips or misses sessions, the remaining plan for that week updates accordingly rather than stacking the missed work
-**Plans**: 3 plans
+**Plans**: TBD
 Plans:
-- [ ] 01-01-PLAN.md — Xcode project scaffold, Supabase backend, core infrastructure
-- [ ] 01-02-PLAN.md — AI safety system prompt and red-team tests
-- [ ] 01-03-PLAN.md — Auth UI, disclaimer, tab bar shell
+- [ ] TBD
 
 ## Progress
 
@@ -161,7 +152,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete | - |
 | 2. Exercise Library | 0/4 | Planned | - |
-| 3. AI Onboarding and Plan Generation | 0/TBD | Not started | - |
+| 3. AI Onboarding and Plan Generation | 0/5 | Planned | - |
 | 4. In-Session Workout Experience | 0/TBD | Not started | - |
 | 5. AI Coach Chat | 0/TBD | Not started | - |
 | 6. Progress Tracking | 0/TBD | Not started | - |
