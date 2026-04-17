@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22222" systemVersion="23F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CDWorkoutPlan" representedClassName="CDWorkoutPlan" syncable="YES" codeGenerationType="class">
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="goalSummary" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isActive" optional="YES" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="planName" optional="YES" attributeType="String"/>
+        <attribute name="rawJSON" optional="YES" attributeType="Binary"/>
+        <attribute name="supabaseId" optional="YES" attributeType="String"/>
+        <attribute name="userId" optional="YES" attributeType="String"/>
+        <relationship name="days" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="CDWorkoutDay" inverseName="plan" inverseEntity="CDWorkoutDay"/>
+    </entity>
+    <entity name="CDWorkoutDay" representedClassName="CDWorkoutDay" syncable="YES" codeGenerationType="class">
+        <attribute name="dayLabel" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="sessionName" optional="YES" attributeType="String"/>
+        <attribute name="sortOrder" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="exercises" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="CDPlannedExercise" inverseName="day" inverseEntity="CDPlannedExercise"/>
+        <relationship name="plan" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDWorkoutPlan" inverseName="days" inverseEntity="CDWorkoutPlan"/>
+    </entity>
+    <entity name="CDPlannedExercise" representedClassName="CDPlannedExercise" syncable="YES" codeGenerationType="class">
+        <attribute name="exerciseName" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="rationale" optional="YES" attributeType="String"/>
+        <attribute name="reps" optional="YES" attributeType="String"/>
+        <attribute name="restSeconds" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="sets" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="sortOrder" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="day" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDWorkoutDay" inverseName="exercises" inverseEntity="CDWorkoutDay"/>
+    </entity>
+    <elements>
+        <element name="CDWorkoutPlan" positionX="-63" positionY="-18" width="128" height="193"/>
+        <element name="CDWorkoutDay" positionX="135" positionY="-18" width="128" height="128"/>
+        <element name="CDPlannedExercise" positionX="333" positionY="-18" width="128" height="163"/>
+    </elements>
+</model>
