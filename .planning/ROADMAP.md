@@ -68,10 +68,10 @@ Plans:
   5. AI generates equipment-appropriate plans when the user indicates a different equipment context
 **Plans**: 5 plans
 Plans:
-- [ ] 03-01-PLAN.md — Data layer: Supabase migrations, Edge Function, WorkoutPlan models, CoreData schema, unit tests
-- [ ] 03-02-PLAN.md — Onboarding UI: 5-card flow, OnboardingViewModel, chip components, progress indicator
-- [ ] 03-03-PLAN.md — SSE streaming pipeline: PlanSSEClient (manual auth), PlanGenerationService, auto-retry
-- [ ] 03-04-PLAN.md — Plan preview UI: loading view, PlanPreviewView, day cards, exercise rows, regen counter
+- [x] 03-01-PLAN.md — Data layer: Supabase migrations, Edge Function, WorkoutPlan models, CoreData schema, unit tests
+- [x] 03-02-PLAN.md — Onboarding UI: 5-card flow, OnboardingViewModel, chip components, progress indicator
+- [x] 03-03-PLAN.md — SSE streaming pipeline: PlanSSEClient (manual auth), PlanGenerationService, auto-retry
+- [x] 03-04-PLAN.md — Plan preview UI: loading view, PlanPreviewView, day cards, exercise rows, regen counter
 - [ ] 03-05-PLAN.md — Integration: AppState routing, ContentView third branch, HomeView plan summary, human verification
 **UI hint**: yes
 
