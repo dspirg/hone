@@ -45,6 +45,10 @@ No subscription billing, no workout session execution, no coach chat in this pha
 - **D-16:** On generation failure: auto-retry once silently. If second attempt fails, show "Something went wrong" with a "Try Again" button. Never show a dead-end state.
 - **D-17:** No timeout UI — SSE connection keeps the loading state alive. If connection drops (network loss), show "Check your connection and try again" with retry button.
 
+### HomeView Post-Onboarding
+- **D-18:** After onboarding, HomeView shows today's scheduled workout — exercise list, estimated duration, and primary muscle groups for that session.
+- **D-19:** "Start Workout" CTA is visible but disabled in Phase 3 with subtitle "Session tracking coming soon." The button becomes active in Phase 4. This makes the screen feel real without requiring Phase 4 to be built first.
+
 ### Claude's Discretion
 - Exact OpenAI system prompt structure and JSON schema for workout plan output (use Structured Outputs)
 - Supabase Edge Function Deno implementation details
@@ -52,6 +56,7 @@ No subscription billing, no workout session execution, no coach chat in this pha
 - Exact copy for each onboarding card heading and chip labels
 - CoreData `WorkoutPlan` entity schema
 - `workout_plans` table column details beyond what's implied by the plan structure
+- Which workout day counts as "today" when the plan has no fixed schedule (default to Day 1 if no session log exists)
 
 </decisions>
 
@@ -108,3 +113,4 @@ No subscription billing, no workout session execution, no coach chat in this pha
 
 *Phase: 03-ai-onboarding-and-plan-generation*
 *Context gathered: 2026-04-16*
+*Context updated: 2026-04-17*
