@@ -24,6 +24,33 @@ struct ExerciseModel: Identifiable, Equatable {
 
     var hasVideo: Bool { muxPlaybackId != nil }
 
+    // MARK: - Memberwise Init (for previews and tests)
+    init(
+        id: UUID = UUID(),
+        name: String,
+        primaryMuscle: String,
+        equipmentTag: String,
+        difficulty: String,
+        howToSteps: [String] = [],
+        formTips: String? = nil,
+        muxPlaybackId: String? = nil,
+        thumbnailURL: String? = nil,
+        localAssetURL: String? = nil,
+        lastViewedAt: Date? = nil
+    ) {
+        self.id = id
+        self.name = name
+        self.primaryMuscle = primaryMuscle
+        self.equipmentTag = equipmentTag
+        self.difficulty = difficulty
+        self.howToSteps = howToSteps
+        self.formTips = formTips
+        self.muxPlaybackId = muxPlaybackId
+        self.thumbnailURL = thumbnailURL
+        self.localAssetURL = localAssetURL
+        self.lastViewedAt = lastViewedAt
+    }
+
     // MARK: - Init from Supabase DTO
     init(from dto: ExerciseDTO) {
         self.id = dto.id

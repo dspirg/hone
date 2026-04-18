@@ -64,6 +64,10 @@
 		B002002100000003 /* ExerciseLibraryRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B002002000000003 /* ExerciseLibraryRowView.swift */; };
 		B002002100000004 /* ExerciseLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B002002000000004 /* ExerciseLibraryView.swift */; };
 		B002002100000005 /* ExerciseSearchFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B002002000000005 /* ExerciseSearchFilterTests.swift */; };
+		B002003100000001 /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B002003000000001 /* VideoPlayerView.swift */; };
+		B002003100000002 /* ExercisePlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B002003000000002 /* ExercisePlaceholderView.swift */; };
+		B002003100000003 /* ExerciseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B002003000000003 /* ExerciseDetailView.swift */; };
+		B002003100000004 /* MuxPlayerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B002003000000004 /* MuxPlayerSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -146,6 +150,9 @@
 		B002002000000003 /* ExerciseLibraryRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseLibraryRowView.swift; sourceTree = "<group>"; };
 		B002002000000004 /* ExerciseLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseLibraryView.swift; sourceTree = "<group>"; };
 		B002002000000005 /* ExerciseSearchFilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseSearchFilterTests.swift; sourceTree = "<group>"; };
+		B002003000000001 /* VideoPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerView.swift; sourceTree = "<group>"; };
+		B002003000000002 /* ExercisePlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExercisePlaceholderView.swift; sourceTree = "<group>"; };
+		B002003000000003 /* ExerciseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +162,7 @@
 			files = (
 				B001003100000001 /* Supabase in Frameworks */,
 				B001003100000002 /* KeychainAccess in Frameworks */,
+				B002003100000004 /* MuxPlayerSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,6 +371,9 @@
 				B002002000000002 /* FilterChipRow.swift */,
 				B002002000000003 /* ExerciseLibraryRowView.swift */,
 				B002002000000004 /* ExerciseLibraryView.swift */,
+				B002003000000001 /* VideoPlayerView.swift */,
+				B002003000000002 /* ExercisePlaceholderView.swift */,
+				B002003000000003 /* ExerciseDetailView.swift */,
 			);
 			path = Train;
 			sourceTree = "<group>";
@@ -446,6 +457,7 @@
 			packageProductDependencies = (
 				B001003000000001 /* Supabase */,
 				B001003000000002 /* KeychainAccess */,
+				B002003000000004 /* MuxPlayerSwift */,
 			);
 			productName = WorkoutApp;
 			productReference = B001000000000010 /* WorkoutApp.app */;
@@ -520,6 +532,7 @@
 			packageReferences = (
 				B001003090000001 /* XCRemoteSwiftPackageReference "supabase-swift" */,
 				B001003090000002 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+				B002003090000001 /* XCRemoteSwiftPackageReference "mux-player-swift" */,
 			);
 			productRefGroup = B001000030000010 /* Products */;
 			projectDirPath = "";
@@ -590,6 +603,9 @@
 				B002002100000002 /* FilterChipRow.swift in Sources */,
 				B002002100000003 /* ExerciseLibraryRowView.swift in Sources */,
 				B002002100000004 /* ExerciseLibraryView.swift in Sources */,
+				B002003100000001 /* VideoPlayerView.swift in Sources */,
+				B002003100000002 /* ExercisePlaceholderView.swift in Sources */,
+				B002003100000003 /* ExerciseDetailView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -947,6 +963,14 @@
 				minimumVersion = 4.0.0;
 			};
 		};
+		B002003090000001 /* XCRemoteSwiftPackageReference "mux-player-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/muxinc/mux-player-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -959,6 +983,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B001003090000002 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
 			productName = KeychainAccess;
+		};
+		B002003000000004 /* MuxPlayerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B002003090000001 /* XCRemoteSwiftPackageReference "mux-player-swift" */;
+			productName = MuxPlayerSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
