@@ -50,7 +50,7 @@ Plans:
   4. A video played during a session plays back offline without re-downloading
 **Plans**: 4 plans
 Plans:
-- [ ] 02-01-PLAN.md — CoreData stack, Exercise entity, Supabase migration + seed data, ExerciseRepository
+- [x] 02-01-PLAN.md — CoreData stack, Exercise entity, Supabase migration + seed data, ExerciseRepository
 - [ ] 02-02-PLAN.md — ExerciseLibraryView with search, filter chips, sectioned list, TrainView integration
 - [ ] 02-03-PLAN.md — ExerciseDetailView, VideoPlayerView (Mux HLS + seek-to-zero loop), placeholder view
 - [ ] 02-04-PLAN.md — Offline caching (ExerciseCacheManager, 500MB eviction), ProfileView cache size, human verification
