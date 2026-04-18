@@ -4,24 +4,23 @@ import CoreData
 
 // MARK: - CoreDataStackTests
 // Verifies the PersistenceController singleton and Exercise entity round-trips.
-// All tests use PersistenceController.preview (in-memory store) — no disk writes.
+// Each test gets a fresh in-memory store — avoids shared state from the static preview singleton.
 
 @MainActor
 final class CoreDataStackTests: XCTestCase {
 
     var context: NSManagedObjectContext!
+    // Fresh in-memory store per test run — avoids shared state from the static preview singleton
+    private var persistenceController: PersistenceController!
 
     override func setUpWithError() throws {
-        // Use in-memory store for isolation — no state bleeds between tests
-        context = PersistenceController.preview.container.viewContext
+        persistenceController = PersistenceController(inMemory: true)
+        context = persistenceController.container.viewContext
     }
 
     override func tearDownWithError() throws {
-        // Clean up any inserted entities after each test
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Exercise")
-        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-        try context.execute(deleteRequest)
-        try context.save()
+        context = nil
+        persistenceController = nil
     }
 
     // MARK: - Test 1: PersistenceController loads without crash

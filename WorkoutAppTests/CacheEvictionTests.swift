@@ -15,9 +15,12 @@ final class CacheEvictionTests: XCTestCase {
 
     var context: NSManagedObjectContext!
     var tempDirectory: URL!
+    // Fresh in-memory store per test run — avoids shared state from the static preview singleton
+    private var persistenceController: PersistenceController!
 
     override func setUpWithError() throws {
-        context = PersistenceController.preview.container.viewContext
+        persistenceController = PersistenceController(inMemory: true)
+        context = persistenceController.container.viewContext
 
         // Create a temporary directory for fake cached video files
         tempDirectory = FileManager.default.temporaryDirectory
@@ -26,14 +29,10 @@ final class CacheEvictionTests: XCTestCase {
     }
 
     override func tearDownWithError() throws {
-        // Remove all Exercise entities
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Exercise")
-        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-        try context.execute(deleteRequest)
-        try context.save()
-
-        // Remove temp directory
+        // Remove temp directory (CoreData store is discarded with persistenceController below)
         try? FileManager.default.removeItem(at: tempDirectory)
+        context = nil
+        persistenceController = nil
     }
 
     // MARK: - Helper: Insert Exercise entity with a local cache file

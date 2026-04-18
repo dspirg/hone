@@ -11,16 +11,17 @@ import CoreData
 final class ExerciseRepositoryTests: XCTestCase {
 
     var context: NSManagedObjectContext!
+    // Fresh in-memory store per test run — avoids shared state from the static preview singleton
+    private var persistenceController: PersistenceController!
 
     override func setUpWithError() throws {
-        context = PersistenceController.preview.container.viewContext
+        persistenceController = PersistenceController(inMemory: true)
+        context = persistenceController.container.viewContext
     }
 
     override func tearDownWithError() throws {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Exercise")
-        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-        try context.execute(deleteRequest)
-        try context.save()
+        context = nil
+        persistenceController = nil
     }
 
     // MARK: - Helper: Insert Exercise entity directly into test context
