@@ -20,6 +20,21 @@ CREATE TABLE public.exercises (
     updated_at       TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+-- 1b. Trigger to keep updated_at current on every UPDATE
+--     Without this, updated_at always reflects the insert time, breaking stale-while-revalidate
+--     cache invalidation logic in ExerciseDTO.updatedAt.
+CREATE OR REPLACE FUNCTION public.set_updated_at()
+RETURNS TRIGGER LANGUAGE plpgsql AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER exercises_set_updated_at
+  BEFORE UPDATE ON public.exercises
+  FOR EACH ROW EXECUTE PROCEDURE public.set_updated_at();
+
 -- 2. Indexes for common filter operations
 CREATE INDEX idx_exercises_primary_muscle ON public.exercises(primary_muscle);
 CREATE INDEX idx_exercises_equipment_tag  ON public.exercises(equipment_tag);
