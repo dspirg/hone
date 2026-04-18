@@ -70,7 +70,10 @@ struct ExerciseModel: Identifiable, Equatable {
     // Used for offline loading via ExerciseRepository.loadFromCoreData()
     // howToSteps stored as NSArray Transformable — cast to [String] safely
     init(from entity: NSManagedObject) {
-        self.id = entity.value(forKey: "id") as? UUID ?? UUID()
+        self.id = (entity.value(forKey: "id") as? UUID) ?? {
+            assertionFailure("Exercise entity missing id — data model may be corrupt")
+            return UUID() // still needed for type safety; log to analytics in production
+        }()
         self.name = entity.value(forKey: "name") as? String ?? ""
         self.primaryMuscle = entity.value(forKey: "primaryMuscle") as? String ?? ""
         self.equipmentTag = entity.value(forKey: "equipmentTag") as? String ?? ""
