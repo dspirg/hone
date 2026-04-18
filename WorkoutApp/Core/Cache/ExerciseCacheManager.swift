@@ -36,6 +36,13 @@ final class ExerciseCacheManager {
     /// Reserved headroom for a new download before eviction runs
     private let reservedDownloadBytes: Int64 = 50 * 1_024 * 1_024
 
+    // MARK: - Active Download Tracking
+    // Both the session and its delegate must be retained strongly until the download completes.
+    // AVAssetDownloadURLSession cancels in-flight tasks if the session is deallocated.
+    // Keyed by exerciseId so each exercise has at most one active download at a time.
+    private var activeSessions: [UUID: AVAssetDownloadURLSession] = [:]
+    private var activeDelegates: [UUID: DownloadDelegate] = [:]
+
     private init() {}
 
     // MARK: - Cache Size
@@ -115,7 +122,14 @@ final class ExerciseCacheManager {
 
             // Clear the CoreData localAssetURL reference
             oldest.setValue(nil, forKey: "localAssetURL")
-            try? context.save()
+            do {
+                try context.save()
+            } catch {
+                // Cannot persist eviction — break to avoid infinite loop.
+                // Log to analytics in production.
+                context.rollback()
+                break
+            }
         }
     }
 
@@ -146,8 +160,11 @@ final class ExerciseCacheManager {
         // Enforce budget before starting download
         evictOldestIfNeeded(requiredBytes: reservedDownloadBytes)
 
-        // Create AVURLAsset from Mux HLS URL
-        let hlsURL = URL(string: "https://stream.mux.com/\(muxPlaybackId).m3u8")!
+        // Create AVURLAsset from Mux HLS URL — guard against malformed playback IDs
+        guard let hlsURL = URL(string: "https://stream.mux.com/\(muxPlaybackId).m3u8") else {
+            // Invalid playback ID — skip download silently, log to analytics in production
+            return
+        }
         let asset = AVURLAsset(url: hlsURL)
 
         // Build background URLSession configuration
@@ -160,6 +177,12 @@ final class ExerciseCacheManager {
             assetDownloadDelegate: delegate,
             delegateQueue: .main
         )
+
+        // Retain both strongly so the session (and its in-flight task) survives until the
+        // delegate callback fires. Without this the session is released immediately on return,
+        // cancelling the download silently. Cleaned up in DownloadDelegate.didFinishDownloadingTo.
+        activeSessions[exerciseId] = downloadSession
+        activeDelegates[exerciseId] = delegate
 
         // Start download task (low-bitrate rendition to minimise file size)
         guard let task = downloadSession.makeAssetDownloadTask(
@@ -251,6 +274,10 @@ private final class DownloadDelegate: NSObject, AVAssetDownloadDelegate, @unchec
                 entity.setValue(relativePath, forKey: "localAssetURL")
                 try? context.save()
             }
+
+            // Release the retained session and delegate now that the download is complete
+            ExerciseCacheManager.shared.activeSessions.removeValue(forKey: exerciseId)
+            ExerciseCacheManager.shared.activeDelegates.removeValue(forKey: exerciseId)
         }
     }
 
