@@ -60,11 +60,16 @@ struct VideoPlayerView: UIViewControllerRepresentable {
             guard let player else { return }
             player.actionAtItemEnd = .none
             // Pattern 6 from 02-RESEARCH.md: seek-to-zero loop (NOT AVPlayerLooper — HLS incompatible)
+            // Observe all items (object: nil) to avoid the case where player.currentItem is nil at
+            // setup time (HLS manifest not yet loaded). Filter in the handler to only react to this
+            // player's current item, preventing spurious seeks from other AVPlayerItems in the app.
             observer = NotificationCenter.default.addObserver(
                 forName: .AVPlayerItemDidPlayToEndTime,
-                object: player.currentItem,
+                object: nil,
                 queue: .main
-            ) { [weak player] _ in
+            ) { [weak player] notification in
+                guard let item = notification.object as? AVPlayerItem,
+                      item === player?.currentItem else { return }
                 player?.seek(to: .zero) { _ in
                     player?.play()
                 }
