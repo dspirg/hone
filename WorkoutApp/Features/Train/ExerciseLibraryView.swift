@@ -16,8 +16,7 @@ import SwiftUI
 //   - Load error: wifi.slash icon + error message
 //   - Success: sectioned list of ExerciseLibraryRowView rows
 //
-// Navigation: NavigationLink pushes to placeholder Text(exercise.name) until Plan 03
-// adds ExerciseDetailView (intentional placeholder — avoids file ownership conflict).
+// Navigation: NavigationLink pushes to ExerciseDetailView (wired in Plan 03).
 
 struct ExerciseLibraryView: View {
     @State private var viewModel = ExerciseLibraryViewModel()
@@ -38,10 +37,7 @@ struct ExerciseLibraryView: View {
                         Section(header: Text(section).textCase(.uppercase)) {
                             ForEach(exercises) { exercise in
                                 NavigationLink {
-                                    // Placeholder — ExerciseDetailView added in Plan 03
-                                    Text(exercise.name)
-                                        .font(.title2)
-                                        .fontWeight(.semibold)
+                                    ExerciseDetailView(exercise: exercise)
                                 } label: {
                                     ExerciseLibraryRowView(exercise: exercise)
                                 }
