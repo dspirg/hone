@@ -72,7 +72,7 @@ Plans:
 - [x] 03-02-PLAN.md — Onboarding UI: 5-card flow, OnboardingViewModel, chip components, progress indicator
 - [x] 03-03-PLAN.md — SSE streaming pipeline: PlanSSEClient (manual auth), PlanGenerationService, auto-retry
 - [x] 03-04-PLAN.md — Plan preview UI: loading view, PlanPreviewView, day cards, exercise rows, regen counter
-- [ ] 03-05-PLAN.md — Integration: AppState routing, ContentView third branch, HomeView plan summary, human verification
+- [x] 03-05-PLAN.md — Integration: AppState routing, ContentView third branch, HomeView plan summary, human verification
 **UI hint**: yes
 
 ### Phase 4: In-Session Workout Experience
