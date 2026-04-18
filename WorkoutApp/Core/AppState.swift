@@ -1,3 +1,4 @@
+import Foundation
 import Observation
 import Supabase
 
@@ -79,4 +80,11 @@ final class AppState {
     func markOnboardingComplete() {
         self.onboardingCompleted = true
     }
+
+    // MARK: - Exercise / Train State (Phase 2)
+
+    /// Set of exercise UUIDs that belong to the user's active workout plan.
+    /// Used by ExerciseCacheManager to prioritise caching plan exercises over recently-viewed ones.
+    /// Populated when the active plan is loaded; cleared on sign-out.
+    var activePlanExerciseIDs: Set<UUID> = []
 }
