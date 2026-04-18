@@ -16,6 +16,12 @@ import CoreData
 final class PersistenceController {
     static let shared = PersistenceController()
 
+    // MARK: - Preview (In-Memory Store for Tests and Previews)
+    // Uses /dev/null to prevent disk writes; safe to use in unit tests and SwiftUI previews
+    static let preview: PersistenceController = {
+        PersistenceController(inMemory: true)
+    }()
+
     let container: NSPersistentContainer
 
     init(inMemory: Bool = false) {
@@ -24,6 +30,10 @@ final class PersistenceController {
             // Point the store to /dev/null to prevent disk writes in tests
             container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
         }
+        // Enable automatic lightweight migration (safe for new entities)
+        let description = container.persistentStoreDescriptions.first
+        description?.setOption(true as NSNumber, forKey: NSMigratePersistentStoresAutomaticallyOption)
+        description?.setOption(true as NSNumber, forKey: NSInferMappingModelAutomaticallyOption)
         container.loadPersistentStores { _, error in
             if let error {
                 // fatalError is appropriate here: if CoreData cannot load, the app

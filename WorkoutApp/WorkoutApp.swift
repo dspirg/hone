@@ -14,6 +14,7 @@ struct WorkoutApp: App {
         WindowGroup {
             ContentView()
                 .environment(appState)
+                .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
                 .fullScreenCover(isPresented: Binding(
                     get: { !disclaimerAcknowledged },
                     set: { _ in }
