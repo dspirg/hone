@@ -7,6 +7,7 @@ import CoreData
 // All tests use in-memory CoreData store (PersistenceController.preview) — no disk writes.
 // Network-dependent fetchAndSync() tests require a live Supabase connection and are skipped here.
 
+@MainActor
 final class ExerciseRepositoryTests: XCTestCase {
 
     var context: NSManagedObjectContext!

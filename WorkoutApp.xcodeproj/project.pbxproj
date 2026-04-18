@@ -59,6 +59,11 @@
 		B002000100000004 /* WorkoutApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B002000030000003 /* WorkoutApp.xcdatamodeld */; };
 		B002001100000001 /* CoreDataStackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B002001000000001 /* CoreDataStackTests.swift */; };
 		B002001100000002 /* ExerciseRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B002001000000002 /* ExerciseRepositoryTests.swift */; };
+		B002002100000001 /* ExerciseLibraryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B002002000000001 /* ExerciseLibraryViewModel.swift */; };
+		B002002100000002 /* FilterChipRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B002002000000002 /* FilterChipRow.swift */; };
+		B002002100000003 /* ExerciseLibraryRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B002002000000003 /* ExerciseLibraryRowView.swift */; };
+		B002002100000004 /* ExerciseLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B002002000000004 /* ExerciseLibraryView.swift */; };
+		B002002100000005 /* ExerciseSearchFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B002002000000005 /* ExerciseSearchFilterTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -136,6 +141,11 @@
 		B002000030000003 /* WorkoutApp.xcdatamodeld */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodeld; path = WorkoutApp.xcdatamodeld; sourceTree = "<group>"; };
 		B002001000000001 /* CoreDataStackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStackTests.swift; sourceTree = "<group>"; };
 		B002001000000002 /* ExerciseRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseRepositoryTests.swift; sourceTree = "<group>"; };
+		B002002000000001 /* ExerciseLibraryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseLibraryViewModel.swift; sourceTree = "<group>"; };
+		B002002000000002 /* FilterChipRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterChipRow.swift; sourceTree = "<group>"; };
+		B002002000000003 /* ExerciseLibraryRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseLibraryRowView.swift; sourceTree = "<group>"; };
+		B002002000000004 /* ExerciseLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseLibraryView.swift; sourceTree = "<group>"; };
+		B002002000000005 /* ExerciseSearchFilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseSearchFilterTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,7 +205,6 @@
 			children = (
 				B001000000000002 /* AppState.swift */,
 				B001000000000003 /* SupabaseClient.swift */,
-				B003000030000002 /* Components */,
 				B002000030000002 /* Data */,
 			);
 			path = Core;
@@ -232,6 +241,7 @@
 				B003B01000000001 /* PlanPreviewViewModelTests.swift */,
 				B002001000000001 /* CoreDataStackTests.swift */,
 				B002001000000002 /* ExerciseRepositoryTests.swift */,
+				B002002000000005 /* ExerciseSearchFilterTests.swift */,
 			);
 			path = WorkoutAppTests;
 			sourceTree = "<group>";
@@ -249,6 +259,7 @@
 			children = (
 				B003000000000001 /* OnboardingViewModel.swift */,
 				B003000000000005 /* OnboardingView.swift */,
+				B003000030000002 /* Components */,
 				B003000030000003 /* Cards */,
 			);
 			path = Onboarding;
@@ -340,8 +351,20 @@
 				B003A00030000001 /* Models */,
 				B003A00030000002 /* CoreData */,
 				B003A02030000001 /* PlanPreview */,
+				B002002030000001 /* Train */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		B002002030000001 /* Train */ = {
+			isa = PBXGroup;
+			children = (
+				B002002000000001 /* ExerciseLibraryViewModel.swift */,
+				B002002000000002 /* FilterChipRow.swift */,
+				B002002000000003 /* ExerciseLibraryRowView.swift */,
+				B002002000000004 /* ExerciseLibraryView.swift */,
+			);
+			path = Train;
 			sourceTree = "<group>";
 		};
 		B003B00030000001 /* PlanPreview */ = {
@@ -563,6 +586,10 @@
 				B002000100000001 /* ExerciseDTO.swift in Sources */,
 				B002000100000002 /* ExerciseModel.swift in Sources */,
 				B002000100000003 /* ExerciseRepository.swift in Sources */,
+				B002002100000001 /* ExerciseLibraryViewModel.swift in Sources */,
+				B002002100000002 /* FilterChipRow.swift in Sources */,
+				B002002100000003 /* ExerciseLibraryRowView.swift in Sources */,
+				B002002100000004 /* ExerciseLibraryView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -579,6 +606,7 @@
 				B003B01100000001 /* PlanPreviewViewModelTests.swift in Sources */,
 				B002001100000001 /* CoreDataStackTests.swift in Sources */,
 				B002001100000002 /* ExerciseRepositoryTests.swift in Sources */,
+				B002002100000005 /* ExerciseSearchFilterTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
