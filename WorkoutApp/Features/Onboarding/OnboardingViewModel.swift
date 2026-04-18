@@ -1,17 +1,6 @@
 import SwiftUI
 import Observation
 
-// MARK: - UserProfile
-// Local definition for Wave 1 Plan 02 parallel execution.
-// Will be replaced by import from Core/Models/UserProfile.swift once Plan 01 merges.
-struct UserProfile: Codable, Equatable, Sendable {
-    let goal: String
-    let fitnessLevel: String
-    let daysPerWeek: Int
-    let equipment: [String]
-    let injuries: String
-}
-
 // MARK: - OnboardingViewModel
 // @Observable ViewModel (Swift 6 / iOS 17+ idiom — not @ObservableObject)
 // Manages 5-step onboarding wizard: Goal, FitnessLevel, DaysPerWeek, Equipment, Injuries

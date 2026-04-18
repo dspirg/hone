@@ -120,7 +120,7 @@ struct PlanPreviewView: View {
                     }
                     .padding(.horizontal, 8)
                     .frame(height: 32)  // 32pt height per UI-SPEC
-                    .foregroundStyle(viewModel.canRegenerate ? Color("AccentColor") : .tertiary)
+                    .foregroundStyle(viewModel.canRegenerate ? Color("AccentColor") : Color(UIColor.tertiaryLabel))
                     .background(
                         viewModel.canRegenerate
                             ? Color("CardBackground")
@@ -158,7 +158,7 @@ struct PlanPreviewView: View {
             Button(action: { onStartTraining?() }) {
                 Text("Start Training")
                     .font(.body.weight(.semibold))
-                    .foregroundStyle(viewModel.canStartTraining ? .white : .tertiary)
+                    .foregroundStyle(viewModel.canStartTraining ? Color.white : Color(UIColor.tertiaryLabel))
                     .frame(maxWidth: .infinity)
                     .frame(height: 52)  // 52pt per UI-SPEC
                     .background(

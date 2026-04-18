@@ -6,6 +6,7 @@ import CoreData
 // Verifies the PersistenceController singleton and Exercise entity round-trips.
 // All tests use PersistenceController.preview (in-memory store) — no disk writes.
 
+@MainActor
 final class CoreDataStackTests: XCTestCase {
 
     var context: NSManagedObjectContext!
