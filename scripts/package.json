@@ -1,0 +1,12 @@
+{
+  "name": "workout-scripts",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Utility scripts for the WorkoutApp backend",
+  "scripts": {
+    "upload-videos": "node upload-videos.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.0.0"
+  }
+}
