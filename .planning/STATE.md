@@ -71,8 +71,13 @@ None yet.
 
 ### Blockers/Concerns
 
-- Video content sourcing timeline is unknown — must be resolved before Phase 2 can complete; see SUMMARY.md gaps
 - Subscription pricing not yet set — unit economics model (Apple 30% cut + AI cost + margin) must be run before Phase 7 planning
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 260420-a0 | Set up Supabase Storage video pipeline — add video_url to exercises, write upload script, update iOS model | 2026-04-20 | ddb066f | [260420-a0-supabase-video-pipeline](./quick/260420-a0-supabase-video-pipeline/) |
 
 ## Deferred Items
 
