@@ -19,10 +19,11 @@ struct ExerciseModel: Identifiable, Equatable {
     let formTips: String?
     let muxPlaybackId: String?
     let thumbnailURL: String?
+    let videoUrl: String?
     var localAssetURL: String?
     var lastViewedAt: Date?
 
-    var hasVideo: Bool { muxPlaybackId != nil }
+    var hasVideo: Bool { muxPlaybackId != nil || videoUrl != nil }
 
     // MARK: - Memberwise Init (for previews and tests)
     init(
@@ -35,6 +36,7 @@ struct ExerciseModel: Identifiable, Equatable {
         formTips: String? = nil,
         muxPlaybackId: String? = nil,
         thumbnailURL: String? = nil,
+        videoUrl: String? = nil,
         localAssetURL: String? = nil,
         lastViewedAt: Date? = nil
     ) {
@@ -47,6 +49,7 @@ struct ExerciseModel: Identifiable, Equatable {
         self.formTips = formTips
         self.muxPlaybackId = muxPlaybackId
         self.thumbnailURL = thumbnailURL
+        self.videoUrl = videoUrl
         self.localAssetURL = localAssetURL
         self.lastViewedAt = lastViewedAt
     }
@@ -62,6 +65,7 @@ struct ExerciseModel: Identifiable, Equatable {
         self.formTips = dto.formTips
         self.muxPlaybackId = dto.muxPlaybackId
         self.thumbnailURL = dto.thumbnailUrl
+        self.videoUrl = dto.videoUrl
         self.localAssetURL = nil
         self.lastViewedAt = nil
     }
@@ -82,6 +86,7 @@ struct ExerciseModel: Identifiable, Equatable {
         self.formTips = entity.value(forKey: "formTips") as? String
         self.muxPlaybackId = entity.value(forKey: "muxPlaybackId") as? String
         self.thumbnailURL = entity.value(forKey: "thumbnailURL") as? String
+        self.videoUrl = entity.value(forKey: "videoUrl") as? String
         self.localAssetURL = entity.value(forKey: "localAssetURL") as? String
         self.lastViewedAt = entity.value(forKey: "lastViewedAt") as? Date
     }

@@ -18,6 +18,7 @@ struct ExerciseDTO: Decodable {
     let formTips: String?
     let muxPlaybackId: String?
     let thumbnailUrl: String?
+    let videoUrl: String?
     let updatedAt: Date
 
     enum CodingKeys: String, CodingKey {
@@ -28,6 +29,7 @@ struct ExerciseDTO: Decodable {
         case formTips       = "form_tips"
         case muxPlaybackId  = "mux_playback_id"
         case thumbnailUrl   = "thumbnail_url"
+        case videoUrl       = "video_url"
         case updatedAt      = "updated_at"
     }
 }
