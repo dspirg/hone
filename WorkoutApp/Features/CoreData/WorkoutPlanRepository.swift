@@ -41,17 +41,20 @@ final class WorkoutPlanRepository {
             cdDay.id = UUID()
             cdDay.dayLabel = day.dayLabel
             cdDay.sessionName = day.sessionName
-            cdDay.sortOrder = Int16(index)
+            // WR-05: Clamp to Int16.max before casting. exercise.sets and sortOrder come from
+            // AI-generated data — an unexpected model response could return a value that
+            // silently truncates (wraps) on cast, producing corrupt CoreData records.
+            cdDay.sortOrder = Int16(min(index, Int(Int16.max)))
 
             for (exIndex, exercise) in day.exercises.enumerated() {
                 let cdExercise = CDPlannedExercise(context: context)
                 cdExercise.id = UUID()
                 cdExercise.exerciseName = exercise.exerciseName
-                cdExercise.sets = Int16(exercise.sets)
+                cdExercise.sets = Int16(min(exercise.sets, Int(Int16.max)))
                 cdExercise.reps = exercise.reps
                 cdExercise.restSeconds = Int32(exercise.restSeconds)
                 cdExercise.rationale = exercise.rationale
-                cdExercise.sortOrder = Int16(exIndex)
+                cdExercise.sortOrder = Int16(min(exIndex, Int(Int16.max)))
                 cdDay.addToExercises(cdExercise)
             }
             cdPlan.addToDays(cdDay)
