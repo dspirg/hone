@@ -3,3 +3,6 @@
 
 SUPABASE_URL = REPLACE_WITH_HOSTED_URL
 SUPABASE_ANON_KEY = REPLACE_WITH_HOSTED_ANON_KEY
+// Phase 7: RevenueCat SDK API key (D-17) — replace with real production key from RevenueCat Dashboard
+// RevenueCat Dashboard -> Project -> Apps -> iOS -> Public API Key (starts with appl_)
+REVENUECAT_API_KEY = appl_REPLACE_WITH_PROD_RC_KEY

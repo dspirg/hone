@@ -19,6 +19,20 @@ final class AppState {
     // Reset on sign-out so return visits re-fetch from server (T-03-15).
     var onboardingCompleted: Bool = false
 
+    // MARK: - Phase 7: Subscription State
+    // isSubscribed reflects the "pro" entitlement from RevenueCat (D-18).
+    // Drives the fullScreenCover paywall gate in ContentView (D-13 hard paywall).
+    // Source of truth: RevenueCat customerInfo.entitlements["pro"]?.isActive
+    // Set to false by default — paywall shows until subscription confirmed (safe default, T-07-01)
+    var isSubscribed: Bool = false
+
+    // isOnboarded mirrors onboardingCompleted for SUBS-03 compatibility.
+    // Phase 3 populates this; Phase 7 gates paywall on authenticated + onboarded + !isSubscribed
+    var isOnboarded: Bool = false
+
+    // Dependency-injected RevenueCat service. Replaced with MockRevenueCatService in tests.
+    var revenueCatService: RevenueCatServiceProtocol = RevenueCatService()
+
     // MARK: - Auth State Listener
     // Subscribes to Supabase authStateChanges AsyncStream
     // Drives root navigation: auth screen vs. main tab bar
@@ -33,11 +47,21 @@ final class AppState {
                 if session != nil {
                     await fetchOnboardingStatus()
                 }
+                // CRITICAL: logIn with Supabase UUID immediately after auth resolves (D-18, RESEARCH Pitfall 1)
+                // Without this, ALL webhook payloads contain $RCAnonymousID, breaking
+                // the revenuecat-webhook -> profiles.subscription_status pipeline entirely
+                if let userId = session?.user.id.uuidString {
+                    let subscribed = (try? await revenueCatService.logIn(userId: userId)) ?? false
+                    self.isSubscribed = subscribed
+                }
             case .signedOut:
                 self.isAuthenticated = false
                 self.currentUser = nil
                 // T-03-14: Reset local flag on sign-out so it cannot be spoofed across sessions.
                 self.onboardingCompleted = false
+                // Clear subscription state and RC identity on sign-out
+                try? await revenueCatService.logOut()
+                self.isSubscribed = false
             case .passwordRecovery:
                 // AUTH-03: deep link callback triggers password reset form
                 self.showPasswordResetForm = true
@@ -79,6 +103,17 @@ final class AppState {
     /// (Pitfall 4 strict ordering in Plan 03) before this is called.
     func markOnboardingComplete() {
         self.onboardingCompleted = true
+        self.isOnboarded = true
+    }
+
+    // MARK: - Phase 7: Entitlement Refresh
+
+    /// Re-fetches the current entitlement state from RevenueCat.
+    /// Called after a successful purchase to dismiss the paywall.
+    /// Also called on foreground resume to catch server-side subscription changes.
+    func refreshEntitlements() async {
+        let subscribed = await revenueCatService.refreshEntitlements()
+        self.isSubscribed = subscribed
     }
 
     // MARK: - Exercise / Train State (Phase 2)
