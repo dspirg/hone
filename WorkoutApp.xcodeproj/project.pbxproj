@@ -128,6 +128,7 @@
 		B001000000000006 /* WorkoutApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WorkoutApp.entitlements; sourceTree = "<group>"; };
 		B001000000000007 /* Dev.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Dev.xcconfig; path = Config/Dev.xcconfig; sourceTree = "<group>"; };
 		B001000000000008 /* Prod.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Prod.xcconfig; path = Config/Prod.xcconfig; sourceTree = "<group>"; };
+		B007040000000001 /* WorkoutAppProducts.storekit */ = {isa = PBXFileReference; lastKnownFileType = com.apple.storekit.configuration; path = WorkoutAppProducts.storekit; sourceTree = "<group>"; };
 		B001000000000010 /* WorkoutApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WorkoutApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B001001000000001 /* WorkoutAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutAppTests.swift; sourceTree = "<group>"; };
 		B001001000000010 /* WorkoutAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WorkoutAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -265,11 +266,20 @@
 				B001000030000002 /* Core */,
 				B002000030000001 /* Models */,
 				B00F000030000001 /* Features */,
+				B007040030000001 /* Configuration */,
 				B001000000000004 /* Assets.xcassets */,
 				B001000000000005 /* Info.plist */,
 				B001000000000006 /* WorkoutApp.entitlements */,
 			);
 			path = WorkoutApp;
+			sourceTree = "<group>";
+		};
+		B007040030000001 /* Configuration */ = {
+			isa = PBXGroup;
+			children = (
+				B007040000000001 /* WorkoutAppProducts.storekit */,
+			);
+			path = Configuration;
 			sourceTree = "<group>";
 		};
 		B001000030000002 /* Core */ = {
