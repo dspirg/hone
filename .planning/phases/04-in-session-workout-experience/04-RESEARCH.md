@@ -650,19 +650,19 @@ try await supabase
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Exercise-to-plan lookup at session start**
+1. RESOLVED (04-04 T2): **Exercise-to-plan lookup at session start**
    - What we know: `TrainView` currently shows `ExerciseLibraryView`. The session launches from the active plan displayed in the Train tab.
    - What's unclear: The TrainView doesn't yet show the active plan — that UI is in Phase 3 HomeView. Phase 4 needs a "Start Workout" entry point. The plan likely needs to be passed from a TrainView plan display or HomeView.
    - Recommendation: The first plan in Phase 4 should update `TrainView` to show the active plan with a "Start Workout" button, and pass the selected `WorkoutDay` to `SessionView` via NavigationLink.
 
-2. **Exercise name to Exercise entity linking**
+2. RESOLVED (04-03 T2): **Exercise name to Exercise entity linking**
    - What we know: `PlannedExercise.exerciseName` is a string. `Exercise` CoreData entity also has a `name` string. They should match.
    - What's unclear: There is no foreign key or UUID link — they're matched by string. If an exercise name in the plan doesn't exactly match the exercises table, video playback will fail (no muxPlaybackId found).
    - Recommendation: `SessionViewModel` should attempt a lookup from the `Exercise` CoreData entity by name to get the `muxPlaybackId` and `localAssetURL`. If not found, fall back to `ExercisePlaceholderView` (already exists from Phase 2).
 
-3. **SessionSummaryView exit — what's next?**
+3. RESOLVED (04-04 T1): **SessionSummaryView exit — what's next?**
    - What we know: The summary shows at session end. User sees exercises, sets, reps, duration.
    - What's unclear: Where does the "Done" button take the user? Back to TrainView? Back to HomeView?
    - Recommendation: Dismiss to TrainView (parent). A "Done" button pops the session navigation stack. ADPT-01 (rate difficulty) is Phase 8 scope — do not add a difficulty rating here.
