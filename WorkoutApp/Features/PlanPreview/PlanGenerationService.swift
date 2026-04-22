@@ -224,13 +224,13 @@ final class PlanGenerationService {
             .single()
             .execute()
 
-        // Extract the UUID of the inserted row
+        // Extract the UUID of the inserted row.
+        // CR-03: Do NOT fall back to a random UUID — a phantom ID breaks plan management
+        // (update/delete by supabaseId) and corrupts CoreData linkage silently.
+        // Let the decode error propagate so the caller's retry path handles it.
         struct InsertResult: Decodable { let id: String }
-        if let result = try? JSONDecoder().decode(InsertResult.self, from: response.data) {
-            return result.id
-        }
-        // Fallback ID if extraction fails — plan still persists but loses Supabase linkage
-        return UUID().uuidString
+        let result = try JSONDecoder().decode(InsertResult.self, from: response.data)
+        return result.id
     }
 
     /// Sets onboarding_completed = true on the profiles table.
