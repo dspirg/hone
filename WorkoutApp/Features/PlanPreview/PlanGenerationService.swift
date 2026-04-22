@@ -122,6 +122,7 @@ final class PlanGenerationService {
                 }
             } catch {
                 if Task.isCancelled { return }
+                print("🔴 PlanGenerationService error (isRetry=\(isRetry)): \(error)")
 
                 // D-16: Silent auto-retry once on first failure.
                 // isRetry=false -> fires retry silently (user sees no error).

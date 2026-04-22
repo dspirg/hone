@@ -37,7 +37,13 @@ struct OnboardingView: View {
                     )
 
                     Spacer()
-                    Color.clear.frame(width: 44, height: 44) // trailing balance
+                    Button(action: { viewModel.requestQuitConfirmation() }) {
+                        Image(systemName: "xmark")
+                            .font(.body)
+                            .foregroundStyle(.secondary)
+                            .frame(width: 44, height: 44)
+                    }
+                    .accessibilityLabel("Sign out")
                 }
                 .padding(.horizontal, 16)
                 .padding(.top, 16)
@@ -56,8 +62,8 @@ struct OnboardingView: View {
             isPresented: $viewModel.showQuitConfirmation,
             titleVisibility: .visible
         ) {
-            Button("Quit", role: .destructive) {
-                // Dismissal handled by parent via binding or environment dismiss action
+            Button("Sign Out", role: .destructive) {
+                Task { try? await supabase.auth.signOut() }
             }
             Button("Continue Setup", role: .cancel) { }
         } message: {

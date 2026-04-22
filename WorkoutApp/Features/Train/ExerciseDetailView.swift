@@ -12,10 +12,16 @@ struct ExerciseDetailView: View {
         ScrollView {
             VStack(spacing: 0) {
                 // Video player or placeholder based on exercise.hasVideo
-                if exercise.hasVideo, let playbackId = exercise.muxPlaybackId {
+                if let playbackId = exercise.muxPlaybackId {
                     VideoPlayerView(
                         muxPlaybackId: playbackId,
                         localAssetURL: exercise.localAssetURL.flatMap { URL(string: $0) }
+                    )
+                    .aspectRatio(16 / 9, contentMode: .fit)
+                } else if let videoUrl = exercise.videoUrl, let url = URL(string: videoUrl) {
+                    VideoPlayerView(
+                        muxPlaybackId: "",
+                        localAssetURL: url
                     )
                     .aspectRatio(16 / 9, contentMode: .fit)
                 } else {
