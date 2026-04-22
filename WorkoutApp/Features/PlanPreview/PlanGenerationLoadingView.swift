@@ -168,6 +168,11 @@ struct PlanGenerationLoadingView: View {
     private func startCycling() {
         cycleTimer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true) { _ in
             Task { @MainActor in
+                // WR-03: When errorMessage is non-nil the view body switches to errorOverlay
+                // but does NOT call onDisappear, so the timer keeps running. Guard here so
+                // we stop cycling phases and posting accessibility announcements once an error
+                // is visible — the loading-phase text is no longer shown.
+                guard errorMessage == nil else { return }
                 withAnimation(.easeInOut(duration: 0.4)) {
                     currentPhase = (currentPhase + 1) % phases.count
                 }
