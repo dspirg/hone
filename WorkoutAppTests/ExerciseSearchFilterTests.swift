@@ -28,6 +28,7 @@ final class ExerciseSearchFilterTests: XCTestCase {
             formTips: nil,
             muxPlaybackId: nil,
             thumbnailUrl: nil,
+            videoUrl: nil,
             updatedAt: Date()
         )
         return ExerciseModel(from: dto)
