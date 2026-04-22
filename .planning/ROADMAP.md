@@ -84,9 +84,14 @@ Plans:
   2. A rest timer automatically activates between sets with a duration the user can configure
   3. Session logging continues without interruption when the device has no internet connection; data syncs automatically when connectivity is restored
   4. User sees a completion summary at the end of each session showing exercises completed, sets, and reps
-**Plans**: TBD
+**Plans**: 5 plans
 Plans:
-- [ ] TBD
+- [ ] 04-01-PLAN.md — CoreData entities (CDSessionLog, CDSetLog), SessionRepository, Supabase migration, unit tests
+- [ ] 04-02-PLAN.md — SessionViewModel (session state machine, rest timer), SessionSyncService (NWPathMonitor + Supabase upsert)
+- [ ] 04-03-PLAN.md — Session UI: SessionView, ExerciseCardView, SetLogRow, SessionProgressBar, RestTimerOverlay
+- [ ] 04-04-PLAN.md — SessionSummaryView + TrainView active plan entry point with Start Workout buttons
+- [ ] 04-05-PLAN.md — [BLOCKING] Supabase schema push, full test suite verification, human end-to-end verification
+**UI hint**: yes
 
 ### Phase 5: AI Coach Chat
 **Goal**: Users can have a persistent conversation with an AI coach that knows their goals, plan, and workout history — and can modify the plan through natural conversation
@@ -153,7 +158,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 1. Foundation | 3/3 | Complete | - |
 | 2. Exercise Library | 0/4 | Planned | - |
 | 3. AI Onboarding and Plan Generation | 0/5 | Planned | - |
-| 4. In-Session Workout Experience | 0/TBD | Not started | - |
+| 4. In-Session Workout Experience | 0/5 | Planned | - |
 | 5. AI Coach Chat | 0/TBD | Not started | - |
 | 6. Progress Tracking | 0/TBD | Not started | - |
 | 7. Subscriptions and Paywall | 0/4 | Planned | - |
