@@ -6,8 +6,8 @@ import SwiftUI
 // D-15: Tapping anywhere on the overlay triggers the paywall.
 // UI-SPEC: blur(radius: 8), Color.black.opacity(0.40) scrim, .white title2 semibold copy.
 struct BlurredPlanGateView<Content: View>: View {
-    @ViewBuilder let content: () -> Content
     @Binding var showPaywall: Bool
+    @ViewBuilder let content: () -> Content
 
     var body: some View {
         ZStack {
@@ -41,3 +41,4 @@ struct BlurredPlanGateView<Content: View>: View {
             .overlay(Text("Plan content").foregroundStyle(.white))
     }
 }
+

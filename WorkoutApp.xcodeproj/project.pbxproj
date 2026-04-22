@@ -80,6 +80,7 @@
 		B004003100000003 /* SetLogRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B004003000000003 /* SetLogRow.swift */; };
 		B004003100000004 /* ExerciseCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B004003000000004 /* ExerciseCardView.swift */; };
 		B004003100000005 /* SessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B004003000000005 /* SessionView.swift */; };
+		B004003100000006 /* SessionSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B004003000000006 /* SessionSummaryView.swift */; };
 		B004005100000001 /* SessionViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B004005000000001 /* SessionViewModelTests.swift */; };
 		B004005100000002 /* SessionSyncServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B004005000000002 /* SessionSyncServiceTests.swift */; };
 		B007000100000001 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = B007000000000001 /* RevenueCat */; };
@@ -196,6 +197,7 @@
 		B004003000000003 /* SetLogRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetLogRow.swift; sourceTree = "<group>"; };
 		B004003000000004 /* ExerciseCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCardView.swift; sourceTree = "<group>"; };
 		B004003000000005 /* SessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionView.swift; sourceTree = "<group>"; };
+		B004003000000006 /* SessionSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSummaryView.swift; sourceTree = "<group>"; };
 		B004005000000001 /* SessionViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionViewModelTests.swift; sourceTree = "<group>"; };
 		B004005000000002 /* SessionSyncServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSyncServiceTests.swift; sourceTree = "<group>"; };
 		B007000000000003 /* RevenueCatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevenueCatService.swift; sourceTree = "<group>"; };
@@ -411,6 +413,7 @@
 				B004003000000002 /* SessionProgressBar.swift */,
 				B004003000000003 /* SetLogRow.swift */,
 				B004003000000004 /* ExerciseCardView.swift */,
+				B004003000000006 /* SessionSummaryView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -763,6 +766,7 @@
 				B004003100000002 /* SessionProgressBar.swift in Sources */,
 				B004003100000003 /* SetLogRow.swift in Sources */,
 				B004003100000004 /* ExerciseCardView.swift in Sources */,
+				B004003100000006 /* SessionSummaryView.swift in Sources */,
 				B004003100000005 /* SessionView.swift in Sources */,
 				B007000100000003 /* RevenueCatService.swift in Sources */,
 				B007003100000001 /* CancellationRetentionView.swift in Sources */,

@@ -123,9 +123,9 @@ final class SessionSyncService {
             let setLogs = try repository.fetchUnsyncedSetLogs(for: session)
 
             if !setLogs.isEmpty {
-                let setRows = setLogs.compactMap { sl -> SetLogRow? in
+                let setRows = setLogs.compactMap { sl -> SetLogPayload? in
                     guard let id = sl.id, let completedAt = sl.completedAt else { return nil }
-                    return SetLogRow(
+                    return SetLogPayload(
                         id: id.uuidString,
                         sessionId: sl.sessionId?.uuidString ?? "",
                         userId: session.userId ?? "",
@@ -202,7 +202,7 @@ private struct SessionLogRow: Encodable {
 
 /// Encodable struct for Supabase set_logs upsert.
 /// snake_case CodingKeys map to Supabase column names.
-private struct SetLogRow: Encodable {
+private struct SetLogPayload: Encodable {
     let id: String
     let sessionId: String
     let userId: String

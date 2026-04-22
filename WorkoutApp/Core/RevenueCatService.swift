@@ -1,3 +1,4 @@
+import Foundation
 import RevenueCat
 
 // MARK: - RevenueCatServiceProtocol
@@ -105,7 +106,7 @@ final class RevenueCatService: RevenueCatServiceProtocol {
 // Test double for unit tests. Tracks call counts and arguments for assertion.
 // Uses actor isolation via @MainActor for safe mutation in XCTest async contexts.
 @MainActor
-final class MockRevenueCatService: RevenueCatServiceProtocol {
+final class MockRevenueCatService: @preconcurrency RevenueCatServiceProtocol {
     // MARK: Configurable State
     var mockIsSubscribed = false
     var shouldFailOfferings = false
