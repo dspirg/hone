@@ -70,6 +70,11 @@
 		B002003100000004 /* MuxPlayerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B002003000000004 /* MuxPlayerSwift */; };
 		B002004100000001 /* ExerciseCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B002004000000001 /* ExerciseCacheManager.swift */; };
 		B002004100000002 /* CacheEvictionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B002004000000002 /* CacheEvictionTests.swift */; };
+		B007000100000001 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = B007000000000001 /* RevenueCat */; };
+		B007000100000002 /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = B007000000000002 /* RevenueCatUI */; };
+		B007000100000003 /* RevenueCatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B007000000000003 /* RevenueCatService.swift */; };
+		B007001100000001 /* RevenueCatServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B007001000000001 /* RevenueCatServiceTests.swift */; };
+		B007001100000002 /* EntitlementGateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B007001000000002 /* EntitlementGateTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -157,6 +162,9 @@
 		B002003000000003 /* ExerciseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDetailView.swift; sourceTree = "<group>"; };
 		B002004000000001 /* ExerciseCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCacheManager.swift; sourceTree = "<group>"; };
 		B002004000000002 /* CacheEvictionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheEvictionTests.swift; sourceTree = "<group>"; };
+		B007000000000003 /* RevenueCatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevenueCatService.swift; sourceTree = "<group>"; };
+		B007001000000001 /* RevenueCatServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevenueCatServiceTests.swift; sourceTree = "<group>"; };
+		B007001000000002 /* EntitlementGateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntitlementGateTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,6 +175,8 @@
 				B001003100000001 /* Supabase in Frameworks */,
 				B001003100000002 /* KeychainAccess in Frameworks */,
 				B002003100000004 /* MuxPlayerSwift in Frameworks */,
+				B007000100000001 /* RevenueCat in Frameworks */,
+				B007000100000002 /* RevenueCatUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -217,6 +227,7 @@
 			children = (
 				B001000000000002 /* AppState.swift */,
 				B001000000000003 /* SupabaseClient.swift */,
+				B007000000000003 /* RevenueCatService.swift */,
 				B002000030000002 /* Data */,
 				B002004030000001 /* Cache */,
 				B003000030000002 /* Components */,
@@ -265,6 +276,8 @@
 				B002001000000002 /* ExerciseRepositoryTests.swift */,
 				B002002000000005 /* ExerciseSearchFilterTests.swift */,
 				B002004000000002 /* CacheEvictionTests.swift */,
+				B007001000000001 /* RevenueCatServiceTests.swift */,
+				B007001000000002 /* EntitlementGateTests.swift */,
 			);
 			path = WorkoutAppTests;
 			sourceTree = "<group>";
@@ -472,6 +485,8 @@
 				B001003000000001 /* Supabase */,
 				B001003000000002 /* KeychainAccess */,
 				B002003000000004 /* MuxPlayerSwift */,
+				B007000000000001 /* RevenueCat */,
+				B007000000000002 /* RevenueCatUI */,
 			);
 			productName = WorkoutApp;
 			productReference = B001000000000010 /* WorkoutApp.app */;
@@ -547,6 +562,7 @@
 				B001003090000001 /* XCRemoteSwiftPackageReference "supabase-swift" */,
 				B001003090000002 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 				B002003090000001 /* XCRemoteSwiftPackageReference "mux-player-swift" */,
+				B007000090000001 /* XCRemoteSwiftPackageReference "purchases-ios" */,
 			);
 			productRefGroup = B001000030000010 /* Products */;
 			projectDirPath = "";
@@ -621,6 +637,7 @@
 				B002003100000002 /* ExercisePlaceholderView.swift in Sources */,
 				B002003100000003 /* ExerciseDetailView.swift in Sources */,
 				B002004100000001 /* ExerciseCacheManager.swift in Sources */,
+				B007000100000003 /* RevenueCatService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -639,6 +656,8 @@
 				B002001100000002 /* ExerciseRepositoryTests.swift in Sources */,
 				B002002100000005 /* ExerciseSearchFilterTests.swift in Sources */,
 				B002004100000002 /* CacheEvictionTests.swift in Sources */,
+				B007001100000001 /* RevenueCatServiceTests.swift in Sources */,
+				B007001100000002 /* EntitlementGateTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -987,6 +1006,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		B007000090000001 /* XCRemoteSwiftPackageReference "purchases-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1004,6 +1031,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B002003090000001 /* XCRemoteSwiftPackageReference "mux-player-swift" */;
 			productName = MuxPlayerSwift;
+		};
+		B007000000000001 /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B007000090000001 /* XCRemoteSwiftPackageReference "purchases-ios" */;
+			productName = RevenueCat;
+		};
+		B007000000000002 /* RevenueCatUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B007000090000001 /* XCRemoteSwiftPackageReference "purchases-ios" */;
+			productName = RevenueCatUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

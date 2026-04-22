@@ -5,6 +5,7 @@ import SwiftUI
 // D-07: Hard block — user must tap "I Understand" to proceed; state in AppStorage
 // AUTH-03: .onOpenURL handles workout://auth-callback for password reset deep link
 // AppState drives root navigation between auth screen and main content
+// Phase 7: RevenueCat SDK configured here before auth listener starts (D-17)
 @main
 struct WorkoutApp: App {
     @AppStorage("disclaimerAcknowledged") var disclaimerAcknowledged = false
@@ -33,6 +34,13 @@ struct WorkoutApp: App {
                     }
                 }
                 .task {
+                    // Phase 7: Configure RevenueCat SDK BEFORE starting the auth listener.
+                    // configure() does not pass appUserID — logIn() is called later in
+                    // listenForAuthChanges() after Supabase auth resolves (RESEARCH Pitfall 1).
+                    appState.revenueCatService.configure()
+                    // Synchronous cache read — prevents paywall flash for subscribed users
+                    // on subsequent app launches (RESEARCH Pitfall 6: "Paywall Flashing")
+                    appState.isSubscribed = appState.revenueCatService.cachedIsSubscribed()
                     // Starts auth state listener; drives isAuthenticated throughout app lifetime
                     await appState.listenForAuthChanges()
                 }
@@ -41,19 +49,39 @@ struct WorkoutApp: App {
 }
 
 // MARK: - Root Navigation
-// D-14: 3-branch routing based on isAuthenticated + onboardingCompleted:
-//   Branch 1: authenticated + onboarded    -> MainTabView (normal app experience)
-//   Branch 2: authenticated + not onboarded -> OnboardingFlowView (new user flow)
-//   Branch 3: not authenticated             -> AuthView
-// T-03-15: Both flags must be true to reach MainTabView; flag is re-fetched from Supabase
-//          on every sign-in, so a client-only flag manipulation cannot persist.
+// Phase 7 paywall gate added: D-13 hard paywall — no free tier after trial/subscription expiry.
+//
+// Routing logic (evaluated in order):
+//   1. Not authenticated                              -> AuthView
+//   2. Authenticated + not onboarded                 -> OnboardingFlowView
+//   3. Authenticated + onboarded + !isSubscribed     -> MainTabView with paywall fullScreenCover
+//   4. Authenticated + onboarded + isSubscribed      -> MainTabView (full access)
+//
+// The fullScreenCover binding getter — `isAuthenticated && !isSubscribed` — re-evaluates
+// whenever AppState changes. The setter is a no-op: the cover only dismisses when
+// isSubscribed becomes true after a successful purchase calls refreshEntitlements().
+// .interactiveDismissDisabled(true) prevents swipe-to-dismiss (D-13 hard paywall).
+//
+// T-03-15: onboardingCompleted re-fetched from Supabase on every sign-in.
+// T-07-01: isSubscribed is a UX gate only; backend AI proxy reads profiles.subscription_status.
 struct ContentView: View {
     @Environment(AppState.self) var appState
 
     var body: some View {
         if appState.isAuthenticated && appState.onboardingCompleted {
-            // Branch 1: Authenticated AND onboarded — normal app experience
+            // Branches 3 & 4: Authenticated AND onboarded — show MainTabView
+            // Paywall fullScreenCover appears when !isSubscribed (D-13 hard paywall)
             MainTabView()
+                .fullScreenCover(isPresented: Binding(
+                    get: { appState.isAuthenticated && !appState.isSubscribed },
+                    set: { _ in } // no-op: only dismissed by isSubscribed becoming true
+                )) {
+                    // PaywallView placeholder — replaced in Plan 02 with full custom paywall
+                    // Plan 02 will call appState.refreshEntitlements() on purchase success
+                    // to flip isSubscribed and dismiss this cover (D-13)
+                    Text("Subscription required")
+                        .interactiveDismissDisabled(true)
+                }
         } else if appState.isAuthenticated && !appState.onboardingCompleted {
             // Branch 2: Authenticated but NOT onboarded — D-14 third routing branch
             Color("AppBackground")
@@ -63,7 +91,7 @@ struct ContentView: View {
                         .environment(appState)
                 }
         } else {
-            // Branch 3: Not authenticated — auth screen
+            // Branch 1: Not authenticated — auth screen
             NavigationStack {
                 AuthView()
             }
