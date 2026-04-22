@@ -70,6 +70,11 @@
 		B002003100000004 /* MuxPlayerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B002003000000004 /* MuxPlayerSwift */; };
 		B002004100000001 /* ExerciseCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B002004000000001 /* ExerciseCacheManager.swift */; };
 		B002004100000002 /* CacheEvictionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B002004000000002 /* CacheEvictionTests.swift */; };
+		B004000100000001 /* SessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B004000000000001 /* SessionRepository.swift */; };
+		B004000100000002 /* SessionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B004000000000002 /* SessionViewModel.swift */; };
+		B004000100000003 /* SessionSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B004000000000003 /* SessionSyncService.swift */; };
+		B004001100000001 /* SessionViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B004001000000001 /* SessionViewModelTests.swift */; };
+		B004001100000002 /* SessionSyncServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B004001000000002 /* SessionSyncServiceTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -157,6 +162,11 @@
 		B002003000000003 /* ExerciseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDetailView.swift; sourceTree = "<group>"; };
 		B002004000000001 /* ExerciseCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCacheManager.swift; sourceTree = "<group>"; };
 		B002004000000002 /* CacheEvictionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheEvictionTests.swift; sourceTree = "<group>"; };
+		B004000000000001 /* SessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionRepository.swift; sourceTree = "<group>"; };
+		B004000000000002 /* SessionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionViewModel.swift; sourceTree = "<group>"; };
+		B004000000000003 /* SessionSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSyncService.swift; sourceTree = "<group>"; };
+		B004001000000001 /* SessionViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionViewModelTests.swift; sourceTree = "<group>"; };
+		B004001000000002 /* SessionSyncServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSyncServiceTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -220,6 +230,7 @@
 				B002000030000002 /* Data */,
 				B002004030000001 /* Cache */,
 				B003000030000002 /* Components */,
+				B004000030000002 /* Sync */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -265,6 +276,8 @@
 				B002001000000002 /* ExerciseRepositoryTests.swift */,
 				B002002000000005 /* ExerciseSearchFilterTests.swift */,
 				B002004000000002 /* CacheEvictionTests.swift */,
+				B004001000000001 /* SessionViewModelTests.swift */,
+				B004001000000002 /* SessionSyncServiceTests.swift */,
 			);
 			path = WorkoutAppTests;
 			sourceTree = "<group>";
@@ -322,8 +335,25 @@
 			isa = PBXGroup;
 			children = (
 				B003A00000000004 /* WorkoutPlanRepository.swift */,
+				B004000000000001 /* SessionRepository.swift */,
 			);
 			path = CoreData;
+			sourceTree = "<group>";
+		};
+		B004000030000001 /* Session */ = {
+			isa = PBXGroup;
+			children = (
+				B004000000000002 /* SessionViewModel.swift */,
+			);
+			path = Session;
+			sourceTree = "<group>";
+		};
+		B004000030000002 /* Sync */ = {
+			isa = PBXGroup;
+			children = (
+				B004000000000003 /* SessionSyncService.swift */,
+			);
+			path = Sync;
 			sourceTree = "<group>";
 		};
 		B002000030000001 /* Models */ = {
@@ -374,6 +404,7 @@
 				B003A00030000002 /* CoreData */,
 				B003A02030000001 /* PlanPreview */,
 				B002002030000001 /* Train */,
+				B004000030000001 /* Session */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -621,6 +652,9 @@
 				B002003100000002 /* ExercisePlaceholderView.swift in Sources */,
 				B002003100000003 /* ExerciseDetailView.swift in Sources */,
 				B002004100000001 /* ExerciseCacheManager.swift in Sources */,
+				B004000100000001 /* SessionRepository.swift in Sources */,
+				B004000100000002 /* SessionViewModel.swift in Sources */,
+				B004000100000003 /* SessionSyncService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -639,6 +673,8 @@
 				B002001100000002 /* ExerciseRepositoryTests.swift in Sources */,
 				B002002100000005 /* ExerciseSearchFilterTests.swift in Sources */,
 				B002004100000002 /* CacheEvictionTests.swift in Sources */,
+				B004001100000001 /* SessionViewModelTests.swift in Sources */,
+				B004001100000002 /* SessionSyncServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
