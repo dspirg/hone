@@ -71,14 +71,14 @@ Phase 4 role assignments (no new sizes or weights introduced):
 | Set row label ("Set 1", "Set 2") | Label — `.subheadline` regular | Primary color |
 | Rep count displayed in stepper | Heading — `.title2` semibold | Large enough to tap accurately; monospacedDigit |
 | Target reps placeholder ("Target: 8–12") | Label — `.subheadline` regular | `.secondary` color |
-| Rest timer countdown number | Display — `.system(size: 64, weight: .bold, design: .rounded)` | Exception: fixed size for impact in overlay — see note |
+| Rest timer countdown number | Display — `.system(size: 64, weight: .semibold, design: .rounded)` | Exception: fixed size for impact in overlay — see note |
 | Rest timer "Next up" context label | Label — `.subheadline` regular | `.secondary` color |
 | Session summary stat values | Heading — `.title2` semibold | Exercises, sets, reps, duration values |
 | Session summary stat labels | Label — `.subheadline` regular | `.secondary` color |
 | Session summary duration | Heading — `.title2` semibold | — |
 | Sync failure banner message | Label — `.subheadline` regular | Inline banner, `.secondary` |
 
-**Rest timer countdown exception:** `.system(size: 64, weight: .bold, design: .rounded)` with `.monospacedDigit()` is approved for the rest timer overlay only. The large fixed size is intentional — it must be legible at arm's length under exertion. This is the only place in Phase 4 where a fixed system size is used. All other text uses semantic SwiftUI tokens. (Source: RESEARCH.md Pattern 1 code example; CONTEXT.md "large countdown number, minimal chrome".)
+**Rest timer countdown exception:** `.system(size: 64, weight: .semibold, design: .rounded)` with `.monospacedDigit()` is approved for the rest timer overlay only. The large fixed size is intentional — it must be legible at arm's length under exertion. This is the only place in Phase 4 where a fixed system size is used. All other text uses semantic SwiftUI tokens. (Source: RESEARCH.md Pattern 1 code example; CONTEXT.md "large countdown number, minimal chrome".)
 
 ---
 
@@ -200,7 +200,7 @@ No new tabs. No new modal sheets. Session is a full-screen pushed view from Trai
       .tint(Color("AccentColor"))
       .frame(width: 200, height: 200)
       currentValueLabel: Text(timerEndDate, style: .timer)
-                           .font(.system(size: 64, weight: .bold, design: .rounded))
+                           .font(.system(size: 64, weight: .semibold, design: .rounded))
                            .monospacedDigit()
     Text("Up next: [next set label or exercise name]")
                                     — .subheadline, .secondary
