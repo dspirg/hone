@@ -1,47 +1,78 @@
 import SwiftUI
+import RevenueCatUI
 
 // MARK: - ProfileView
-// Displays user profile placeholder and storage usage information.
-// Storage section shows current exercise video cache size from ExerciseCacheManager.
-// Account settings and preferences will be added in later phases.
+// Functional profile screen with Manage Subscription retention flow entry point (D-09).
 //
-// Requirements: EXRC-04 (cache size visibility in Profile/Settings — 02-CONTEXT.md)
+// Sections:
+//   1. Account — email display
+//   2. Subscription — "Manage Subscription" NavigationLink to CancellationRetentionView,
+//      subscription status badge ("Active" / "Free"), Restore Purchases via RC CustomerCenterView
+//   3. Account actions — Sign Out (destructive)
+//
+// NavigationStack here enables the push navigation into CancellationRetentionView.
+// The retention flow's internal NavigationStack is nested within.
+//
+// Requirements: SUBS-04 (cancellation retention flow accessible from Profile tab)
 struct ProfileView: View {
+    @Environment(AppState.self) var appState
+    @State private var showCustomerCenter = false
+
     var body: some View {
-        List {
-            Section {
-                VStack(spacing: 16) {
-                    // SF Symbol illustration — large, secondary color (UI-SPEC)
-                    Image(systemName: "person.fill")
-                        .font(.system(size: 64))
-                        .foregroundStyle(.secondary)
-
-                    // Heading — .title2, semibold (UI-SPEC Typography)
-                    Text("Your profile")
-                        .font(.title2)
-                        .fontWeight(.semibold)
-
-                    // Body — UI-SPEC Copywriting Contract
-                    Text("Account settings and preferences will appear here.")
-                        .font(.body)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
+        NavigationStack {
+            List {
+                // Section 1: Account info
+                Section("Account") {
+                    if let email = appState.currentUser?.email {
+                        HStack {
+                            Text("Email")
+                            Spacer()
+                            Text(email)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 16)
+
+                // Section 2: Subscription (D-09)
+                Section("Subscription") {
+                    // "Manage Subscription" navigates to retention flow (D-09)
+                    // NavigationLink push — not modal — so system back button is available
+                    NavigationLink {
+                        CancellationRetentionView()
+                    } label: {
+                        HStack {
+                            Text("Manage Subscription")
+                            Spacer()
+                            Text(appState.isSubscribed ? "Active" : "Free")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+
+                    // Restore Purchases via RevenueCat CustomerCenterView (Pattern 6 from RESEARCH.md)
+                    // Supplements the custom retention flow — handles standard restore scenarios
+                    Button("Restore Purchases") {
+                        showCustomerCenter = true
+                    }
+                    .foregroundStyle(.secondary)
+                }
+
+                // Section 3: Account actions
+                Section {
+                    Button("Sign Out", role: .destructive) {
+                        Task {
+                            try? await supabase.auth.signOut()
+                        }
+                    }
+                }
             }
-
-            Section("Storage") {
-                HStack {
-                    Text("Exercise video cache")
-                        .font(.subheadline)
-                    Spacer()
-                    Text(ExerciseCacheManager.shared.formattedCacheSize())
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
+            .listStyle(.insetGrouped)
+            .navigationTitle("Profile")
+            .navigationBarTitleDisplayMode(.large)
+            .sheet(isPresented: $showCustomerCenter) {
+                // RevenueCat CustomerCenterView handles standard restore flow
+                // This supplements the custom retention flow (D-09 through D-12)
+                CustomerCenterView()
             }
         }
-        .listStyle(.insetGrouped)
     }
 }
