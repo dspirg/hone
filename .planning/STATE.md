@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 03 context updated
-last_updated: "2026-04-17T01:56:51.164Z"
-last_activity: 2026-04-17 -- Phase 02 execution started
+stopped_at: Completed 04-04-PLAN.md
+last_updated: "2026-04-22T17:39:47.629Z"
+last_activity: 2026-04-22
 progress:
   total_phases: 8
-  completed_phases: 2
-  total_plans: 16
-  completed_plans: 8
-  percent: 50
+  completed_phases: 3
+  total_plans: 21
+  completed_plans: 19
+  percent: 90
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-04-16)
 ## Current Position
 
 Phase: 02 (exercise-library) — EXECUTING
-Plan: 1 of 4
-Status: Executing Phase 02
-Last activity: 2026-04-17 -- Phase 02 execution started
+Plan: 2 of 4
+Status: Ready to execute
+Last activity: 2026-04-22
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [█████████░] 90%
 
 ## Performance Metrics
 
@@ -52,6 +52,7 @@ Progress: [░░░░░░░░░░] 0%
 - Trend: —
 
 *Updated after each plan completion*
+| Phase 04 P04 | 16m | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -64,6 +65,8 @@ Recent decisions affecting current work:
 - Phase 1 must include video content licensing as a parallel track — it gates Phase 2 and everything downstream
 - All OpenAI calls must proxy through Supabase Edge Functions — never from iOS client directly
 - AI safety guardrails (system prompt rules) must be established in Phase 1 before any user-facing AI is live
+- SessionSummaryView uses onDone closure (dismiss()) rather than NavigationStack pop — avoids coupling summary to nav stack depth
+- TrainView fetches CDWorkoutPlan.supabaseId in same loadActivePlan task as WorkoutPlan decode — single async operation consistent with HomeView pattern
 
 ### Pending Todos
 
@@ -87,6 +90,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-17T00:36:35.156Z
-Stopped at: Phase 03 context updated
-Resume file: .planning/phases/03-ai-onboarding-and-plan-generation/03-CONTEXT.md
+Last session: 2026-04-22T17:39:47.622Z
+Stopped at: Completed 04-04-PLAN.md
+Resume file: None

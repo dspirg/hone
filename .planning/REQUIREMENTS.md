@@ -34,10 +34,12 @@
 
 ### In-Session Experience
 
-- [ ] **SESS-01**: User can watch the exercise animatic video and log completed reps and sets during a workout
+- [x] **SESS-01
+**: User can watch the exercise animatic video and log completed reps and sets during a workout
 - [ ] **SESS-02**: Automatic rest timer activates between sets with configurable duration
 - [ ] **SESS-03**: Session tracking works fully offline; data syncs to server when internet is restored
-- [ ] **SESS-04**: User sees a completion summary at the end of each workout showing what was accomplished
+- [x] **SESS-04
+**: User sees a completion summary at the end of each workout showing what was accomplished
 
 ### AI Coach Chat
 
