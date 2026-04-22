@@ -1,0 +1,103 @@
+{
+  "identifier" : "WorkoutAppProducts",
+  "nonConsumableProducts" : [
+
+  ],
+  "nonRenewingSubscriptionProducts" : [
+
+  ],
+  "products" : [
+
+  ],
+  "subscriptionGroups" : [
+    {
+      "id" : "6B4F82D1-3A2E-4B5C-8D9F-1E0A7B6C5D4E",
+      "localizations" : [
+        {
+          "description" : "Full access to AI-powered workout plans, coach chat, and progress tracking.",
+          "displayName" : "WorkoutApp Pro",
+          "locale" : "en_US"
+        }
+      ],
+      "name" : "WorkoutApp Pro",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "9.99",
+          "familyShareable" : false,
+          "groupNumber" : 2,
+          "internalID" : "A1B2C3D4-E5F6-7890-ABCD-EF1234567890",
+          "introductoryOffer" : {
+            "duration" : "P14D",
+            "offerMode" : "FREE_TRIAL",
+            "offerType" : "introductory"
+          },
+          "localizations" : [
+            {
+              "description" : "AI workout coach, personalized plans, and full exercise library.",
+              "displayName" : "Pro Monthly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.workoutapp.pro.monthly",
+          "promotionalOffers" : [
+            {
+              "duration" : "P1M",
+              "identifier" : "monthly_50pct_3months",
+              "numberOfPeriods" : 3,
+              "offerMode" : "PAY_AS_YOU_GO",
+              "offerType" : "promotional",
+              "price" : "4.99"
+            }
+          ],
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Pro Monthly",
+          "subscriptionGroupID" : "6B4F82D1-3A2E-4B5C-8D9F-1E0A7B6C5D4E",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "59.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "B2C3D4E5-F6A7-8901-BCDE-F12345678901",
+          "introductoryOffer" : {
+            "duration" : "P14D",
+            "offerMode" : "FREE_TRIAL",
+            "offerType" : "introductory"
+          },
+          "localizations" : [
+            {
+              "description" : "AI workout coach, personalized plans, and full exercise library — best value.",
+              "displayName" : "Pro Annual",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.workoutapp.pro.annual",
+          "promotionalOffers" : [
+
+          ],
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Pro Annual",
+          "subscriptionGroupID" : "6B4F82D1-3A2E-4B5C-8D9F-1E0A7B6C5D4E",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0,
+    "patch" : 0
+  }
+}
