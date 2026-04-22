@@ -127,8 +127,14 @@ final class PlanGenerationService {
                 // D-16: Silent auto-retry once on first failure.
                 // isRetry=false -> fires retry silently (user sees no error).
                 // isRetry=true -> second failure, show error to user.
+                //
+                // WR-01: Wrap the retry in a new Task so it starts after this task's
+                // catch block fully unwinds. A direct recursive call would overwrite
+                // currentStreamTask while the current Task is still on the call stack,
+                // making it impossible to cancel the old task and allowing two concurrent
+                // streaming tasks to write to state simultaneously.
                 if !isRetry {
-                    generatePlan(profile: profile, isRetry: true)
+                    Task { self.generatePlan(profile: profile, isRetry: true) }
                 } else {
                     state = .error("Something went wrong generating your plan. Please try again.")
                 }
