@@ -100,6 +100,11 @@ final class OnboardingViewModel {
     // MARK: - Completion
 
     func completeOnboarding() {
+        // WR-04: Idempotency guard — both the Skip button and Save & Continue button call
+        // this method. If both fire rapidly (double-tap, keyboard dismiss timing), the
+        // second call would invoke onComplete? a second time, triggering a duplicate
+        // startGeneration() while PlanPreviewView is already presented.
+        guard !isOnboardingComplete else { return }
         let profile = UserProfile(
             goal: selectedGoal ?? "",
             fitnessLevel: selectedFitnessLevel ?? "",
