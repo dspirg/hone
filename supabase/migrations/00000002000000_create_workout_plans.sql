@@ -27,3 +27,11 @@ CREATE POLICY "Users can insert own plans"
 CREATE POLICY "Users can update own plans"
     ON public.workout_plans FOR UPDATE
     USING (auth.uid() = user_id);
+
+-- WR-06: DELETE policy so row owners can delete their own plans via the Supabase client.
+-- Without this policy, RLS blocks all DELETE attempts even from the row owner.
+-- Current v1 app uses UPDATE (is_active = false) for deactivation, but a missing DELETE
+-- policy would silently fail any future client-side delete feature.
+CREATE POLICY "Users can delete own plans"
+    ON public.workout_plans FOR DELETE
+    USING (auth.uid() = user_id);
