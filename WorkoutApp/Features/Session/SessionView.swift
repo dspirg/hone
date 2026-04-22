@@ -64,50 +64,54 @@ struct SessionView: View {
 
     @ViewBuilder
     private func sessionContent(vm: SessionViewModel) -> some View {
-        // Card transition: spring for normal, easeInOut(0.15) for reduce motion
-        let animation: Animation = reduceMotion
-            ? .easeInOut(duration: 0.15)
-            : .spring(response: 0.4, dampingFraction: 0.85)
+        // Session complete — replace card area with summary screen
+        if vm.isSessionComplete {
+            SessionSummaryView(
+                workoutDayLabel: vm.workoutDay.dayLabel,
+                totalExercises: vm.exercises.count,
+                totalSets: vm.completedSets.values.reduce(0) { $0 + $1.count },
+                totalReps: vm.completedSets.values.flatMap { $0.values }.reduce(0, +),
+                duration: vm.sessionDuration,
+                onDone: { dismiss() }
+            )
+        } else {
+            // Card transition: spring for normal, easeInOut(0.15) for reduce motion
+            let animation: Animation = reduceMotion
+                ? .easeInOut(duration: 0.15)
+                : .spring(response: 0.4, dampingFraction: 0.85)
 
-        ZStack(alignment: .bottom) {
-            // App background
-            Color("AppBackground").ignoresSafeArea()
+            ZStack(alignment: .bottom) {
+                // App background
+                Color("AppBackground").ignoresSafeArea()
 
-            VStack(spacing: 0) {
-                // Progress bar — "Exercise N of M" + segmented capsules
-                SessionProgressBar(
-                    current: vm.currentExerciseIndex + 1,
-                    total: vm.exercises.count
-                )
-                .padding(.top, 8)
-                .padding(.bottom, 8)
+                VStack(spacing: 0) {
+                    // Progress bar — "Exercise N of M" + segmented capsules
+                    SessionProgressBar(
+                        current: vm.currentExerciseIndex + 1,
+                        total: vm.exercises.count
+                    )
+                    .padding(.top, 8)
+                    .padding(.bottom, 8)
 
-                // Exercise cards ZStack with horizontal offset slide navigation
-                // UIScreen.main.bounds.width offset per RESEARCH.md Pattern 7 and UI-SPEC
-                ZStack {
-                    ForEach(Array(vm.exercises.enumerated()), id: \.offset) { index, exercise in
-                        ExerciseCardView(
-                            exercise: exercise,
-                            exerciseIndex: index,
-                            viewModel: vm
-                        )
-                        .offset(x: CGFloat(index - vm.currentExerciseIndex) * UIScreen.main.bounds.width)
+                    // Exercise cards ZStack with horizontal offset slide navigation
+                    // UIScreen.main.bounds.width offset per RESEARCH.md Pattern 7 and UI-SPEC
+                    ZStack {
+                        ForEach(Array(vm.exercises.enumerated()), id: \.offset) { index, exercise in
+                            ExerciseCardView(
+                                exercise: exercise,
+                                exerciseIndex: index,
+                                viewModel: vm
+                            )
+                            .offset(x: CGFloat(index - vm.currentExerciseIndex) * UIScreen.main.bounds.width)
+                        }
                     }
-                }
-                .animation(animation, value: vm.currentExerciseIndex)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .animation(animation, value: vm.currentExerciseIndex)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-                // "Next Exercise" / "Finish Session" CTA button
-                if !vm.isSessionComplete {
+                    // "Next Exercise" / "Finish Session" CTA button
                     let isLast = vm.currentExerciseIndex == vm.exercises.count - 1
                     Button(isLast ? "Finish Session" : "Next Exercise") {
-                        if isLast {
-                            // isSessionComplete will be set by completeSet on last set;
-                            // advanceExercise is a no-op on last exercise
-                            vm.advanceExercise()
-                        } else {
-                            vm.advanceExercise()
-                        }
+                        vm.advanceExercise()
                     }
                     .buttonStyle(.borderedProminent)
                     .frame(maxWidth: .infinity)
@@ -116,32 +120,32 @@ struct SessionView: View {
                     .padding(.bottom, 16)
                     .accessibilityLabel(isLast ? "Finish Session" : "Next Exercise")
                 }
-            }
 
-            // Rest timer overlay — ZStack layer (NOT fullScreenCover) so AVPlayer stays alive beneath
-            // RESEARCH.md Pitfall 2: fullScreenCover pauses AVPlayer; ZStack overlay does not
-            if vm.isRestTimerActive, let endDate = vm.timerEndDate {
-                RestTimerOverlay(
-                    endDate: endDate,
-                    nextContextLabel: vm.nextContextLabel,
-                    onSkip: { vm.skipRest() },
-                    onExtend: { vm.extendRest() },
-                    onExpired: { vm.handleTimerExpired() }
-                )
-                .transition(.opacity)
-            }
+                // Rest timer overlay — ZStack layer (NOT fullScreenCover) so AVPlayer stays alive beneath
+                // RESEARCH.md Pitfall 2: fullScreenCover pauses AVPlayer; ZStack overlay does not
+                if vm.isRestTimerActive, let endDate = vm.timerEndDate {
+                    RestTimerOverlay(
+                        endDate: endDate,
+                        nextContextLabel: vm.nextContextLabel,
+                        onSkip: { vm.skipRest() },
+                        onExtend: { vm.extendRest() },
+                        onExpired: { vm.handleTimerExpired() }
+                    )
+                    .transition(.opacity)
+                }
 
-            // Sync failure banner — bottom, shown after 3 failed sync retries
-            if let sync = syncService, sync.syncBannerVisible {
-                SyncFailureBanner()
-                    .padding(.bottom, 8)
+                // Sync failure banner — bottom, shown after 3 failed sync retries
+                if let sync = syncService, sync.syncBannerVisible {
+                    SyncFailureBanner()
+                        .padding(.bottom, 8)
+                }
             }
-        }
-        .task {
-            syncService?.startMonitoring()
-        }
-        .onDisappear {
-            syncService?.stopMonitoring()
+            .task {
+                syncService?.startMonitoring()
+            }
+            .onDisappear {
+                syncService?.stopMonitoring()
+            }
         }
     }
 
