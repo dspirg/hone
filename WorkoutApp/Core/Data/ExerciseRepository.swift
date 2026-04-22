@@ -77,6 +77,18 @@ final class ExerciseRepository {
         }
     }
 
+    // MARK: - Fetch by Name
+
+    /// Looks up a single Exercise CoreData entity by name (case-insensitive, diacritic-insensitive).
+    /// Used by ExerciseCardView to resolve muxPlaybackId and localAssetURL from PlannedExercise.exerciseName.
+    /// Returns nil if no matching exercise is found in the local CoreData cache.
+    func fetchByName(_ name: String) throws -> NSManagedObject? {
+        let request = NSFetchRequest<NSManagedObject>(entityName: "Exercise")
+        request.predicate = NSPredicate(format: "name ==[cd] %@", name)
+        request.fetchLimit = 1
+        return try context.fetch(request).first
+    }
+
     // MARK: - Private Helpers
 
     /// Upserts a DTO into the CoreData Exercise entity.
