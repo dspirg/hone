@@ -75,6 +75,11 @@
 		B004000100000001 /* SessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B004000000000001 /* SessionRepository.swift */; };
 		B004000100000002 /* SessionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B004000000000002 /* SessionViewModel.swift */; };
 		B004000100000003 /* SessionSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B004000000000003 /* SessionSyncService.swift */; };
+		B004003100000001 /* RestTimerOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = B004003000000001 /* RestTimerOverlay.swift */; };
+		B004003100000002 /* SessionProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B004003000000002 /* SessionProgressBar.swift */; };
+		B004003100000003 /* SetLogRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B004003000000003 /* SetLogRow.swift */; };
+		B004003100000004 /* ExerciseCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B004003000000004 /* ExerciseCardView.swift */; };
+		B004003100000005 /* SessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B004003000000005 /* SessionView.swift */; };
 		B004005100000001 /* SessionViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B004005000000001 /* SessionViewModelTests.swift */; };
 		B004005100000002 /* SessionSyncServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B004005000000002 /* SessionSyncServiceTests.swift */; };
 		B007000100000001 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = B007000000000001 /* RevenueCat */; };
@@ -82,6 +87,18 @@
 		B007000100000003 /* RevenueCatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B007000000000003 /* RevenueCatService.swift */; };
 		B007001100000001 /* RevenueCatServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B007001000000001 /* RevenueCatServiceTests.swift */; };
 		B007001100000002 /* EntitlementGateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B007001000000002 /* EntitlementGateTests.swift */; };
+		B007003100000001 /* CancellationRetentionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B007003000000001 /* CancellationRetentionView.swift */; };
+		B007003100000002 /* PauseOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B007003000000002 /* PauseOptionsView.swift */; };
+		B007003100000003 /* PauseOptionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B007003000000003 /* PauseOptionsViewModel.swift */; };
+		B007003100000004 /* DiscountOfferView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B007003000000004 /* DiscountOfferView.swift */; };
+		B007003100000005 /* DiscountOfferViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B007003000000005 /* DiscountOfferViewModel.swift */; };
+		B007004100000001 /* RetentionFlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B007004000000001 /* RetentionFlowTests.swift */; };
+		B007002100000001 /* PaywallViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B007002000000001 /* PaywallViewModel.swift */; };
+		B007002100000002 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B007002000000002 /* PaywallView.swift */; };
+		B007002100000003 /* ValuePropListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B007002000000003 /* ValuePropListView.swift */; };
+		B007002100000004 /* PricingCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B007002000000004 /* PricingCardView.swift */; };
+		B007002100000005 /* BlurredPlanGateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B007002000000005 /* BlurredPlanGateView.swift */; };
+		B007002100000006 /* PaywallViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B007002000000006 /* PaywallViewModelTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -174,11 +191,28 @@
 		B004000000000001 /* SessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionRepository.swift; sourceTree = "<group>"; };
 		B004000000000002 /* SessionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionViewModel.swift; sourceTree = "<group>"; };
 		B004000000000003 /* SessionSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSyncService.swift; sourceTree = "<group>"; };
+		B004003000000001 /* RestTimerOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestTimerOverlay.swift; sourceTree = "<group>"; };
+		B004003000000002 /* SessionProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionProgressBar.swift; sourceTree = "<group>"; };
+		B004003000000003 /* SetLogRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetLogRow.swift; sourceTree = "<group>"; };
+		B004003000000004 /* ExerciseCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCardView.swift; sourceTree = "<group>"; };
+		B004003000000005 /* SessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionView.swift; sourceTree = "<group>"; };
 		B004005000000001 /* SessionViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionViewModelTests.swift; sourceTree = "<group>"; };
 		B004005000000002 /* SessionSyncServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSyncServiceTests.swift; sourceTree = "<group>"; };
 		B007000000000003 /* RevenueCatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevenueCatService.swift; sourceTree = "<group>"; };
 		B007001000000001 /* RevenueCatServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevenueCatServiceTests.swift; sourceTree = "<group>"; };
 		B007001000000002 /* EntitlementGateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntitlementGateTests.swift; sourceTree = "<group>"; };
+		B007003000000001 /* CancellationRetentionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancellationRetentionView.swift; sourceTree = "<group>"; };
+		B007003000000002 /* PauseOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PauseOptionsView.swift; sourceTree = "<group>"; };
+		B007003000000003 /* PauseOptionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PauseOptionsViewModel.swift; sourceTree = "<group>"; };
+		B007003000000004 /* DiscountOfferView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscountOfferView.swift; sourceTree = "<group>"; };
+		B007003000000005 /* DiscountOfferViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscountOfferViewModel.swift; sourceTree = "<group>"; };
+		B007004000000001 /* RetentionFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetentionFlowTests.swift; sourceTree = "<group>"; };
+		B007002000000001 /* PaywallViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallViewModel.swift; sourceTree = "<group>"; };
+		B007002000000002 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
+		B007002000000003 /* ValuePropListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValuePropListView.swift; sourceTree = "<group>"; };
+		B007002000000004 /* PricingCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricingCardView.swift; sourceTree = "<group>"; };
+		B007002000000005 /* BlurredPlanGateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurredPlanGateView.swift; sourceTree = "<group>"; };
+		B007002000000006 /* PaywallViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallViewModelTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -296,6 +330,8 @@
 				B004005000000002 /* SessionSyncServiceTests.swift */,
 				B007001000000001 /* RevenueCatServiceTests.swift */,
 				B007001000000002 /* EntitlementGateTests.swift */,
+				B007004000000001 /* RetentionFlowTests.swift */,
+				B007002000000006 /* PaywallViewModelTests.swift */,
 			);
 			path = WorkoutAppTests;
 			sourceTree = "<group>";
@@ -362,8 +398,21 @@
 			isa = PBXGroup;
 			children = (
 				B004000000000002 /* SessionViewModel.swift */,
+				B004003000000005 /* SessionView.swift */,
+				B004003030000001 /* Components */,
 			);
 			path = Session;
+			sourceTree = "<group>";
+		};
+		B004003030000001 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				B004003000000001 /* RestTimerOverlay.swift */,
+				B004003000000002 /* SessionProgressBar.swift */,
+				B004003000000003 /* SetLogRow.swift */,
+				B004003000000004 /* ExerciseCardView.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		B004000030000002 /* Sync */ = {
@@ -423,6 +472,7 @@
 				B003A02030000001 /* PlanPreview */,
 				B002002030000001 /* Train */,
 				B004000030000001 /* Session */,
+				B007003030000001 /* Paywall */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -499,6 +549,39 @@
 				B00F00000000000A /* ProfileView.swift */,
 			);
 			path = Tabs;
+			sourceTree = "<group>";
+		};
+		B007003030000001 /* Paywall */ = {
+			isa = PBXGroup;
+			children = (
+				B007002000000001 /* PaywallViewModel.swift */,
+				B007002000000002 /* PaywallView.swift */,
+				B007002030000001 /* Components */,
+				B007003030000002 /* Retention */,
+			);
+			path = Paywall;
+			sourceTree = "<group>";
+		};
+		B007002030000001 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				B007002000000003 /* ValuePropListView.swift */,
+				B007002000000004 /* PricingCardView.swift */,
+				B007002000000005 /* BlurredPlanGateView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		B007003030000002 /* Retention */ = {
+			isa = PBXGroup;
+			children = (
+				B007003000000001 /* CancellationRetentionView.swift */,
+				B007003000000002 /* PauseOptionsView.swift */,
+				B007003000000003 /* PauseOptionsViewModel.swift */,
+				B007003000000004 /* DiscountOfferView.swift */,
+				B007003000000005 /* DiscountOfferViewModel.swift */,
+			);
+			path = Retention;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -676,7 +759,22 @@
 				B004000100000001 /* SessionRepository.swift in Sources */,
 				B004000100000002 /* SessionViewModel.swift in Sources */,
 				B004000100000003 /* SessionSyncService.swift in Sources */,
+				B004003100000001 /* RestTimerOverlay.swift in Sources */,
+				B004003100000002 /* SessionProgressBar.swift in Sources */,
+				B004003100000003 /* SetLogRow.swift in Sources */,
+				B004003100000004 /* ExerciseCardView.swift in Sources */,
+				B004003100000005 /* SessionView.swift in Sources */,
 				B007000100000003 /* RevenueCatService.swift in Sources */,
+				B007003100000001 /* CancellationRetentionView.swift in Sources */,
+				B007003100000002 /* PauseOptionsView.swift in Sources */,
+				B007003100000003 /* PauseOptionsViewModel.swift in Sources */,
+				B007003100000004 /* DiscountOfferView.swift in Sources */,
+				B007003100000005 /* DiscountOfferViewModel.swift in Sources */,
+				B007002100000001 /* PaywallViewModel.swift in Sources */,
+				B007002100000002 /* PaywallView.swift in Sources */,
+				B007002100000003 /* ValuePropListView.swift in Sources */,
+				B007002100000004 /* PricingCardView.swift in Sources */,
+				B007002100000005 /* BlurredPlanGateView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -700,6 +798,8 @@
 				B004005100000002 /* SessionSyncServiceTests.swift in Sources */,
 				B007001100000001 /* RevenueCatServiceTests.swift in Sources */,
 				B007001100000002 /* EntitlementGateTests.swift in Sources */,
+				B007004100000001 /* RetentionFlowTests.swift in Sources */,
+				B007002100000006 /* PaywallViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

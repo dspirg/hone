@@ -76,11 +76,10 @@ struct ContentView: View {
                     get: { appState.isAuthenticated && !appState.isSubscribed },
                     set: { _ in } // no-op: only dismissed by isSubscribed becoming true
                 )) {
-                    // PaywallView placeholder — replaced in Plan 02 with full custom paywall
-                    // Plan 02 will call appState.refreshEntitlements() on purchase success
-                    // to flip isSubscribed and dismiss this cover (D-13)
-                    Text("Subscription required")
-                        .interactiveDismissDisabled(true)
+                    // Full custom paywall — replaced placeholder from Plan 01.
+                    // PaywallView calls appState.refreshEntitlements() on purchase success
+                    // to flip isSubscribed and dismiss this cover (D-13).
+                    PaywallView()
                 }
         } else if appState.isAuthenticated && !appState.onboardingCompleted {
             // Branch 2: Authenticated but NOT onboarded — D-14 third routing branch
