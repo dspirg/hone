@@ -40,8 +40,8 @@ final class ExerciseCacheManager {
     // Both the session and its delegate must be retained strongly until the download completes.
     // AVAssetDownloadURLSession cancels in-flight tasks if the session is deallocated.
     // Keyed by exerciseId so each exercise has at most one active download at a time.
-    private var activeSessions: [UUID: AVAssetDownloadURLSession] = [:]
-    private var activeDelegates: [UUID: DownloadDelegate] = [:]
+    var activeSessions: [UUID: AVAssetDownloadURLSession] = [:]
+    fileprivate var activeDelegates: [UUID: DownloadDelegate] = [:]
 
     private init() {}
 

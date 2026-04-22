@@ -76,6 +76,7 @@ private extension ExerciseModel {
             formTips: "Keep core tight throughout",
             muxPlaybackId: nil,
             thumbnailUrl: nil,
+            videoUrl: nil,
             updatedAt: Date()
         )
         return ExerciseModel(from: dto)

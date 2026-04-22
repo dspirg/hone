@@ -43,10 +43,36 @@
         <attribute name="lastViewedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="syncedAt" attributeType="Date" usesScalarValueType="NO"/>
     </entity>
+    <entity name="CDSessionLog" representedClassName="CDSessionLog" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="userId" optional="YES" attributeType="String"/>
+        <attribute name="planId" optional="YES" attributeType="String"/>
+        <attribute name="workoutDayLabel" optional="YES" attributeType="String"/>
+        <attribute name="startedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="completedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="totalExercises" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="totalSets" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="totalReps" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="syncedToSupabase" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <relationship name="setLogs" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="CDSetLog" inverseName="session" inverseEntity="CDSetLog"/>
+    </entity>
+    <entity name="CDSetLog" representedClassName="CDSetLog" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="sessionId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="exerciseName" optional="YES" attributeType="String"/>
+        <attribute name="setNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="targetReps" optional="YES" attributeType="String"/>
+        <attribute name="repsLogged" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="completedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="syncedToSupabase" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <relationship name="session" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDSessionLog" inverseName="setLogs" inverseEntity="CDSessionLog"/>
+    </entity>
     <elements>
         <element name="CDWorkoutPlan" positionX="-63" positionY="-18" width="128" height="193"/>
         <element name="CDWorkoutDay" positionX="135" positionY="-18" width="128" height="128"/>
         <element name="CDPlannedExercise" positionX="333" positionY="-18" width="128" height="163"/>
         <element name="Exercise" positionX="531" positionY="-18" width="128" height="238"/>
+        <element name="CDSessionLog" positionX="729" positionY="-18" width="128" height="238"/>
+        <element name="CDSetLog" positionX="927" positionY="-18" width="128" height="193"/>
     </elements>
 </model>
