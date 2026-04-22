@@ -78,11 +78,14 @@ serve(async (req: Request): Promise<Response> => {
 
   // T-03-05: Validate Authorization header. iOS client sends Bearer <token> manually
   // because the Supabase Swift SDK invokeWithStreamedResponse drops the JWT (bug #634).
+  // Hard-reject requests with no Bearer token — Supabase Edge Functions do NOT
+  // auto-verify JWTs unless verify_jwt = true is set in config.toml (off by default).
   const authHeader = req.headers.get("Authorization");
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    console.warn("generate-plan: Missing or invalid Authorization header");
-    // We warn but do not hard-reject — Supabase JWT verification middleware handles
-    // actual auth enforcement. We log for observability.
+    return new Response(
+      JSON.stringify({ error: "Unauthorized" }),
+      { status: 401, headers: { "Content-Type": "application/json" } }
+    );
   }
 
   let profile: {
