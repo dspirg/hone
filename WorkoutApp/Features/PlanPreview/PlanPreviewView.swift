@@ -39,8 +39,10 @@ struct PlanPreviewView: View {
             }
         }
         .onAppear {
-            // Auto-start generation if this is a fresh load (no plan, no error)
-            if viewModel.plan == nil && viewModel.errorMessage == nil {
+            // Auto-start generation if this is a fresh load (no plan, no error, not already streaming).
+            // WR-02: Guard against isStreaming so a view disappear/reappear during generation
+            // (e.g., app backgrounding) does not start a second concurrent network request.
+            if viewModel.plan == nil && viewModel.errorMessage == nil && !viewModel.isStreaming {
                 viewModel.startGeneration()
             }
         }
