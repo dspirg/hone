@@ -119,24 +119,51 @@ serve(async (req: Request): Promise<Response> => {
     );
   }
 
+  // T-03-02: Length limits on user-supplied strings — prevents prompt injection and token abuse.
+  // The Edge Function is an independent API surface; the iOS client's UI constraints do not
+  // protect against direct HTTP callers.
+  const MAX_GOAL_LEN = 100;
+  const MAX_LEVEL_LEN = 50;
+  const MAX_INJURIES_LEN = 500;
+
+  if (
+    profile.goal.length > MAX_GOAL_LEN ||
+    profile.fitness_level.length > MAX_LEVEL_LEN ||
+    (typeof profile.injuries === "string" && profile.injuries.length > MAX_INJURIES_LEN) ||
+    profile.days_per_week < 1 || profile.days_per_week > 7 ||
+    !Array.isArray(profile.equipment) || profile.equipment.length > 20
+  ) {
+    return new Response(
+      JSON.stringify({ error: "Profile field exceeds allowed length or range" }),
+      { status: 400, headers: { "Content-Type": "application/json" } }
+    );
+  }
+
+  // Truncate as defense-in-depth even after validation (prevents races on boundary values).
+  const safeGoal = profile.goal.slice(0, MAX_GOAL_LEN);
+  const safeLevel = profile.fitness_level.slice(0, MAX_LEVEL_LEN);
+  const safeInjuries = typeof profile.injuries === "string"
+    ? profile.injuries.slice(0, MAX_INJURIES_LEN)
+    : "";
+
   // Build system prompt injecting all user profile fields (AIPL-04, D-12)
   // T-03-02: injuries goes into a structured slot within the system prompt —
   // OpenAI safety layer and Structured Outputs schema provide secondary defense.
   const equipmentList = Array.isArray(profile.equipment)
-    ? profile.equipment.join(", ")
+    ? profile.equipment.slice(0, 20).join(", ")
     : String(profile.equipment);
 
   let systemPrompt = `You are a professional fitness coach. Generate a personalized ${profile.days_per_week}-day weekly workout plan.
 
 User profile:
-- Goal: ${profile.goal}
-- Fitness Level: ${profile.fitness_level}
+- Goal: ${safeGoal}
+- Fitness Level: ${safeLevel}
 - Training Days: ${profile.days_per_week} days per week
 - Available Equipment: ${equipmentList}`;
 
   // Only include injuries section when the user provided input (SAFE-02, D-12)
-  if (typeof profile.injuries === "string" && profile.injuries.trim() !== "") {
-    systemPrompt += `\n- Areas to avoid or modify around: ${profile.injuries}`;
+  if (safeInjuries.trim() !== "") {
+    systemPrompt += `\n- Areas to avoid or modify around: ${safeInjuries}`;
   }
 
   systemPrompt += `
