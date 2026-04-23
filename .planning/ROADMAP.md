@@ -104,11 +104,11 @@ Plans:
   4. AI coach sends proactive check-in messages based on the user's recent activity and progress patterns
 **Plans**: 5 plans
 Plans:
-- [ ] 05-01-PLAN.md — Data layer: CDChatMessage CoreData entity, Supabase migration, Swift model types, CoachSSEClient
-- [ ] 05-02-PLAN.md — coach-chat Edge Function: GPT-4o mini streaming, system prompt assembly, plan modification routing
-- [ ] 05-03-PLAN.md — CoachViewModel state machine, CoreData persistence, Supabase sync, unit tests
-- [ ] 05-04-PLAN.md — Chat UI: CoachView, chat bubbles, input bar, streaming cursor, plan modification card, offline banner
-- [ ] 05-05-PLAN.md — [BLOCKING] Edge Function deployment, Supabase migration push, human end-to-end verification
+- [x] 05-01-PLAN.md — Data layer: CDChatMessage CoreData entity, Supabase migration, Swift model types, CoachSSEClient
+- [x] 05-02-PLAN.md — coach-chat Edge Function: GPT-4o mini streaming, system prompt assembly, plan modification routing
+- [x] 05-03-PLAN.md — CoachViewModel state machine, CoreData persistence, Supabase sync, unit tests
+- [x] 05-04-PLAN.md — Chat UI: CoachView, chat bubbles, input bar, streaming cursor, plan modification card, offline banner
+- [x] 05-05-PLAN.md — [BLOCKING] Edge Function deployment, Supabase migration push, human end-to-end verification
 **UI hint**: yes
 
 ### Phase 6: Progress Tracking
