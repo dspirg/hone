@@ -50,10 +50,13 @@
 
 ### Progress Tracking
 
-- [ ] **PROG-01**: User can view a full history of all completed workout sessions
-- [ ] **PROG-02**: User can see current streak and longest streak, plus weekly consistency score
+- [x] **PROG-01
+**: User can view a full history of all completed workout sessions
+- [x] **PROG-02
+**: User can see current streak and longest streak, plus weekly consistency score
 - [ ] **PROG-03**: User is notified when they set a new personal record on an exercise
-- [ ] **PROG-04**: User can view charts showing volume over time, workouts per week, and performance trends
+- [x] **PROG-04
+**: User can view charts showing volume over time, workouts per week, and performance trends
 
 ### Subscriptions & Billing
 
