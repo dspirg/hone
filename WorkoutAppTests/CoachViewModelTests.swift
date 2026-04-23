@@ -1,4 +1,5 @@
 import XCTest
+import CoreData
 @testable import WorkoutApp
 
 // MARK: - CoachViewModelTests
