@@ -44,6 +44,8 @@
 	</dict>
 	<key>UILaunchScreen</key>
 	<dict/>
+	<key>NSUserNotificationsUsageDescription</key>
+	<string>We'll remind you when it's time for your next workout to help you stay on track.</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

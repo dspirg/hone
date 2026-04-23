@@ -112,6 +112,8 @@
 		B005004100000005 /* OfflineBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B005004000000005 /* OfflineBannerView.swift */; };
 		B005004100000006 /* ChatDateHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B005004000000006 /* ChatDateHeader.swift */; };
 		B005004100000007 /* PlanModificationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B005004000000007 /* PlanModificationCard.swift */; };
+		B006000100000001 /* NotificationScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B006000000000001 /* NotificationScheduler.swift */; };
+		B006001100000001 /* NotificationSchedulerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B006001000000001 /* NotificationSchedulerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -240,6 +242,8 @@
 		B005004000000005 /* OfflineBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineBannerView.swift; sourceTree = "<group>"; };
 		B005004000000006 /* ChatDateHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDateHeader.swift; sourceTree = "<group>"; };
 		B005004000000007 /* PlanModificationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanModificationCard.swift; sourceTree = "<group>"; };
+		B006000000000001 /* NotificationScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationScheduler.swift; sourceTree = "<group>"; };
+		B006001000000001 /* NotificationSchedulerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSchedulerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -316,6 +320,7 @@
 				B002004030000001 /* Cache */,
 				B003000030000002 /* Components */,
 				B004000030000002 /* Sync */,
+				B006000030000001 /* Notifications */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -370,6 +375,7 @@
 				B007002000000006 /* PaywallViewModelTests.swift */,
 				B005001000000001 /* CoachViewModelTests.swift */,
 				B005001000000002 /* CoachSSEClientTests.swift */,
+				B006001000000001 /* NotificationSchedulerTests.swift */,
 			);
 			path = WorkoutAppTests;
 			sourceTree = "<group>";
@@ -460,6 +466,14 @@
 				B004000000000003 /* SessionSyncService.swift */,
 			);
 			path = Sync;
+			sourceTree = "<group>";
+		};
+		B006000030000001 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				B006000000000001 /* NotificationScheduler.swift */,
+			);
+			path = Notifications;
 			sourceTree = "<group>";
 		};
 		B002000030000001 /* Models */ = {
@@ -867,6 +881,7 @@
 				B005004100000005 /* OfflineBannerView.swift in Sources */,
 				B005004100000006 /* ChatDateHeader.swift in Sources */,
 				B005004100000007 /* PlanModificationCard.swift in Sources */,
+				B006000100000001 /* NotificationScheduler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -894,6 +909,7 @@
 				B007002100000006 /* PaywallViewModelTests.swift in Sources */,
 				B005001100000001 /* CoachViewModelTests.swift in Sources */,
 				B005001100000002 /* CoachSSEClientTests.swift in Sources */,
+				B006001100000001 /* NotificationSchedulerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
