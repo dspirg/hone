@@ -102,6 +102,9 @@
 		B007002100000006 /* PaywallViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B007002000000006 /* PaywallViewModelTests.swift */; };
 		B005000100000001 /* ChatModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B005000000000001 /* ChatModels.swift */; };
 		B005000100000002 /* CoachSSEClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B005000000000002 /* CoachSSEClient.swift */; };
+		B005000100000003 /* CoachViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B005000000000003 /* CoachViewModel.swift */; };
+		B005001100000001 /* CoachViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B005001000000001 /* CoachViewModelTests.swift */; };
+		B005001100000002 /* CoachSSEClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B005001000000002 /* CoachSSEClientTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -220,6 +223,9 @@
 		B007002000000006 /* PaywallViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallViewModelTests.swift; sourceTree = "<group>"; };
 		B005000000000001 /* ChatModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatModels.swift; sourceTree = "<group>"; };
 		B005000000000002 /* CoachSSEClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachSSEClient.swift; sourceTree = "<group>"; };
+		B005000000000003 /* CoachViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachViewModel.swift; sourceTree = "<group>"; };
+		B005001000000001 /* CoachViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachViewModelTests.swift; sourceTree = "<group>"; };
+		B005001000000002 /* CoachSSEClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachSSEClientTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -348,6 +354,8 @@
 				B007001000000002 /* EntitlementGateTests.swift */,
 				B007004000000001 /* RetentionFlowTests.swift */,
 				B007002000000006 /* PaywallViewModelTests.swift */,
+				B005001000000001 /* CoachViewModelTests.swift */,
+				B005001000000002 /* CoachSSEClientTests.swift */,
 			);
 			path = WorkoutAppTests;
 			sourceTree = "<group>";
@@ -607,6 +615,7 @@
 			children = (
 				B005000030000002 /* Models */,
 				B005000030000003 /* SSE */,
+				B005000000000003 /* CoachViewModel.swift */,
 			);
 			path = Coach;
 			sourceTree = "<group>";
@@ -821,6 +830,7 @@
 				B007002100000005 /* BlurredPlanGateView.swift in Sources */,
 				B005000100000001 /* ChatModels.swift in Sources */,
 				B005000100000002 /* CoachSSEClient.swift in Sources */,
+				B005000100000003 /* CoachViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -846,6 +856,8 @@
 				B007001100000002 /* EntitlementGateTests.swift in Sources */,
 				B007004100000001 /* RetentionFlowTests.swift in Sources */,
 				B007002100000006 /* PaywallViewModelTests.swift in Sources */,
+				B005001100000001 /* CoachViewModelTests.swift in Sources */,
+				B005001100000002 /* CoachSSEClientTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
