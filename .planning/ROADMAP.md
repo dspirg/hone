@@ -102,9 +102,14 @@ Plans:
   2. User can modify their workout plan (swap exercise, reschedule day) by telling the AI coach in plain language
   3. AI coach responses reference the user's profile, current plan, and recent workout history — not generic advice
   4. AI coach sends proactive check-in messages based on the user's recent activity and progress patterns
-**Plans**: TBD
+**Plans**: 5 plans
 Plans:
-- [ ] TBD
+- [ ] 05-01-PLAN.md — Data layer: CDChatMessage CoreData entity, Supabase migration, Swift model types, CoachSSEClient
+- [ ] 05-02-PLAN.md — coach-chat Edge Function: GPT-4o mini streaming, system prompt assembly, plan modification routing
+- [ ] 05-03-PLAN.md — CoachViewModel state machine, CoreData persistence, Supabase sync, unit tests
+- [ ] 05-04-PLAN.md — Chat UI: CoachView, chat bubbles, input bar, streaming cursor, plan modification card, offline banner
+- [ ] 05-05-PLAN.md — [BLOCKING] Edge Function deployment, Supabase migration push, human end-to-end verification
+**UI hint**: yes
 
 ### Phase 6: Progress Tracking
 **Goal**: Users can see their full workout history, streaks, volume trends, and receive notifications when they hit personal records
@@ -159,7 +164,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 2. Exercise Library | 0/4 | Planned | - |
 | 3. AI Onboarding and Plan Generation | 0/5 | Planned | - |
 | 4. In-Session Workout Experience | 0/5 | Planned | - |
-| 5. AI Coach Chat | 0/TBD | Not started | - |
+| 5. AI Coach Chat | 0/5 | Planned | - |
 | 6. Progress Tracking | 0/TBD | Not started | - |
 | 7. Subscriptions and Paywall | 0/4 | Planned | - |
 | 8. Adaptive AI | 0/TBD | Not started | - |
