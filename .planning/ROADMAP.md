@@ -86,11 +86,11 @@ Plans:
   4. User sees a completion summary at the end of each session showing exercises completed, sets, and reps
 **Plans**: 5 plans
 Plans:
-- [ ] 04-01-PLAN.md — CoreData entities (CDSessionLog, CDSetLog), SessionRepository, Supabase migration, unit tests
-- [ ] 04-02-PLAN.md — SessionViewModel (session state machine, rest timer), SessionSyncService (NWPathMonitor + Supabase upsert)
-- [ ] 04-03-PLAN.md — Session UI: SessionView, ExerciseCardView, SetLogRow, SessionProgressBar, RestTimerOverlay
-- [ ] 04-04-PLAN.md — SessionSummaryView + TrainView active plan entry point with Start Workout buttons
-- [ ] 04-05-PLAN.md — [BLOCKING] Supabase schema push, full test suite verification, human end-to-end verification
+- [x] 04-01-PLAN.md — CoreData entities (CDSessionLog, CDSetLog), SessionRepository, Supabase migration, unit tests
+- [x] 04-02-PLAN.md — SessionViewModel (session state machine, rest timer), SessionSyncService (NWPathMonitor + Supabase upsert)
+- [x] 04-03-PLAN.md — Session UI: SessionView, ExerciseCardView, SetLogRow, SessionProgressBar, RestTimerOverlay
+- [x] 04-04-PLAN.md — SessionSummaryView + TrainView active plan entry point with Start Workout buttons
+- [x] 04-05-PLAN.md — [BLOCKING] Supabase schema push, full test suite verification, human end-to-end verification
 **UI hint**: yes
 
 ### Phase 5: AI Coach Chat
