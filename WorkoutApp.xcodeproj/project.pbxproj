@@ -112,6 +112,10 @@
 		B005004100000005 /* OfflineBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B005004000000005 /* OfflineBannerView.swift */; };
 		B005004100000006 /* ChatDateHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B005004000000006 /* ChatDateHeader.swift */; };
 		B005004100000007 /* PlanModificationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B005004000000007 /* PlanModificationCard.swift */; };
+		B006000100000001 /* ProgressViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B006000000000001 /* ProgressViewModel.swift */; };
+		B006000100000002 /* PRResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = B006000000000002 /* PRResult.swift */; };
+		B006000100000003 /* WeekBucket.swift in Sources */ = {isa = PBXBuildFile; fileRef = B006000000000003 /* WeekBucket.swift */; };
+		B006001100000001 /* ProgressViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B006001000000001 /* ProgressViewModelTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -240,6 +244,10 @@
 		B005004000000005 /* OfflineBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineBannerView.swift; sourceTree = "<group>"; };
 		B005004000000006 /* ChatDateHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDateHeader.swift; sourceTree = "<group>"; };
 		B005004000000007 /* PlanModificationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanModificationCard.swift; sourceTree = "<group>"; };
+		B006000000000001 /* ProgressViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressViewModel.swift; sourceTree = "<group>"; };
+		B006000000000002 /* PRResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PRResult.swift; sourceTree = "<group>"; };
+		B006000000000003 /* WeekBucket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekBucket.swift; sourceTree = "<group>"; };
+		B006001000000001 /* ProgressViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressViewModelTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -370,6 +378,7 @@
 				B007002000000006 /* PaywallViewModelTests.swift */,
 				B005001000000001 /* CoachViewModelTests.swift */,
 				B005001000000002 /* CoachSSEClientTests.swift */,
+				B006001000000001 /* ProgressViewModelTests.swift */,
 			);
 			path = WorkoutAppTests;
 			sourceTree = "<group>";
@@ -513,6 +522,7 @@
 				B004000030000001 /* Session */,
 				B007003030000001 /* Paywall */,
 				B005000030000001 /* Coach */,
+				B006000030000001 /* Progress */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -633,6 +643,24 @@
 				B005000000000003 /* CoachViewModel.swift */,
 			);
 			path = Coach;
+			sourceTree = "<group>";
+		};
+		B006000030000001 /* Progress */ = {
+			isa = PBXGroup;
+			children = (
+				B006000030000002 /* Models */,
+				B006000000000001 /* ProgressViewModel.swift */,
+			);
+			path = Progress;
+			sourceTree = "<group>";
+		};
+		B006000030000002 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B006000000000002 /* PRResult.swift */,
+				B006000000000003 /* WeekBucket.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		B005004030000001 /* Components */ = {
@@ -867,6 +895,9 @@
 				B005004100000005 /* OfflineBannerView.swift in Sources */,
 				B005004100000006 /* ChatDateHeader.swift in Sources */,
 				B005004100000007 /* PlanModificationCard.swift in Sources */,
+				B006000100000001 /* ProgressViewModel.swift in Sources */,
+				B006000100000002 /* PRResult.swift in Sources */,
+				B006000100000003 /* WeekBucket.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -894,6 +925,7 @@
 				B007002100000006 /* PaywallViewModelTests.swift in Sources */,
 				B005001100000001 /* CoachViewModelTests.swift in Sources */,
 				B005001100000002 /* CoachSSEClientTests.swift in Sources */,
+				B006001100000001 /* ProgressViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
