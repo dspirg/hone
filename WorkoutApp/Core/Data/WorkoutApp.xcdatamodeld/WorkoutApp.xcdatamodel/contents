@@ -67,6 +67,16 @@
         <attribute name="syncedToSupabase" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <relationship name="session" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDSessionLog" inverseName="setLogs" inverseEntity="CDSessionLog"/>
     </entity>
+    <entity name="CDChatMessage" representedClassName="CDChatMessage" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="userId" optional="YES" attributeType="String"/>
+        <attribute name="role" optional="YES" attributeType="String"/>
+        <attribute name="content" optional="YES" attributeType="String"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="syncedToSupabase" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="planModificationJSON" optional="YES" attributeType="String"/>
+        <attribute name="planModificationState" optional="YES" attributeType="String"/>
+    </entity>
     <elements>
         <element name="CDWorkoutPlan" positionX="-63" positionY="-18" width="128" height="193"/>
         <element name="CDWorkoutDay" positionX="135" positionY="-18" width="128" height="128"/>
@@ -74,5 +84,6 @@
         <element name="Exercise" positionX="531" positionY="-18" width="128" height="238"/>
         <element name="CDSessionLog" positionX="729" positionY="-18" width="128" height="238"/>
         <element name="CDSetLog" positionX="927" positionY="-18" width="128" height="193"/>
+        <element name="CDChatMessage" positionX="1125" positionY="-18" width="128" height="193"/>
     </elements>
 </model>

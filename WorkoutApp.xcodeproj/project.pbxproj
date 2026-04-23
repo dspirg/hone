@@ -100,6 +100,8 @@
 		B007002100000004 /* PricingCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B007002000000004 /* PricingCardView.swift */; };
 		B007002100000005 /* BlurredPlanGateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B007002000000005 /* BlurredPlanGateView.swift */; };
 		B007002100000006 /* PaywallViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B007002000000006 /* PaywallViewModelTests.swift */; };
+		B005000100000001 /* ChatModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B005000000000001 /* ChatModels.swift */; };
+		B005000100000002 /* CoachSSEClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B005000000000002 /* CoachSSEClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -216,6 +218,8 @@
 		B007002000000004 /* PricingCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricingCardView.swift; sourceTree = "<group>"; };
 		B007002000000005 /* BlurredPlanGateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurredPlanGateView.swift; sourceTree = "<group>"; };
 		B007002000000006 /* PaywallViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallViewModelTests.swift; sourceTree = "<group>"; };
+		B005000000000001 /* ChatModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatModels.swift; sourceTree = "<group>"; };
+		B005000000000002 /* CoachSSEClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachSSEClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -486,6 +490,7 @@
 				B002002030000001 /* Train */,
 				B004000030000001 /* Session */,
 				B007003030000001 /* Paywall */,
+				B005000030000001 /* Coach */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -595,6 +600,31 @@
 				B007003000000005 /* DiscountOfferViewModel.swift */,
 			);
 			path = Retention;
+			sourceTree = "<group>";
+		};
+		B005000030000001 /* Coach */ = {
+			isa = PBXGroup;
+			children = (
+				B005000030000002 /* Models */,
+				B005000030000003 /* SSE */,
+			);
+			path = Coach;
+			sourceTree = "<group>";
+		};
+		B005000030000002 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B005000000000001 /* ChatModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		B005000030000003 /* SSE */ = {
+			isa = PBXGroup;
+			children = (
+				B005000000000002 /* CoachSSEClient.swift */,
+			);
+			path = SSE;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -789,6 +819,8 @@
 				B007002100000003 /* ValuePropListView.swift in Sources */,
 				B007002100000004 /* PricingCardView.swift in Sources */,
 				B007002100000005 /* BlurredPlanGateView.swift in Sources */,
+				B005000100000001 /* ChatModels.swift in Sources */,
+				B005000100000002 /* CoachSSEClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
