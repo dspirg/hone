@@ -120,9 +120,13 @@ Plans:
   2. User can see their current streak, longest streak, and weekly consistency score
   3. User receives an in-app notification when they set a new personal record on an exercise
   4. User can view charts showing workout volume over time, sessions per week, and performance trends
-**Plans**: TBD
+**Plans**: 4 plans
 Plans:
-- [ ] TBD
+- [ ] 06-01-PLAN.md — ProgressViewModel data layer: streak, weekly ring, chart data, PR detection, unit tests
+- [ ] 06-02-PLAN.md — Progress tab UI: StreakCard, WeeklyRingView, SessionHistoryRow, ChartSectionView, 5th tab
+- [ ] 06-03-PLAN.md — NotificationScheduler: local workout reminders, Info.plist, unit tests
+- [ ] 06-04-PLAN.md — PRBadgeView, SessionSummaryView PR injection, notification wiring, human verification
+**UI hint**: yes
 
 ### Phase 7: Subscriptions and Paywall
 **Goal**: Users are presented with a compelling paywall after seeing their personalized plan; monthly and annual subscription options are offered with a free trial; a cancellation retention flow is active
@@ -165,6 +169,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 3. AI Onboarding and Plan Generation | 0/5 | Planned | - |
 | 4. In-Session Workout Experience | 0/5 | Planned | - |
 | 5. AI Coach Chat | 0/5 | Planned | - |
-| 6. Progress Tracking | 0/TBD | Not started | - |
+| 6. Progress Tracking | 0/4 | Planned | - |
 | 7. Subscriptions and Paywall | 0/4 | Planned | - |
 | 8. Adaptive AI | 0/TBD | Not started | - |
