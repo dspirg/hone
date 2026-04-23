@@ -24,7 +24,11 @@ final class AppState {
     // Drives the fullScreenCover paywall gate in ContentView (D-13 hard paywall).
     // Source of truth: RevenueCat customerInfo.entitlements["pro"]?.isActive
     // Set to false by default — paywall shows until subscription confirmed (safe default, T-07-01)
+    #if DEBUG
+    var isSubscribed: Bool = true  // Bypass paywall in debug builds for testing
+    #else
     var isSubscribed: Bool = false
+    #endif
 
     // isOnboarded mirrors onboardingCompleted for SUBS-03 compatibility.
     // Phase 3 populates this; Phase 7 gates paywall on authenticated + onboarded + !isSubscribed
@@ -51,8 +55,13 @@ final class AppState {
                 // Without this, ALL webhook payloads contain $RCAnonymousID, breaking
                 // the revenuecat-webhook -> profiles.subscription_status pipeline entirely
                 if let userId = session?.user.id.uuidString {
+                    #if DEBUG
+                    _ = try? await revenueCatService.logIn(userId: userId)
+                    self.isSubscribed = true  // Bypass paywall in debug builds
+                    #else
                     let subscribed = (try? await revenueCatService.logIn(userId: userId)) ?? false
                     self.isSubscribed = subscribed
+                    #endif
                 }
             case .signedOut:
                 self.isAuthenticated = false

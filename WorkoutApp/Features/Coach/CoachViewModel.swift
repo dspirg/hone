@@ -372,6 +372,9 @@ final class CoachViewModel {
 
                 guard let httpResponse = response as? HTTPURLResponse,
                       httpResponse.statusCode == 200 else {
+                    let statusCode = (response as? HTTPURLResponse)?.statusCode ?? -1
+                    let body = String(data: data, encoding: .utf8) ?? "no body"
+                    print("CoachViewModel: execute_modify HTTP \(statusCode): \(body)")
                     // Revert to pending on HTTP error
                     if let idx = messages.firstIndex(where: { $0.id == messageId }) {
                         messages[idx].planModificationState = .pending
@@ -578,7 +581,7 @@ final class CoachViewModel {
             message: message,
             messageHistory: historyMessages,
             profile: profile,
-            currentPlan: AnyCodable(planData as Any),
+            currentPlan: AnyCodable(planData),
             sessionSummaries: summaries,
             messageCount: totalMessageCount,
             action: nil,
@@ -600,7 +603,7 @@ final class CoachViewModel {
             message: "",
             messageHistory: [],
             profile: profile,
-            currentPlan: AnyCodable(planData as Any),
+            currentPlan: AnyCodable(planData),
             sessionSummaries: [],
             messageCount: 0,
             action: "execute_modify",

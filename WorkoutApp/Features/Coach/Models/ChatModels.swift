@@ -82,62 +82,55 @@ struct ChatPayload: Encodable, Sendable {
 
 // MARK: - AnyCodable helper for untyped JSON passthrough
 // Used to pass CDWorkoutPlan.rawJSON Data blob through ChatPayload without decoding.
-struct AnyCodable: Encodable, Sendable {
-    let value: Any
+// Uses a recursive enum instead of Any to satisfy Swift 6 Sendable requirements.
+enum AnyCodable: Encodable, Sendable {
+    case string(String)
+    case int(Int)
+    case double(Double)
+    case bool(Bool)
+    case dict([String: AnyCodable])
+    case array([AnyCodable])
+    case null
 
-    init(_ value: Any) {
-        self.value = value
+    /// Create from raw JSON Data (e.g. CDWorkoutPlan.rawJSON)
+    init(_ value: Data?) {
+        guard let data = value,
+              let json = try? JSONSerialization.jsonObject(with: data) else {
+            self = .null
+            return
+        }
+        self = Self.fromJSONObject(json)
     }
 
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        if let data = value as? Data {
-            // Pass raw JSON data through by deserializing then re-encoding
-            if let json = try? JSONSerialization.jsonObject(with: data),
-               let encodable = json as? [String: Any] {
-                try container.encode(encodable.mapValues { AnyCodableValue($0) })
-            } else {
-                try container.encodeNil()
-            }
-        } else if let string = value as? String {
-            try container.encode(string)
-        } else if let int = value as? Int {
-            try container.encode(int)
-        } else if let double = value as? Double {
-            try container.encode(double)
-        } else if let bool = value as? Bool {
-            try container.encode(bool)
-        } else {
-            try container.encodeNil()
+    /// Create from a String value
+    init(_ value: String) {
+        self = .string(value)
+    }
+
+    private static func fromJSONObject(_ obj: Any) -> AnyCodable {
+        switch obj {
+        case let string as String: return .string(string)
+        case let int as Int: return .int(int)
+        case let double as Double: return .double(double)
+        case let bool as Bool: return .bool(bool)
+        case let dict as [String: Any]:
+            return .dict(dict.mapValues { fromJSONObject($0) })
+        case let array as [Any]:
+            return .array(array.map { fromJSONObject($0) })
+        default: return .null
         }
     }
-}
-
-// Helper for encoding arbitrary JSON values (supports nested objects/arrays)
-private struct AnyCodableValue: Encodable {
-    let value: Any
-
-    init(_ value: Any) {
-        self.value = value
-    }
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
-        switch value {
-        case let string as String:
-            try container.encode(string)
-        case let int as Int:
-            try container.encode(int)
-        case let double as Double:
-            try container.encode(double)
-        case let bool as Bool:
-            try container.encode(bool)
-        case let dict as [String: Any]:
-            try container.encode(dict.mapValues { AnyCodableValue($0) })
-        case let array as [Any]:
-            try container.encode(array.map { AnyCodableValue($0) })
-        default:
-            try container.encodeNil()
+        switch self {
+        case .string(let v): try container.encode(v)
+        case .int(let v): try container.encode(v)
+        case .double(let v): try container.encode(v)
+        case .bool(let v): try container.encode(v)
+        case .dict(let v): try container.encode(v)
+        case .array(let v): try container.encode(v)
+        case .null: try container.encodeNil()
         }
     }
 }

@@ -124,32 +124,8 @@ serve(async (req: Request): Promise<Response> => {
     );
   }
 
-  // T-05-04: Validate and sanitize message field (defense-in-depth per Security Domain)
-  const MAX_MESSAGE_LEN = 2000;
-  if (!payload.message || typeof payload.message !== "string") {
-    return new Response(
-      JSON.stringify({ error: "message field is required" }),
-      { status: 400, headers: { "Content-Type": "application/json" } }
-    );
-  }
-  const safeMessage = payload.message.slice(0, MAX_MESSAGE_LEN);
-
-  // T-05-05: Cap message_history at 20 entries (Pitfall 5 — prevents context overflow)
-  let safeHistory = Array.isArray(payload.message_history)
-    ? payload.message_history.slice(-20)
-    : [];
-
-  // D-30: Cap session_summaries at 3 most recent
-  const safeSummaries = Array.isArray(payload.session_summaries)
-    ? payload.session_summaries.slice(0, 3)
-    : [];
-
-  // T-05-07: Rate limiting check (per-user, max 60 requests/hour).
-  // For MVP, log a warning but do not block. Full rate limiting requires a Redis/KV store
-  // not yet in the stack. Console.warn is monitored in Edge Function logs.
-  console.warn("coach-chat: rate-limit-check placeholder — implement with KV store when available");
-
-  // D-09, D-14: Handle execute_modify path — GPT-4o with Structured Outputs (non-streaming)
+  // D-09, D-14: Handle execute_modify path FIRST — before message validation
+  // execute_modify sends message: "" which would fail the message check below
   if (payload.action === "execute_modify") {
     const modificationSystemPrompt = `You are a professional fitness coach modifying a user's workout plan.
 
@@ -211,6 +187,30 @@ SAFETY: You are not a medical professional. Do not recommend exercises that coul
       { status: 200, headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" } }
     );
   }
+
+  // T-05-04: Validate and sanitize message field (defense-in-depth per Security Domain)
+  // Placed after execute_modify check — that path sends message: "" intentionally
+  const MAX_MESSAGE_LEN = 2000;
+  if (!payload.message || typeof payload.message !== "string") {
+    return new Response(
+      JSON.stringify({ error: "message field is required" }),
+      { status: 400, headers: { "Content-Type": "application/json" } }
+    );
+  }
+  const safeMessage = payload.message.slice(0, MAX_MESSAGE_LEN);
+
+  // T-05-05: Cap message_history at 20 entries (Pitfall 5 — prevents context overflow)
+  let safeHistory = Array.isArray(payload.message_history)
+    ? payload.message_history.slice(-20)
+    : [];
+
+  // D-30: Cap session_summaries at 3 most recent
+  const safeSummaries = Array.isArray(payload.session_summaries)
+    ? payload.session_summaries.slice(0, 3)
+    : [];
+
+  // T-05-07: Rate limiting check (per-user, max 60 requests/hour).
+  console.warn("coach-chat: rate-limit-check placeholder — implement with KV store when available");
 
   // D-22: Context summarization — when message count exceeds threshold,
   // summarize older messages server-side and inject summary into system prompt.
