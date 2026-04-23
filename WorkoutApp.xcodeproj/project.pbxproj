@@ -105,6 +105,13 @@
 		B005000100000003 /* CoachViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B005000000000003 /* CoachViewModel.swift */; };
 		B005001100000001 /* CoachViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B005001000000001 /* CoachViewModelTests.swift */; };
 		B005001100000002 /* CoachSSEClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B005001000000002 /* CoachSSEClientTests.swift */; };
+		B005004100000001 /* ChatBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B005004000000001 /* ChatBubbleView.swift */; };
+		B005004100000002 /* CoachHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B005004000000002 /* CoachHeaderView.swift */; };
+		B005004100000003 /* ChatInputBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B005004000000003 /* ChatInputBar.swift */; };
+		B005004100000004 /* StreamingCursorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B005004000000004 /* StreamingCursorView.swift */; };
+		B005004100000005 /* OfflineBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B005004000000005 /* OfflineBannerView.swift */; };
+		B005004100000006 /* ChatDateHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B005004000000006 /* ChatDateHeader.swift */; };
+		B005004100000007 /* PlanModificationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B005004000000007 /* PlanModificationCard.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -226,6 +233,13 @@
 		B005000000000003 /* CoachViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachViewModel.swift; sourceTree = "<group>"; };
 		B005001000000001 /* CoachViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachViewModelTests.swift; sourceTree = "<group>"; };
 		B005001000000002 /* CoachSSEClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachSSEClientTests.swift; sourceTree = "<group>"; };
+		B005004000000001 /* ChatBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatBubbleView.swift; sourceTree = "<group>"; };
+		B005004000000002 /* CoachHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachHeaderView.swift; sourceTree = "<group>"; };
+		B005004000000003 /* ChatInputBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInputBar.swift; sourceTree = "<group>"; };
+		B005004000000004 /* StreamingCursorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingCursorView.swift; sourceTree = "<group>"; };
+		B005004000000005 /* OfflineBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineBannerView.swift; sourceTree = "<group>"; };
+		B005004000000006 /* ChatDateHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDateHeader.swift; sourceTree = "<group>"; };
+		B005004000000007 /* PlanModificationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanModificationCard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -615,9 +629,24 @@
 			children = (
 				B005000030000002 /* Models */,
 				B005000030000003 /* SSE */,
+				B005004030000001 /* Components */,
 				B005000000000003 /* CoachViewModel.swift */,
 			);
 			path = Coach;
+			sourceTree = "<group>";
+		};
+		B005004030000001 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				B005004000000001 /* ChatBubbleView.swift */,
+				B005004000000002 /* CoachHeaderView.swift */,
+				B005004000000003 /* ChatInputBar.swift */,
+				B005004000000004 /* StreamingCursorView.swift */,
+				B005004000000005 /* OfflineBannerView.swift */,
+				B005004000000006 /* ChatDateHeader.swift */,
+				B005004000000007 /* PlanModificationCard.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		B005000030000002 /* Models */ = {
@@ -831,6 +860,13 @@
 				B005000100000001 /* ChatModels.swift in Sources */,
 				B005000100000002 /* CoachSSEClient.swift in Sources */,
 				B005000100000003 /* CoachViewModel.swift in Sources */,
+				B005004100000001 /* ChatBubbleView.swift in Sources */,
+				B005004100000002 /* CoachHeaderView.swift in Sources */,
+				B005004100000003 /* ChatInputBar.swift in Sources */,
+				B005004100000004 /* StreamingCursorView.swift in Sources */,
+				B005004100000005 /* OfflineBannerView.swift in Sources */,
+				B005004100000006 /* ChatDateHeader.swift in Sources */,
+				B005004100000007 /* PlanModificationCard.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
