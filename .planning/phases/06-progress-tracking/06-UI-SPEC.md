@@ -55,31 +55,34 @@ Source: existing pattern from HomeView (VStack spacing: 16), SessionSummaryView 
 
 SwiftUI semantic font scale — no custom sizes. These map to the existing codebase pattern.
 
+Exactly 4 size tokens, exactly 2 weights:
+
 | Role | SwiftUI Token | Approx pt | Weight | Line Height |
 |------|--------------|-----------|--------|-------------|
-| Display | `.largeTitle` | 34pt | `.bold` (700) | 1.2 |
+| Display | `.largeTitle` | 34pt | `.semibold` (600) | 1.2 |
 | Heading | `.title2` | 22pt | `.semibold` (600) | 1.2 |
 | Body | `.body` | 17pt | `.regular` (400) | 1.5 |
-| Label / Secondary | `.subheadline` | 15pt | `.regular` (400) | 1.4 |
 | Caption | `.caption` | 12pt | `.regular` (400) | 1.3 |
 
 **Specific assignments for this phase:**
 
 | Element | Token | Weight |
 |---------|-------|--------|
-| Streak number (e.g. "12") | `.largeTitle` | `.bold` |
-| Streak label ("day streak") | `.subheadline` | `.regular` |
+| Streak number (e.g. "12") | `.largeTitle` | `.semibold` |
+| Streak label ("day streak") | `.caption` | `.regular` |
 | Weekly ring fraction ("3/4") | `.title2` | `.semibold` |
 | Weekly ring label ("this week") | `.caption` | `.regular` |
 | Section headers ("Recent Sessions", "Volume", "PRs") | `.title2` | `.semibold` |
 | Session history row — workout name | `.body` | `.semibold` |
-| Session history row — metadata (date, exercise count, sets) | `.subheadline` | `.regular` |
+| Session history row — metadata (date, exercise count, sets) | `.caption` | `.regular` |
 | Chart axis labels | `.caption` | `.regular` |
 | PR badge — exercise name | `.body` | `.semibold` |
 | PR badge — new record value | `.title2` | `.semibold` |
 | PR badge — previous best | `.caption` | `.regular` |
 
-Source: existing pattern from HomeView (`.title2.weight(.semibold)`, `.body`, `.subheadline`), SessionSummaryView (`StatCell` uses `.title2.weight(.semibold)` + `.subheadline`).
+Note: `.subheadline` and `.bold` are not used in this phase. `.largeTitle.semibold` with `AccentColor` foreground provides sufficient visual dominance for the streak number without requiring `.bold`. Session row metadata formerly assigned `.subheadline` is now `.caption` — the size difference is minimal and reduces the token count to the required maximum of 4.
+
+Source: existing pattern from HomeView (`.title2.weight(.semibold)`, `.body`), SessionSummaryView (`StatCell` uses `.title2.weight(.semibold)` + `.body`).
 
 ---
 
@@ -122,8 +125,8 @@ New components required for this phase:
 
 ### StreakCard
 - `VStack(spacing: 8)` inside `CardBackground` rounded card
-- Streak number: `.largeTitle.weight(.bold)`, `AccentColor` foreground
-- Label: "day streak" — `.subheadline`, `.secondary` foreground
+- Streak number: `.largeTitle.weight(.semibold)`, `AccentColor` foreground
+- Label: "day streak" — `.caption`, `.secondary` foreground
 - Card: `.padding(16)`, `.background(Color("CardBackground"))`, `.clipShape(RoundedRectangle(cornerRadius: 16))`
 
 ### WeeklyRingView
@@ -136,7 +139,7 @@ New components required for this phase:
 
 ### SessionHistoryRow
 - `HStack` with 44pt minimum height
-- Leading: workout name (`.body.semibold`) stacked above date + counts (`.subheadline`, `.secondary`)
+- Leading: workout name (`.body.semibold`) stacked above date + counts (`.caption`, `.secondary`)
 - Trailing: chevron SF Symbol (`chevron.right`, `.caption`, `.secondary`)
 - Tap: push `SessionDetailView` via `NavigationLink`
 - Divider between rows: system `Divider()` (no custom color)
