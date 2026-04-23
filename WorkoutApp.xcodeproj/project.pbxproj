@@ -117,6 +117,12 @@
 		B00600A100000001 /* ProgressViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00600A000000001 /* ProgressViewModel.swift */; };
 		B00600A100000002 /* PRResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00600A000000002 /* PRResult.swift */; };
 		B00600A100000003 /* WeekBucket.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00600A000000003 /* WeekBucket.swift */; };
+		B00600A100000010 /* StreakCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00600A000000010 /* StreakCard.swift */; };
+		B00600A100000011 /* WeeklyRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00600A000000011 /* WeeklyRingView.swift */; };
+		B00600A100000012 /* SessionHistoryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00600A000000012 /* SessionHistoryRow.swift */; };
+		B00600A100000013 /* SessionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00600A000000013 /* SessionDetailView.swift */; };
+		B00600A100000014 /* ChartSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00600A000000014 /* ChartSectionView.swift */; };
+		B00600A100000015 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00600A000000015 /* ProgressView.swift */; };
 		B00600B100000001 /* ProgressViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00600B000000001 /* ProgressViewModelTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -251,6 +257,12 @@
 		B00600A000000001 /* ProgressViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressViewModel.swift; sourceTree = "<group>"; };
 		B00600A000000002 /* PRResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PRResult.swift; sourceTree = "<group>"; };
 		B00600A000000003 /* WeekBucket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekBucket.swift; sourceTree = "<group>"; };
+		B00600A000000010 /* StreakCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakCard.swift; sourceTree = "<group>"; };
+		B00600A000000011 /* WeeklyRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyRingView.swift; sourceTree = "<group>"; };
+		B00600A000000012 /* SessionHistoryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionHistoryRow.swift; sourceTree = "<group>"; };
+		B00600A000000013 /* SessionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDetailView.swift; sourceTree = "<group>"; };
+		B00600A000000014 /* ChartSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartSectionView.swift; sourceTree = "<group>"; };
+		B00600A000000015 /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
 		B00600B000000001 /* ProgressViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressViewModelTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -663,9 +675,23 @@
 			isa = PBXGroup;
 			children = (
 				B00600A030000002 /* Models */,
+				B00600A030000003 /* Components */,
 				B00600A000000001 /* ProgressViewModel.swift */,
+				B00600A000000015 /* ProgressView.swift */,
 			);
 			path = Progress;
+			sourceTree = "<group>";
+		};
+		B00600A030000003 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				B00600A000000010 /* StreakCard.swift */,
+				B00600A000000011 /* WeeklyRingView.swift */,
+				B00600A000000012 /* SessionHistoryRow.swift */,
+				B00600A000000013 /* SessionDetailView.swift */,
+				B00600A000000014 /* ChartSectionView.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		B00600A030000002 /* Models */ = {
@@ -913,6 +939,12 @@
 				B00600A100000001 /* ProgressViewModel.swift in Sources */,
 				B00600A100000002 /* PRResult.swift in Sources */,
 				B00600A100000003 /* WeekBucket.swift in Sources */,
+				B00600A100000010 /* StreakCard.swift in Sources */,
+				B00600A100000011 /* WeeklyRingView.swift in Sources */,
+				B00600A100000012 /* SessionHistoryRow.swift in Sources */,
+				B00600A100000013 /* SessionDetailView.swift in Sources */,
+				B00600A100000014 /* ChartSectionView.swift in Sources */,
+				B00600A100000015 /* ProgressView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
