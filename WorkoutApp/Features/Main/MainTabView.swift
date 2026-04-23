@@ -1,7 +1,7 @@
 import SwiftUI
 
 // MARK: - MainTabView
-// D-04: 4-tab shell — Home, Train, Coach, Profile
+// D-04: 5-tab shell — Home, Train, Coach, Progress, Profile
 // Active tab accent tint via .tint(Color("AccentColor")) (UI-SPEC)
 struct MainTabView: View {
     @Environment(AppState.self) var appState
@@ -21,6 +21,11 @@ struct MainTabView: View {
             CoachView()
                 .tabItem {
                     Label("Coach", systemImage: "message")
+                }
+
+            WorkoutProgressView()
+                .tabItem {
+                    Label("Progress", systemImage: "chart.bar.fill")
                 }
 
             ProfileView()

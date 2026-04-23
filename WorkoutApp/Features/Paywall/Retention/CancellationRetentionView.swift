@@ -17,7 +17,7 @@ struct CancellationRetentionView: View {
         NavigationStack {
             Group {
                 if isCheckingEligibility {
-                    ProgressView("Loading...")
+                    SwiftUI.ProgressView("Loading...")
                 } else {
                     PauseOptionsView(
                         isEligibleForDiscount: isEligibleForDiscount,
