@@ -35,8 +35,8 @@ Declared values (multiples of 4, matching all prior phases):
 | Token | Value | Usage |
 |-------|-------|-------|
 | xs | 4pt | VStack spacing within stat cells, badge internal gaps |
-| sm | 8pt | Between heading and subtitle, row internal element gaps |
-| md | 16pt | Default horizontal page padding, card internal padding |
+| sm | 8pt | Between heading and subtitle, row internal element gaps, PRBadgeView vertical padding |
+| md | 16pt | Default horizontal page padding, card internal padding, PRBadgeView horizontal padding |
 | lg | 24pt | Between major section breaks within ProgressView |
 | xl | 32pt | Between streak block and session history section |
 | 2xl | 48pt | Top breathing room above streak display |
@@ -61,7 +61,7 @@ SwiftUI semantic font scale — no custom sizes. These map to the existing codeb
 | Heading | `.title2` | 22pt | `.semibold` (600) | 1.2 |
 | Body | `.body` | 17pt | `.regular` (400) | 1.5 |
 | Label / Secondary | `.subheadline` | 15pt | `.regular` (400) | 1.4 |
-| Caption | `.caption2` | 11pt | `.regular` (400) | 1.3 |
+| Caption | `.caption` | 12pt | `.regular` (400) | 1.3 |
 
 **Specific assignments for this phase:**
 
@@ -74,7 +74,7 @@ SwiftUI semantic font scale — no custom sizes. These map to the existing codeb
 | Section headers ("Recent Sessions", "Volume", "PRs") | `.title2` | `.semibold` |
 | Session history row — workout name | `.body` | `.semibold` |
 | Session history row — metadata (date, exercise count, sets) | `.subheadline` | `.regular` |
-| Chart axis labels | `.caption2` | `.regular` |
+| Chart axis labels | `.caption` | `.regular` |
 | PR badge — exercise name | `.body` | `.semibold` |
 | PR badge — new record value | `.title2` | `.semibold` |
 | PR badge — previous best | `.caption` | `.regular` |
@@ -155,21 +155,21 @@ New components required for this phase:
 - `Chart { BarMark(x: .value("Week", week), y: .value("Sessions", count)) }`
 - Bar foreground: `.secondary` (system adaptive)
 - Chart height: 160pt fixed
-- X-axis: week label (abbreviated, e.g. "Apr 7") — `.caption2`
-- Y-axis: integer session count — `.caption2`
+- X-axis: week label (abbreviated, e.g. "Apr 7") — `.caption`
+- Y-axis: integer session count — `.caption`
 
 #### Volume Line Chart
 - `Chart { LineMark(x: .value("Week", week), y: .value("Volume", volume)) }`
 - Line foreground: `AccentColor` at 70% opacity
 - Area fill: `AccentColor` at 10% opacity (using `.chartPlotStyle`)
 - Chart height: 160pt fixed
-- X-axis: week label — `.caption2`
-- Y-axis: abbreviated volume (e.g. "1.2k") — `.caption2`
+- X-axis: week label — `.caption`
+- Y-axis: abbreviated volume (e.g. "1.2k") — `.caption`
 
 ### PRBadgeView (injected into SessionSummaryView)
 - Appears below existing stats block in `SessionSummaryView` when PR(s) detected
 - Container: `HStack(spacing: 8)` with `AccentColor` at 10% opacity background fill
-- Padding: 12pt vertical, 16pt horizontal
+- Padding: 8pt vertical (sm), 16pt horizontal (md)
 - Corner radius: 12pt
 - Leading: `trophy.fill` SF Symbol, `AccentColor`
 - Body: exercise name (`.body.semibold`) + "New record: X reps" (`.body`, `.primary`) + "Previous best: Y reps" (`.caption`, `.secondary`)
