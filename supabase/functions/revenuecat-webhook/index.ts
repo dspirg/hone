@@ -61,9 +61,14 @@ serve(async (req: Request) => {
     return new Response("Missing event object", { status: 400 })
   }
 
-  const appUserId: string = rcEvent.app_user_id
-  const eventType: string = rcEvent.type
-  const eventId: string = rcEvent.id
+  const appUserId: string | undefined = rcEvent.app_user_id
+  const eventType: string | undefined = rcEvent.type
+  const eventId: string | undefined = rcEvent.id
+
+  if (!appUserId || !eventType || !eventId) {
+    console.error(`[revenuecat-webhook] Missing required fields: app_user_id=${appUserId}, type=${eventType}, id=${eventId}`)
+    return new Response("Missing required event fields", { status: 400 })
+  }
 
   // 3. Reject anonymous IDs (RESEARCH Pitfall 1)
   // If logIn() was never called with the Supabase UUID, RevenueCat assigns
