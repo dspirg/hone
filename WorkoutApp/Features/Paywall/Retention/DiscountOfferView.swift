@@ -33,7 +33,7 @@ struct DiscountOfferView: View {
                     .padding(.top, 24)
 
                 // Body
-                Text("Get 50% off for the next 3 months — then your regular price.")
+                Text("Get 50% off for the next 3 months — $6.49/month for 3 months, then $12.99/month.")
                     .font(.body)
                     .padding(.horizontal, 32)
                     .padding(.top, 8)
@@ -43,7 +43,7 @@ struct DiscountOfferView: View {
                     Text("50% off")
                         .font(.title.weight(.semibold))
                         .foregroundStyle(Color("AccentColor"))
-                    Text("3 months, then full price")
+                    Text("$6.49/month for 3 months, then $12.99/month")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
