@@ -443,22 +443,22 @@ var isEligibleForDiscount: Bool {
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **App Store Connect Product Registration (Blocking Verification)**
+1. **App Store Connect Product Registration (Blocking Verification)** — RESOLVED: Deferred verification item
    - What we know: Products `com.danspirgen.hone.pro.monthly` and `com.danspirgen.hone.pro.annual` must exist in App Store Connect before RevenueCat SDK can fetch real offerings in sandbox.
    - What's unclear: Whether the existing StoreKit config file (created in Plan 04 Task 1) works with the iOS 26 simulator + RevenueCat SDK 5.x for local testing, or if real App Store Connect products are the only path forward.
-   - Recommendation: Create App Store Connect products and sandbox test accounts before running Phase 7 verification (07-04 deferred items). The 07-04-SUMMARY documents this as the root cause of all deferred verification items.
+   - Resolution: Deferred to post-phase verification. StoreKit config file created as local fallback (07-04 Task 1). App Store Connect products required for full sandbox validation. The 07-04-SUMMARY documents this as the root cause of all deferred verification items.
 
-2. **Social Proof Count Update Mechanism**
+2. **Social Proof Count Update Mechanism** — RESOLVED: Seeded value for v1
    - What we know: "Join 1,200 members" is seeded. The UI spec calls for updating via a Supabase `app_config` table.
    - What's unclear: Whether the `app_config` table exists or needs to be created in a future phase.
-   - Recommendation: For v1, the seeded value is sufficient. Supabase `app_config` table can be created in a maintenance phase when real member counts are available.
+   - Resolution: For v1, the seeded value is sufficient. Supabase `app_config` table can be created in a maintenance phase when real member counts are available. No action needed this phase.
 
-3. **`isSubscribed = true` Debug Override**
+3. **`isSubscribed = true` Debug Override** — RESOLVED: Safe as-is
    - What we know: AppState uses `#if DEBUG` to set `isSubscribed = true` to bypass the paywall during development.
    - What's unclear: Whether this override should be removed before App Store submission or toggled via a scheme flag.
-   - Recommendation: The `#if DEBUG` guard ensures the override is stripped in Release builds. This is safe for App Store submission. Keep as-is.
+   - Resolution: The `#if DEBUG` guard ensures the override is stripped in Release builds. This is safe for App Store submission. Keep as-is.
 
 ---
 
