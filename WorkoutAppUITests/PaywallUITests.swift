@@ -99,6 +99,20 @@ final class PaywallUITests: XCTestCase {
         // Retention flow is code-verified; manual spot-check only
     }
 
+    // MARK: - Accessibility Audit
+
+    func testPaywallAccessibilityAudit() throws {
+        app.launch()
+
+        let headline = app.staticTexts["Your personalized plan is ready"]
+        if headline.waitForExistence(timeout: 10) {
+            // Xcode 17+ accessibility audit — checks contrast, labels, hit targets
+            if #available(iOS 17.0, *) {
+                try app.performAccessibilityAudit()
+            }
+        }
+    }
+
     // MARK: - Screenshot Capture
 
     func testCapturePaywallScreenshot() throws {
