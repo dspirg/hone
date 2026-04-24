@@ -46,18 +46,24 @@ serve(async (req: Request) => {
     return new Response("Unauthorized", { status: 401 })
   }
 
-  // 2. Parse event payload
-  let event: Record<string, string>
+  // 2. Parse event payload (RevenueCat sends { api_version, event: { type, app_user_id, id } })
+  let payload: { api_version?: string; event: { type: string; app_user_id: string; id: string } }
   try {
-    event = await req.json()
+    payload = await req.json()
   } catch {
     console.error("[revenuecat-webhook] Failed to parse JSON payload")
     return new Response("Invalid JSON", { status: 400 })
   }
 
-  const appUserId: string = event.app_user_id
-  const eventType: string = event.type
-  const eventId: string = event.id
+  const rcEvent = payload.event
+  if (!rcEvent) {
+    console.error("[revenuecat-webhook] Missing 'event' object in payload")
+    return new Response("Missing event object", { status: 400 })
+  }
+
+  const appUserId: string = rcEvent.app_user_id
+  const eventType: string = rcEvent.type
+  const eventId: string = rcEvent.id
 
   // 3. Reject anonymous IDs (RESEARCH Pitfall 1)
   // If logIn() was never called with the Supabase UUID, RevenueCat assigns
