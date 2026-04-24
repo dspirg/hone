@@ -1,6 +1,6 @@
 # Phase 7: Subscriptions and Paywall - Context
 
-**Gathered:** 2026-04-16
+**Gathered:** 2026-04-16 (updated 2026-04-24)
 **Status:** Ready for planning
 
 <domain>
@@ -23,14 +23,14 @@ No workout execution, no AI features, no coach chat changes in this phase.
 ## Implementation Decisions
 
 ### Pricing & Trial
-- **D-01:** Monthly plan: $9.99/month
-- **D-02:** Annual plan: $59.99/year (~$4.99/month equivalent, ~50% off monthly)
+- **D-01:** Monthly plan: $12.99/month (updated from $9.99 based on competitive research — conversational AI coach differentiator justifies mid-tier pricing between FitnessAI and Fitbod)
+- **D-02:** Annual plan: $79.99/year (~$6.67/month equivalent, ~49% off monthly) (updated from $59.99 — 50% discount was too steep per industry benchmarks of 25-35%; still undercuts Fitbod's $95.99/yr)
 - **D-03:** Free trial: 14 days on both plans — allows users to complete 5-6 sessions and form habits before billing begins
 - **D-04:** Only two tiers: monthly and annual. No weekly, lifetime, or family plans in v1.
 
 ### Paywall Design
 - **D-05:** Paywall style: feature showcase — 3-4 value prop bullets above pricing cards. Example bullets: "AI plan built for you", "500+ exercises with video", "Coach chat anytime", "Adapts as you improve"
-- **D-06:** Annual price displayed as monthly equivalent: "$4.99/month, billed $59.99/year" — makes the discount feel concrete
+- **D-06:** Annual price displayed as monthly equivalent: "$6.67/month, billed $79.99/year" — makes the discount feel concrete
 - **D-07:** Social proof: "Join [X] members" count displayed below value props. Start with a believable seed number, update as the app grows.
 - **D-08:** Annual plan is the default selected state, highlighted with a "Most Popular" badge. Monthly shown below it. Both tappable to switch selection.
 
@@ -38,7 +38,7 @@ No workout execution, no AI features, no coach chat changes in this phase.
 - **D-09:** Retention flow triggered when user taps "Manage Subscription" in Profile tab — shows in-app retention screen before redirecting to App Store settings
 - **D-10:** Offer order: pause first, then discount. Pause has less friction (no money), discount is the stronger offer held in reserve.
 - **D-11:** Pause options: 1 month, 2 months, or 3 months — user picks from a segmented control or chip set
-- **D-12:** Discount offer (shown if pause is declined): 50% off for 3 months — "$4.99/month for 3 months, then $9.99/month". Implemented via RevenueCat promotional offer.
+- **D-12:** Discount offer (shown if pause is declined): 50% off for 3 months — "$6.49/month for 3 months, then $12.99/month". Implemented via RevenueCat promotional offer.
 
 ### Expired & Lapsed State
 - **D-13:** Hard paywall on trial or subscription expiry — no free tier. Show paywall screen again.
@@ -86,7 +86,7 @@ No workout execution, no AI features, no coach chat changes in this phase.
 ## Specific Ideas
 
 - Paywall card layout: AccentColor "Most Popular" badge top-right of annual card, checkmark bullets for value props, CTA "Start 14-Day Free Trial" (primary, AccentColor fill)
-- Fine print below CTA: "Cancel anytime. $59.99/year after trial."
+- Fine print below CTA: "Cancel anytime. $79.99/year after trial."
 - Retention screen 1 (pause): "Life gets busy — take a break" heading, 3-chip pause selector, "Pause Membership" CTA + "I still want to cancel" link
 - Retention screen 2 (discount): "Stay for half price" heading, 3-month offer, "Accept Offer" CTA + "Cancel anyway" link
 
