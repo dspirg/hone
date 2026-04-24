@@ -41,12 +41,20 @@ struct WorkoutApp: App {
                     // Synchronous cache read — prevents paywall flash for subscribed users
                     // on subsequent app launches (RESEARCH Pitfall 6: "Paywall Flashing")
                     #if DEBUG
-                    appState.isSubscribed = true  // Bypass paywall in debug builds
+                    if ProcessInfo.processInfo.arguments.contains("--force-paywall") {
+                        appState.isSubscribed = false  // UI test: force paywall visible
+                        appState.isAuthenticated = true
+                        appState.onboardingCompleted = true
+                    } else {
+                        appState.isSubscribed = true  // Bypass paywall in debug builds
+                    }
                     #else
                     appState.isSubscribed = appState.revenueCatService.cachedIsSubscribed()
                     #endif
                     // Starts auth state listener; drives isAuthenticated throughout app lifetime
-                    await appState.listenForAuthChanges()
+                    if !ProcessInfo.processInfo.arguments.contains("--force-paywall") {
+                        await appState.listenForAuthChanges()
+                    }
                 }
         }
     }
