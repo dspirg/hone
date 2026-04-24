@@ -72,6 +72,7 @@ struct SessionView: View {
                 totalSets: vm.completedSets.values.reduce(0) { $0 + $1.count },
                 totalReps: vm.completedSets.values.flatMap { $0.values }.reduce(0, +),
                 duration: vm.sessionDuration,
+                prs: vm.detectedPRs,
                 onDone: { dismiss() }
             )
         } else {

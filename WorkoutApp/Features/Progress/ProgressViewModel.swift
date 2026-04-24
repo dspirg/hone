@@ -249,7 +249,9 @@ final class ProgressViewModel {
     //   3. For each exercise: fetch all prior CDSetLog records (sessionId != current, userId scoped)
     //   4. If current max > prior max → PRResult
 
-    func detectPRs(for sessionLog: CDSessionLog) throws -> [PRResult] {
+    func detectPRs(for sessionLog: CDSessionLog, userId: String? = nil) throws -> [PRResult] {
+        // T-06-07: prefer explicit userId parameter; fall back to cachedUserId
+        let effectiveUserId = userId ?? cachedUserId ?? ""
         let currentSetLogs = (sessionLog.setLogs?.array as? [CDSetLog]) ?? []
 
         // Group current session sets by exercise name
@@ -266,19 +268,9 @@ final class ProgressViewModel {
         var results: [PRResult] = []
 
         for (exerciseName, currentMax) in currentMaxByExercise {
-            // Fetch prior set logs for this exercise, scoped to userId (T-06-02)
+            // Fetch prior set logs for this exercise, scoped to userId (T-06-02, T-06-07)
             // Exclude current session's sets by filtering sessionId != current session id
             let priorRequest = CDSetLog.fetchRequest()
-            var predicateComponents = ["exerciseName == %@"]
-            var predicateArgs: [Any] = [exerciseName]
-
-            if let sessionId = sessionLog.id {
-                predicateComponents.append("sessionId != %@")
-                predicateArgs.append(sessionId as CVarArg)
-            }
-
-            // Scope to userId via session relationship by fetching sessions for this user
-            // then filtering set logs to those sessions
             priorRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
                 NSPredicate(format: "exerciseName == %@", exerciseName),
                 NSPredicate(format: "sessionId != %@", (sessionLog.id ?? UUID()) as CVarArg)
@@ -286,9 +278,9 @@ final class ProgressViewModel {
 
             let priorSetLogs = try viewContext.fetch(priorRequest)
 
-            // Filter to userId-scoped sessions (T-06-02)
+            // Filter to userId-scoped sessions (T-06-02, T-06-07)
             // CDSetLog doesn't have direct userId; scope via fetching sessions for this user
-            let userSessionIds = try fetchUserSessionIds()
+            let userSessionIds = try fetchUserSessionIds(userId: effectiveUserId)
             let userScopedPriorLogs = priorSetLogs.filter { setLog in
                 guard let setSessionId = setLog.sessionId else { return false }
                 return userSessionIds.contains(setSessionId)
@@ -308,10 +300,10 @@ final class ProgressViewModel {
         return results
     }
 
-    /// Fetch all session IDs for the cached user (used for userId scoping in detectPRs).
-    private func fetchUserSessionIds() throws -> Set<UUID> {
+    /// Fetch all session IDs for the given userId (used for userId scoping in detectPRs).
+    private func fetchUserSessionIds(userId: String) throws -> Set<UUID> {
         let request = CDSessionLog.fetchRequest()
-        request.predicate = NSPredicate(format: "userId == %@", cachedUserId ?? "")
+        request.predicate = NSPredicate(format: "userId == %@", userId)
         request.propertiesToFetch = ["id"]
         let sessions = try viewContext.fetch(request)
         return Set(sessions.compactMap { $0.id })

@@ -27,6 +27,7 @@ final class SessionViewModel {
     private(set) var timerEndDate: Date? = nil
     private(set) var isSessionComplete: Bool = false
     private(set) var sessionStartDate: Date = Date()
+    private(set) var detectedPRs: [PRResult] = []
 
     /// Per-exercise set tracking: [exerciseIndex: [setIndex: repsLogged]]
     private(set) var completedSets: [Int: [Int: Int]] = [:]
@@ -38,6 +39,7 @@ final class SessionViewModel {
     private var sessionLog: CDSessionLog?
     private let planId: String
     private let userId: String
+    private let notificationScheduler = NotificationScheduler()
 
     // MARK: - Init
 
@@ -134,6 +136,16 @@ final class SessionViewModel {
             // Session complete — finalize
             Task {
                 try? repository.finalizeSession(session)
+
+                // PR detection (PROG-03, D-12, T-06-07: scoped by userId)
+                let progressVM = ProgressViewModel()
+                if let prs = try? progressVM.detectPRs(for: session, userId: userId) {
+                    detectedPRs = prs
+                }
+
+                // Notification permission — earned moment after first session (D-24)
+                await notificationScheduler.requestPermissionIfNeeded()
+
                 isSessionComplete = true
             }
         } else {

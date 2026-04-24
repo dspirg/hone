@@ -2,14 +2,14 @@ import SwiftUI
 
 // MARK: - SessionSummaryView
 // Session completion screen shown after the last set of the last exercise is confirmed.
-// Displays total exercises, sets, reps, and session duration.
+// Displays total exercises, sets, reps, session duration, and PR badges.
 // Done button dismisses SessionView (pops back to TrainView via NavigationStack).
 //
 // No difficulty rating — deferred to Phase 8 per CONTEXT.md.
 // No weight logging — deferred per CONTEXT.md.
 //
 // UI-SPEC: Phase 4 "SessionSummaryView — Completion Screen"
-// Requirements: SESS-04
+// Requirements: SESS-04, PROG-03
 
 struct SessionSummaryView: View {
     let workoutDayLabel: String    // e.g., "Monday"
@@ -17,6 +17,7 @@ struct SessionSummaryView: View {
     let totalSets: Int
     let totalReps: Int
     let duration: TimeInterval     // sessionDuration from SessionViewModel
+    let prs: [PRResult]            // Personal records detected this session (D-14)
     let onDone: () -> Void         // Dismisses SessionView
 
     var body: some View {
@@ -52,6 +53,15 @@ struct SessionSummaryView: View {
 
                 // Duration stat
                 StatCell(label: "Duration", value: formattedDuration)
+
+                // PR badges — shown when personal records detected this session (D-14, D-15)
+                if !prs.isEmpty {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("New Record")
+                            .font(.title2.weight(.semibold))
+                        PRBadgeView(prs: prs)
+                    }
+                }
 
                 Spacer()
 
@@ -111,6 +121,7 @@ struct StatCell: View {
             totalSets: 15,
             totalReps: 120,
             duration: 2527,
+            prs: [],
             onDone: {}
         )
     }
