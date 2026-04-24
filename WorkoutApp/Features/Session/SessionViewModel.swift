@@ -102,7 +102,8 @@ final class SessionViewModel {
                 // No timer/sync until sessionLog is non-nil.
             }
         }
-        requestNotificationPermission()
+        // Notification permission is requested after first session completes (D-24 earned moment),
+        // not at session start. See completeSet → finalizeSession flow.
     }
 
     // MARK: - Set Logging
@@ -138,7 +139,9 @@ final class SessionViewModel {
                 try? repository.finalizeSession(session)
 
                 // PR detection (PROG-03, D-12, T-06-07: scoped by userId)
+                // Default context matches repository's context (both use PersistenceController.shared)
                 let progressVM = ProgressViewModel()
+                progressVM.setUserIdForTesting(userId)
                 if let prs = try? progressVM.detectPRs(for: session, userId: userId) {
                     detectedPRs = prs
                 }

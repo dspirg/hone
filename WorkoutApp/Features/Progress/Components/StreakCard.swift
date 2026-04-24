@@ -23,7 +23,7 @@ struct StreakCard: View {
                     .font(.largeTitle.weight(.semibold))
                     .foregroundStyle(Color("AccentColor"))
 
-                Text(currentStreak == 1 ? "day streak" : "day streak")
+                Text(currentStreak == 1 ? "day streak" : "days streak")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }

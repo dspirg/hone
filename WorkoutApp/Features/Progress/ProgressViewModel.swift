@@ -177,7 +177,6 @@ final class ProgressViewModel {
         // Default to 4 planned sessions per week — can be overridden by UI layer
         // when active plan data is available
         weeklyPlanned = max(weeklyPlanned, 4)
-        if weeklyPlanned == 0 { weeklyPlanned = 4 }
     }
 
     // MARK: - Week Buckets Computation
