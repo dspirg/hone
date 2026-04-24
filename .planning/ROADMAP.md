@@ -143,9 +143,9 @@ Plans:
 - [x] 07-02-PLAN.md — PaywallView with feature showcase, pricing cards, purchase flow, BlurredPlanGateView
 - [x] 07-03-PLAN.md — CancellationRetentionView (pause/discount retention flow), ProfileView with Manage Subscription
 - [x] 07-04-PLAN.md — Human verification of paywall and retention flow screens (partial)
-- [ ] 07-05-PLAN.md — [GAP] Fix webhook nested payload parsing (CR-02)
-- [ ] 07-06-PLAN.md — [GAP] Wire BlurredPlanGateView to HomeView (D-14, D-15)
-- [ ] 07-07-PLAN.md — [GAP] Fix StoreKit config prices and DiscountOfferView copy (D-01, D-02, D-12)
+- [x] 07-05-PLAN.md — [GAP] Fix webhook nested payload parsing (CR-02)
+- [x] 07-06-PLAN.md — [GAP] Wire BlurredPlanGateView to HomeView (D-14, D-15)
+- [x] 07-07-PLAN.md — [GAP] Fix StoreKit config prices and DiscountOfferView copy (D-01, D-02, D-12)
 - [ ] 07-08-PLAN.md — [GAP] App Store Connect registration and full human verification
 **UI hint**: yes
 
@@ -174,5 +174,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 4. In-Session Workout Experience | 0/5 | Planned | - |
 | 5. AI Coach Chat | 0/5 | Planned | - |
 | 6. Progress Tracking | 0/4 | Planned | - |
-| 7. Subscriptions and Paywall | 4/8 | Gap closure | - |
+| 7. Subscriptions and Paywall | 7/8 | Gap closure | - |
 | 8. Adaptive AI | 0/TBD | Not started | - |
