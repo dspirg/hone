@@ -122,10 +122,10 @@ Plans:
   4. User can view charts showing workout volume over time, sessions per week, and performance trends
 **Plans**: 4 plans
 Plans:
-- [ ] 06-01-PLAN.md — ProgressViewModel data layer: streak, weekly ring, chart data, PR detection, unit tests
-- [ ] 06-02-PLAN.md — Progress tab UI: StreakCard, WeeklyRingView, SessionHistoryRow, ChartSectionView, 5th tab
-- [ ] 06-03-PLAN.md — NotificationScheduler: local workout reminders, Info.plist, unit tests
-- [ ] 06-04-PLAN.md — PRBadgeView, SessionSummaryView PR injection, notification wiring, human verification
+- [x] 06-01-PLAN.md — ProgressViewModel data layer: streak, weekly ring, chart data, PR detection, unit tests
+- [x] 06-02-PLAN.md — Progress tab UI: StreakCard, WeeklyRingView, SessionHistoryRow, ChartSectionView, 5th tab
+- [x] 06-03-PLAN.md — NotificationScheduler: local workout reminders, Info.plist, unit tests
+- [x] 06-04-PLAN.md — PRBadgeView, SessionSummaryView PR injection, notification wiring, human verification
 **UI hint**: yes
 
 ### Phase 7: Subscriptions and Paywall
