@@ -9,30 +9,22 @@ struct HomeView: View {
     @Environment(AppState.self) var appState
     @State private var activePlan: WorkoutPlan?
     @State private var isLoading = true
+    @State private var showPaywall = false
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 16) {
                     if let plan = activePlan {
-                        // Plan summary card — D-05: plan name (.title2 semibold) + goal summary (.body secondary)
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text(plan.planName)
-                                .font(.title2.weight(.semibold))
-
-                            Text(plan.goalSummary)
-                                .font(.body)
-                                .foregroundStyle(.secondary)
-
-                            Text("\(plan.weeklyDays.count) training days this week")
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
+                        if appState.isSubscribed {
+                            planCard(plan: plan)
+                        } else {
+                            // D-14: Blurred plan preview for expired/lapsed users
+                            // D-15: Tap triggers paywall
+                            BlurredPlanGateView(showPaywall: $showPaywall) {
+                                planCard(plan: plan)
+                            }
                         }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(16)
-                        .background(Color("CardBackground"))
-                        .clipShape(RoundedRectangle(cornerRadius: 16))
-                        .padding(.horizontal, 16)
                     } else if isLoading {
                         ProgressView()
                             .padding(.top, 48)
@@ -55,7 +47,33 @@ struct HomeView: View {
             .task {
                 await loadActivePlan()
             }
+            .fullScreenCover(isPresented: $showPaywall) {
+                PaywallView()
+            }
         }
+    }
+
+    // MARK: - Plan Card
+
+    @ViewBuilder
+    private func planCard(plan: WorkoutPlan) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(plan.planName)
+                .font(.title2.weight(.semibold))
+
+            Text(plan.goalSummary)
+                .font(.body)
+                .foregroundStyle(.secondary)
+
+            Text("\(plan.weeklyDays.count) training days this week")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(16)
+        .background(Color("CardBackground"))
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .padding(.horizontal, 16)
     }
 
     // MARK: - Data Loading
