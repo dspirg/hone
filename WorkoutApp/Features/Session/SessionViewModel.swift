@@ -214,13 +214,6 @@ final class SessionViewModel {
 
     // MARK: - Notifications
 
-    private func requestNotificationPermission() {
-        UNUserNotificationCenter.current()
-            .requestAuthorization(options: [.alert, .sound]) { _, _ in
-                // Silently ignored — timer still works in-app without notification permission
-            }
-    }
-
     private func scheduleRestNotification(at endDate: Date, sessionId: String) {
         let content = UNMutableNotificationContent()
         content.title = "Rest complete"

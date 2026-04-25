@@ -7,6 +7,7 @@ import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { AdaptedPlanSchema } from "../_shared/adaptedPlanSchema.ts";
 import { assertPromptBudget, stripRationale, sanitizeRationale } from "../_shared/promptBuilder.ts";
+import { adaptedPlanJsonSchema } from "../_shared/adaptedPlanJsonSchema.ts";
 
 // ─── Interfaces ──────────────────────────────────────────────────────────────
 
@@ -44,45 +45,6 @@ interface OpenAIChatResponse {
     total_tokens: number;
   };
 }
-
-// ─── JSON Schema for OpenAI Structured Outputs ───────────────────────────────
-// Rule: additionalProperties: false at EVERY level; every property in required[]
-
-const adaptedPlanSchema = {
-  type: "object" as const,
-  properties: {
-    adjustment_summary: { type: "string" as const },
-    weekly_days: {
-      type: "array" as const,
-      items: {
-        type: "object" as const,
-        properties: {
-          day_label: { type: "string" as const },
-          session_name: { type: "string" as const },
-          exercises: {
-            type: "array" as const,
-            items: {
-              type: "object" as const,
-              properties: {
-                exercise_name: { type: "string" as const },
-                sets: { type: "integer" as const },
-                reps: { type: "string" as const },
-                rest_seconds: { type: "integer" as const },
-                rationale: { type: "string" as const },
-              },
-              required: ["exercise_name", "sets", "reps", "rest_seconds", "rationale"],
-              additionalProperties: false,
-            },
-          },
-        },
-        required: ["day_label", "session_name", "exercises"],
-        additionalProperties: false,
-      },
-    },
-  },
-  required: ["adjustment_summary", "weekly_days"],
-  additionalProperties: false,
-};
 
 // ─── Performance trend computation ───────────────────────────────────────────
 
@@ -126,7 +88,7 @@ function computePerformanceTrends(
     trends.push({ exercise_name, average_completion_rate, trend });
   }
 
-  // Return top 5 by volume (number of logged sets)
+  // Return top 5 by completion rate (highest completion rate first)
   return trends
     .sort((a, b) => b.average_completion_rate - a.average_completion_rate)
     .slice(0, 5);
@@ -227,7 +189,7 @@ async function callOpenAI(
         json_schema: {
           name: "adapted_plan",
           strict: true,
-          schema: adaptedPlanSchema,
+          schema: adaptedPlanJsonSchema,
         },
       },
       messages: [

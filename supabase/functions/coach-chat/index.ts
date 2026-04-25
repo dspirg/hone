@@ -79,7 +79,7 @@ serve(async (req: Request): Promise<Response> => {
       injuries: string;
       name?: string;
     };
-    current_plan: any;
+    current_plan: Record<string, unknown>;
     session_summaries: Array<{
       date: string;
       workout_name: string;
@@ -88,7 +88,7 @@ serve(async (req: Request): Promise<Response> => {
     }>;
     message_count: number;
     action?: string;
-    pending_modification?: any;
+    pending_modification?: Record<string, unknown>;
   };
 
   try {
