@@ -34,11 +34,16 @@ interface OpenAIChatResponse {
 // ─── ISO week key helper (D-04, AI-SPEC 4b.5 caching) ───────────────────────
 
 function getISOWeekKey(date: Date): string {
-  const year = date.getUTCFullYear();
+  // WR-02: ISO 8601 week numbering — week 1 is the week containing the first Thursday.
+  // The previous approximation produced wrong keys at year boundaries (e.g., Dec 29-31
+  // that fall in ISO week 1 of the next year), causing cache misses or double-fires.
+  const thursday = new Date(date);
+  thursday.setUTCDate(date.getUTCDate() - ((date.getUTCDay() + 6) % 7) + 3);
+  const year = thursday.getUTCFullYear();
   const startOfYear = new Date(Date.UTC(year, 0, 1));
-  const weekNum = Math.ceil(
-    ((date.getTime() - startOfYear.getTime()) / 86400000 + startOfYear.getUTCDay() + 1) / 7
-  );
+  const startOfYearThursday = new Date(startOfYear);
+  startOfYearThursday.setUTCDate(1 + ((4 - startOfYear.getUTCDay() + 7) % 7));
+  const weekNum = Math.round((thursday.getTime() - startOfYearThursday.getTime()) / 604800000) + 1;
   return `${year}-W${String(weekNum).padStart(2, "0")}`;
 }
 
