@@ -157,9 +157,14 @@ Plans:
   1. After rating a session's difficulty, the user's next workout visibly reflects the adjustment (harder or easier)
   2. After several weeks of sessions, the user's training plan has evolved to reflect accumulated performance data
   3. When a user skips or misses sessions, the remaining plan for that week updates accordingly rather than stacking the missed work
-**Plans**: TBD
+**Plans**: 6 plans
 Plans:
-- [ ] TBD
+- [x] 08-01-PLAN.md — Schema migration, CoreData model, shared Edge Function modules, sync layer extension
+- [ ] 08-02-PLAN.md — Post-session difficulty rating emoji picker UI
+- [ ] 08-03-PLAN.md — adapt-plan and regenerate-plan Edge Functions
+- [ ] 08-04-PLAN.md — AdaptationService, MissedSessionDetector, TrainView integration
+- [ ] 08-05-PLAN.md — Re-engagement notifications with guilt-free guardrails
+- [ ] 08-06-PLAN.md — [BLOCKING] Supabase schema push, Edge Function deploy, human verification
 
 ## Progress
 
@@ -175,4 +180,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 5. AI Coach Chat | 0/5 | Planned | - |
 | 6. Progress Tracking | 0/4 | Planned | - |
 | 7. Subscriptions and Paywall | 8/8 | Human needed | - |
-| 8. Adaptive AI | 0/TBD | Not started | - |
+| 8. Adaptive AI | 1/6 | In progress | - |
