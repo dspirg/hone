@@ -9,47 +9,7 @@
 // Supabase Swift SDK invokeWithStreamedResponse does not forward the JWT (bug #634).
 
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
-
-// JSON Schema for OpenAI Structured Outputs (strict mode).
-// additionalProperties: false is required at EVERY object level in strict mode.
-// The injuries field is NOT in the output schema — it only affects the system prompt.
-// All fields must appear in required[] for strict mode compliance.
-const planSchema = {
-  type: "object" as const,
-  properties: {
-    plan_name: { type: "string" as const },
-    goal_summary: { type: "string" as const },
-    weekly_days: {
-      type: "array" as const,
-      items: {
-        type: "object" as const,
-        properties: {
-          day_label: { type: "string" as const },
-          session_name: { type: "string" as const },
-          exercises: {
-            type: "array" as const,
-            items: {
-              type: "object" as const,
-              properties: {
-                exercise_name: { type: "string" as const },
-                sets: { type: "integer" as const },
-                reps: { type: "string" as const },
-                rest_seconds: { type: "integer" as const },
-                rationale: { type: "string" as const },
-              },
-              required: ["exercise_name", "sets", "reps", "rest_seconds", "rationale"],
-              additionalProperties: false,
-            },
-          },
-        },
-        required: ["day_label", "session_name", "exercises"],
-        additionalProperties: false,
-      },
-    },
-  },
-  required: ["plan_name", "goal_summary", "weekly_days"],
-  additionalProperties: false,
-};
+import { planSchema } from "../_shared/planSchema.ts";
 
 serve(async (req: Request): Promise<Response> => {
   // Handle CORS preflight

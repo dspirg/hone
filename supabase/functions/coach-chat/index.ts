@@ -13,47 +13,7 @@
 // route the response (chat vs. modify_plan) without parsing the full text.
 
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
-
-// JSON Schema for OpenAI Structured Outputs (strict mode).
-// additionalProperties: false is required at EVERY object level in strict mode.
-// Copied verbatim from generate-plan/index.ts — used for plan modification on execute_modify path.
-// All fields must appear in required[] for strict mode compliance.
-const planSchema = {
-  type: "object" as const,
-  properties: {
-    plan_name: { type: "string" as const },
-    goal_summary: { type: "string" as const },
-    weekly_days: {
-      type: "array" as const,
-      items: {
-        type: "object" as const,
-        properties: {
-          day_label: { type: "string" as const },
-          session_name: { type: "string" as const },
-          exercises: {
-            type: "array" as const,
-            items: {
-              type: "object" as const,
-              properties: {
-                exercise_name: { type: "string" as const },
-                sets: { type: "integer" as const },
-                reps: { type: "string" as const },
-                rest_seconds: { type: "integer" as const },
-                rationale: { type: "string" as const },
-              },
-              required: ["exercise_name", "sets", "reps", "rest_seconds", "rationale"],
-              additionalProperties: false,
-            },
-          },
-        },
-        required: ["day_label", "session_name", "exercises"],
-        additionalProperties: false,
-      },
-    },
-  },
-  required: ["plan_name", "goal_summary", "weekly_days"],
-  additionalProperties: false,
-};
+import { planSchema } from "../_shared/planSchema.ts";
 
 serve(async (req: Request): Promise<Response> => {
   // Handle CORS preflight — copied verbatim from generate-plan/index.ts lines 54-65
@@ -232,7 +192,7 @@ SAFETY: You are not a medical professional. Do not recommend exercises that coul
         body: JSON.stringify({
           model: "gpt-4o-mini",
           stream: false,
-          max_tokens: 300,
+          max_completion_tokens: 300,
           messages: [
             {
               role: "system",
