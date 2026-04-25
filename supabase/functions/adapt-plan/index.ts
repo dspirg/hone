@@ -412,8 +412,13 @@ serve(async (req: Request): Promise<Response> => {
 
   const performanceTrends = computePerformanceTrends(setLogs);
 
-  // Missed sessions from request body (for missed_session trigger)
-  const missedSessions = body.missed_sessions ?? [];
+  // WR-03: Sanitize missed_sessions before injecting into the system prompt.
+  // User-controlled strings must be validated as ISO date format only (YYYY-MM-DD)
+  // and capped at 7 entries to prevent prompt injection and token budget overrun.
+  const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+  const missedSessions = (body.missed_sessions ?? [])
+    .slice(0, 7)
+    .filter((s): s is string => typeof s === "string" && ISO_DATE_RE.test(s));
 
   // Estimate weeks on current plan (approximate from session_log history)
   const weeksOnPlan = Math.max(1, Math.ceil(sessionLogs.length / 3));
