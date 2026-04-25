@@ -107,7 +107,8 @@ final class SessionSyncService {
                 completedAt: completedAt,
                 totalExercises: Int(s.totalExercises),
                 totalSets: Int(s.totalSets),
-                totalReps: Int(s.totalReps)
+                totalReps: Int(s.totalReps),
+                difficultyRating: s.difficultyRating
             )
         }
 
@@ -186,6 +187,7 @@ private struct SessionLogRow: Encodable {
     let totalExercises: Int
     let totalSets: Int
     let totalReps: Int
+    let difficultyRating: String?
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -197,6 +199,7 @@ private struct SessionLogRow: Encodable {
         case totalExercises = "total_exercises"
         case totalSets = "total_sets"
         case totalReps = "total_reps"
+        case difficultyRating = "difficulty_rating"
     }
 }
 
