@@ -175,7 +175,7 @@ struct SessionView: View {
             userId: userId,
             repository: repo
         )
-        vm.startSession()
+        await vm.startSession()   // CR-02: await ensures sessionLog is set before view is shown
         viewModel = vm
 
         let sync = SessionSyncService(repository: repo)

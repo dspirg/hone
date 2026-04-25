@@ -88,19 +88,20 @@ final class SessionViewModel {
 
     /// Starts the session: creates CDSessionLog via repository and requests notification permission.
     /// Non-fatal if CoreData write fails — session continues in memory.
-    func startSession() {
+    /// CR-02: async so callers can await completion before allowing set logging,
+    /// eliminating the race where completeSet fires before sessionLog is set.
+    func startSession() async {
         sessionStartDate = Date()
-        Task {
-            do {
-                sessionLog = try repository.startSession(
-                    day: workoutDay,
-                    planId: planId,
-                    userId: userId
-                )
-            } catch {
-                // CoreData write failure is non-fatal — session continues in memory.
-                // No timer/sync until sessionLog is non-nil.
-            }
+        do {
+            sessionLog = try repository.startSession(
+                day: workoutDay,
+                planId: planId,
+                userId: userId
+            )
+        } catch {
+            // CoreData write failure is non-fatal — session continues in memory.
+            // No timer/sync until sessionLog is non-nil.
+            print("SessionViewModel: startSession CoreData write failed: \(error)")
         }
         // Notification permission is requested after first session completes (D-24 earned moment),
         // not at session start. See completeSet → finalizeSession flow.
