@@ -126,6 +126,9 @@
 		B00600A100000015 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00600A000000015 /* ProgressView.swift */; };
 		B00600A100000016 /* PRBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00600A000000016 /* PRBadgeView.swift */; };
 		B00600B100000001 /* ProgressViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00600B000000001 /* ProgressViewModelTests.swift */; };
+		B009000100000001 /* AdaptedPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = B009000000000001 /* AdaptedPlan.swift */; };
+		B009000100000002 /* MissedSessionDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = B009000000000002 /* MissedSessionDetector.swift */; };
+		B009000100000003 /* AdaptationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B009000000000003 /* AdaptationService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -268,6 +271,9 @@
 		B00600A000000015 /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
 		B00600A000000016 /* PRBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PRBadgeView.swift; sourceTree = "<group>"; };
 		B00600B000000001 /* ProgressViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressViewModelTests.swift; sourceTree = "<group>"; };
+		B009000000000001 /* AdaptedPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptedPlan.swift; sourceTree = "<group>"; };
+		B009000000000002 /* MissedSessionDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissedSessionDetector.swift; sourceTree = "<group>"; };
+		B009000000000003 /* AdaptationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptationService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -555,8 +561,27 @@
 				B007003030000001 /* Paywall */,
 				B005000030000001 /* Coach */,
 				B00600A030000001 /* Progress */,
+				B009000030000001 /* Adaptation */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		B009000030000001 /* Adaptation */ = {
+			isa = PBXGroup;
+			children = (
+				B009000000000003 /* AdaptationService.swift */,
+				B009000000000002 /* MissedSessionDetector.swift */,
+				B009000030000002 /* Models */,
+			);
+			path = Adaptation;
+			sourceTree = "<group>";
+		};
+		B009000030000002 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B009000000000001 /* AdaptedPlan.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		B002002030000001 /* Train */ = {
@@ -954,6 +979,9 @@
 				B00600A100000014 /* ChartSectionView.swift in Sources */,
 				B00600A100000015 /* ProgressView.swift in Sources */,
 				B00600A100000016 /* PRBadgeView.swift in Sources */,
+				B009000100000001 /* AdaptedPlan.swift in Sources */,
+				B009000100000002 /* MissedSessionDetector.swift in Sources */,
+				B009000100000003 /* AdaptationService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
