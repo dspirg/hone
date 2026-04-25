@@ -21,6 +21,11 @@ import CoreData
 @MainActor
 final class NotificationScheduler {
 
+    // MARK: - Shared Instance
+
+    /// Singleton shared across the app — used by AdaptationService for re-engagement notifications.
+    static let shared = NotificationScheduler()
+
     // MARK: - Dependencies
 
     private let context: NSManagedObjectContext
@@ -29,6 +34,28 @@ final class NotificationScheduler {
 
     init(context: NSManagedObjectContext? = nil) {
         self.context = context ?? PersistenceController.shared.container.viewContext
+    }
+
+    // MARK: - Guilt Language Blocklist (T-08-13)
+
+    /// Guilt-inducing patterns that must never appear in re-engagement notifications (AI-SPEC Section 5).
+    private static let guiltPatterns: [NSRegularExpression] = {
+        let patterns = [
+            "you missed", "you haven't", "you have not", "you skipped",
+            "you failed", "you didn't", "you did not",
+            "\\d+ (days?|sessions?|workouts?) (missed|skipped|without)",
+            "don't break", "falling behind"
+        ]
+        return patterns.compactMap { try? NSRegularExpression(pattern: $0, options: .caseInsensitive) }
+    }()
+
+    /// Safe fallback copy when generated text fails guilt blocklist (D-09).
+    private static let safeFallbackBody = "Your plan is ready — see you when you're ready."
+
+    /// Returns true if the text contains none of the guilt-inducing patterns.
+    private func passesGuiltBlocklist(_ text: String) -> Bool {
+        let range = NSRange(text.startIndex..., in: text)
+        return !Self.guiltPatterns.contains { $0.firstMatch(in: text, range: range) != nil }
     }
 
     // MARK: - Permission
@@ -120,6 +147,54 @@ final class NotificationScheduler {
             .map { $0.identifier }
             .filter { $0.hasPrefix("workout-reminder-") }
         center.removePendingNotificationRequests(withIdentifiers: workoutReminderIds)
+    }
+
+    // MARK: - Re-engagement Notifications (ADPT-03, D-08, D-09, D-10)
+
+    /// Schedules a re-engagement notification if conditions are met.
+    ///
+    /// Guards (all must pass):
+    ///   - missedSessionCount >= 2 (D-08: avoid nagging for one-off rest days)
+    ///   - Fewer than 2 pending re-engagement notifications this week (D-10)
+    ///   - User has notification permissions
+    ///
+    /// Threat mitigations:
+    ///   T-08-13: Hardcoded copy validated against guilt blocklist; safe fallback on match.
+    ///   T-08-14: Frequency cap — guard checks pending "reengagement-" queue count < 2.
+    func scheduleReengagementNotificationIfNeeded(
+        missedSessionCount: Int
+    ) async {
+        guard missedSessionCount >= 2 else { return }
+        guard await shouldScheduleNotifications() else { return }
+
+        // D-10: Max 2 re-engagement notifications per week
+        let pending = await UNUserNotificationCenter.current().pendingNotificationRequests()
+        let reengagementPending = pending.filter { $0.identifier.hasPrefix("reengagement-") }
+        guard reengagementPending.count < 2 else { return }
+
+        let content = UNMutableNotificationContent()
+        content.title = "Your plan is ready"
+
+        // D-09: Supportive coach tone, no guilt — validated against blocklist
+        let body = "Your plan adapted to your schedule — ready when you are."
+        content.body = passesGuiltBlocklist(body) ? body : Self.safeFallbackBody
+        content.sound = .default
+
+        // Schedule for 10am tomorrow
+        var components = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+        components.day = (components.day ?? 0) + 1
+        components.hour = 10
+        components.minute = 0
+        components.timeZone = TimeZone.current
+
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+        let identifier = "reengagement-\(UUID().uuidString)"
+        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+        do {
+            try await UNUserNotificationCenter.current().add(request)
+        } catch {
+            print("NotificationScheduler: reengagement notification failed: \(error)")
+        }
     }
 
     // MARK: - Session Guard
