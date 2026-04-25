@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Completed 08-04-PLAN.md — iOS adaptation client: AdaptationService, MissedSessionDetector, MainTabView/SessionView/TrainView integration"
-last_updated: "2026-04-25T14:42:18.508Z"
+stopped_at: "Completed 08-05-PLAN.md — re-engagement notifications: guilt blocklist, frequency cap, AdaptationService integration"
+last_updated: "2026-04-25T15:26:29.189Z"
 last_activity: 2026-04-25 -- Phase --phase execution started
 progress:
   total_phases: 8
   completed_phases: 7
   total_plans: 40
-  completed_plans: 38
-  percent: 95
+  completed_plans: 39
+  percent: 98
 ---
 
 # Project State
@@ -60,6 +60,7 @@ Progress: [██████████] 95%
 | Phase 08-adaptive-ai P02 | 18min | 2 tasks | 5 files |
 | Phase 08-adaptive-ai P03 | 25min | 2 tasks | 1 files |
 | Phase 08-adaptive-ai P04 | 23min | 2 tasks | 7 files |
+| Phase 08-adaptive-ai P05 | 40min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -82,6 +83,7 @@ Recent decisions affecting current work:
 - AdaptationService fetches own access token via supabase.auth.session — not passed from AppState — consistent with PlanSSEClient and CoachSSEClient (SDK issue #634)
 - ISO week key uses Calendar(identifier: .iso8601) with yearForWeekOfYear for correct YYYY-Www computation across year boundaries
 - Post-session adaptation is fire-and-forget: Task fires after saveDifficultyRating, dismiss runs synchronously without blocking on network
+- Re-engagement notifications trigger after missedDays.count >= 2, scheduled for 10am next day via UNCalendarNotificationTrigger with reengagement- prefix for pending count filtering
 
 ### Pending Todos
 
@@ -105,8 +107,8 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-25T14:42:18.500Z
-Stopped at: Completed 08-04-PLAN.md — iOS adaptation client: AdaptationService, MissedSessionDetector, MainTabView/SessionView/TrainView integration
+Last session: 2026-04-25T15:26:29.161Z
+Stopped at: Completed 08-05-PLAN.md — re-engagement notifications: guilt blocklist, frequency cap, AdaptationService integration
 Resume file: None
 
 **Planned Phase:** 8 (Adaptive AI) — 6 plans — 2026-04-25T13:14:01.102Z
