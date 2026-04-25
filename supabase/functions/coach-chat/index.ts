@@ -155,7 +155,25 @@ SAFETY: You are not a medical professional. Do not recommend exercises that coul
     }
 
     const modifyResult = await modifyResponse.json();
-    const updatedPlan = modifyResult.choices?.[0]?.message?.content;
+    const updatedPlanRaw = modifyResult.choices?.[0]?.message?.content;
+
+    // WR-01: Parse the raw JSON string from OpenAI structured output before returning.
+    // Without this, plan_delta is double-encoded (JSON string inside JSON object).
+    if (!updatedPlanRaw) {
+      return new Response(
+        JSON.stringify({ error: "Empty plan response from OpenAI" }),
+        { status: 500, headers: { "Content-Type": "application/json" } }
+      );
+    }
+    let updatedPlan: unknown;
+    try {
+      updatedPlan = JSON.parse(updatedPlanRaw);
+    } catch {
+      return new Response(
+        JSON.stringify({ error: "Plan JSON parse failed" }),
+        { status: 500, headers: { "Content-Type": "application/json" } }
+      );
+    }
 
     // Return the modified plan as a non-streaming JSON response
     return new Response(
