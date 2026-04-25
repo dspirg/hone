@@ -198,6 +198,8 @@ final class SessionViewModel {
         guard currentExerciseIndex < exercises.count - 1 else { return }
         isRestTimerActive = false
         timerEndDate = nil
+        cancelRestNotification()   // WR-06: cancel pending "Rest complete" notification so it
+                                   // doesn't fire after the user has already moved to the next exercise
         currentExerciseIndex += 1
     }
 
