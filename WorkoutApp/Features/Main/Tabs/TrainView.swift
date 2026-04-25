@@ -18,6 +18,7 @@ import CoreData
 
 struct TrainView: View {
     @Environment(AppState.self) var appState
+    @Environment(AdaptationService.self) var adaptationService
     @State private var activePlan: WorkoutPlan?
     @State private var activePlanSupabaseId: String = ""
     @State private var isLoading = true
@@ -26,6 +27,15 @@ struct TrainView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 16) {
+                    // D-05: Show adjustment summary when plan was recently adapted.
+                    // Fades in after adaptation — builds trust by explaining changes.
+                    if let summary = adaptationService.lastAdjustmentSummary {
+                        AdaptationSummaryBanner(summary: summary)
+                            .padding(.horizontal, 16)
+                            .padding(.top, 8)
+                            .transition(.opacity)
+                    }
+
                     if isLoading {
                         ProgressView()
                             .padding(.top, 48)
@@ -161,5 +171,33 @@ private struct WorkoutDayCard: View {
         .background(Color("CardBackground"))
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .padding(.horizontal, 16)
+    }
+}
+
+// MARK: - AdaptationSummaryBanner
+
+/// Brief AI rationale shown in TrainView after plan adaptation (D-05).
+/// "Increased weight — you rated last 3 sessions as too easy." — builds trust without clutter.
+private struct AdaptationSummaryBanner: View {
+    let summary: String
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 10) {
+            Image(systemName: "sparkles")
+                .font(.subheadline)
+                .foregroundStyle(Color("AccentColor"))
+            Text(summary)
+                .font(.subheadline)
+                .foregroundStyle(.primary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color("CardBackground"))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color("AccentColor").opacity(0.3), lineWidth: 1)
+        )
     }
 }

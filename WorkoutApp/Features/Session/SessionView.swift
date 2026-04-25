@@ -24,6 +24,7 @@ struct SessionView: View {
     let planId: String
 
     @Environment(AppState.self) var appState
+    @Environment(AdaptationService.self) var adaptationService
     @Environment(\.managedObjectContext) var context
     @Environment(\.accessibilityReduceMotion) var reduceMotion
     @Environment(\.dismiss) var dismiss
@@ -75,6 +76,11 @@ struct SessionView: View {
                 prs: vm.detectedPRs,
                 onDone: { rating in
                     vm.saveDifficultyRating(rating)
+                    // Phase 8 ADPT-01: trigger post-session adaptation with the captured rating.
+                    // Fire-and-forget — dismiss is not blocked on the network call.
+                    Task {
+                        await adaptationService.requestPostSessionAdaptation(rating: rating)
+                    }
                     dismiss()
                 }
             )
