@@ -77,13 +77,17 @@ struct MainTabView: View {
             planDayLabels = []
         }
 
-        // Fetch completed sessions this week from CoreData
+        // Fetch completed sessions this week from CoreData.
+        // WR-04: Add date bound so we only load current-week sessions — MissedSessionDetector
+        // only cares about the current week, and an unbounded fetch grows with usage history.
         let completedSessions: [CDSessionLog]
         do {
+            let weekStart = Calendar.current.dateInterval(of: .weekOfYear, for: Date())?.start ?? Date()
             let request = CDSessionLog.fetchRequest()
             request.predicate = NSPredicate(
-                format: "completedAt != nil AND userId == %@",
-                userId
+                format: "completedAt != nil AND userId == %@ AND completedAt >= %@",
+                userId,
+                weekStart as CVarArg
             )
             completedSessions = try context.fetch(request)
         } catch {
