@@ -146,6 +146,13 @@ final class AdaptationService {
         if !missedDays.isEmpty {
             await requestMissedSessionAdaptation(missedDays: missedDays)
         }
+
+        // Re-engagement notification: schedule if 2+ consecutive missed sessions (D-08, ADPT-03)
+        if missedDays.count >= 2 {
+            await NotificationScheduler.shared.scheduleReengagementNotificationIfNeeded(
+                missedSessionCount: missedDays.count
+            )
+        }
     }
 
     // MARK: - Private Helpers
