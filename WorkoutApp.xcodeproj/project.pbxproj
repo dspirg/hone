@@ -28,6 +28,7 @@
 		B003001100000001 /* OnboardingViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003001000000001 /* OnboardingViewModelTests.swift */; };
 		B003A00100000001 /* WorkoutPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003A00000000001 /* WorkoutPlan.swift */; };
 		B003A00100000002 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003A00000000002 /* UserProfile.swift */; };
+		B008000100000001 /* DifficultyRating.swift in Sources */ = {isa = PBXBuildFile; fileRef = B008000000000001 /* DifficultyRating.swift */; };
 		B003A00100000003 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003A00000000003 /* PersistenceController.swift */; };
 		B003A00100000004 /* WorkoutPlanRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003A00000000004 /* WorkoutPlanRepository.swift */; };
 		B004000100000001 /* SessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B004000000000001 /* SessionRepository.swift */; };
@@ -172,6 +173,7 @@
 		B003001000000001 /* OnboardingViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModelTests.swift; sourceTree = "<group>"; };
 		B003A00000000001 /* WorkoutPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutPlan.swift; sourceTree = "<group>"; };
 		B003A00000000002 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		B008000000000001 /* DifficultyRating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DifficultyRating.swift; sourceTree = "<group>"; };
 		B003A00000000003 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
 		B003A00000000004 /* WorkoutPlanRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutPlanRepository.swift; sourceTree = "<group>"; };
 		B004000000000001 /* SessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionRepository.swift; sourceTree = "<group>"; };
@@ -449,6 +451,7 @@
 			children = (
 				B003A00000000001 /* WorkoutPlan.swift */,
 				B003A00000000002 /* UserProfile.swift */,
+				B008000000000001 /* DifficultyRating.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -888,6 +891,7 @@
 				B00300010000000A /* InjuriesCardView.swift in Sources */,
 				B003A00100000001 /* WorkoutPlan.swift in Sources */,
 				B003A00100000002 /* UserProfile.swift in Sources */,
+				B008000100000001 /* DifficultyRating.swift in Sources */,
 				B003A00100000003 /* PersistenceController.swift in Sources */,
 				B003A00100000004 /* WorkoutPlanRepository.swift in Sources */,
 				B002000100000004 /* WorkoutApp.xcdatamodeld in Sources */,

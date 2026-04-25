@@ -73,7 +73,10 @@ struct SessionView: View {
                 totalReps: vm.completedSets.values.flatMap { $0.values }.reduce(0, +),
                 duration: vm.sessionDuration,
                 prs: vm.detectedPRs,
-                onDone: { dismiss() }
+                onDone: { rating in
+                    vm.saveDifficultyRating(rating)
+                    dismiss()
+                }
             )
         } else {
             // Card transition: spring for normal, easeInOut(0.15) for reduce motion

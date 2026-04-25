@@ -129,6 +129,15 @@ final class SessionRepository {
         try context.save()
     }
 
+    // MARK: - Difficulty Rating
+
+    /// Saves the difficulty rating to the session log (ADPT-01).
+    /// Called after the user taps a rating emoji on the summary screen.
+    func saveDifficultyRating(_ rating: DifficultyRating, for session: CDSessionLog) throws {
+        session.difficultyRating = rating.rawValue
+        try context.save()
+    }
+
     // MARK: - Fetch Unsynced
 
     /// Returns completed sessions that have not yet been synced to Supabase.

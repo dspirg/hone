@@ -243,6 +243,19 @@ final class SessionViewModel {
             .removePendingNotificationRequests(withIdentifiers: ["rest-timer-\(idStr)"])
     }
 
+    // MARK: - Difficulty Rating
+
+    /// Saves the user's difficulty rating for the completed session (D-01, D-02).
+    /// Called when the user taps Done on SessionSummaryView.
+    func saveDifficultyRating(_ rating: DifficultyRating) {
+        guard let session = sessionLog else { return }
+        do {
+            try repository.saveDifficultyRating(rating, for: session)
+        } catch {
+            print("SessionViewModel: saveDifficultyRating failed: \(error)")
+        }
+    }
+
     // MARK: - Testing Hooks
 
     /// For unit tests only — forces timer state without requiring a sessionLog.
