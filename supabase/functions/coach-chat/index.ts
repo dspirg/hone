@@ -13,6 +13,7 @@
 // route the response (chat vs. modify_plan) without parsing the full text.
 
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { planSchema } from "../_shared/planSchema.ts";
 
 serve(async (req: Request): Promise<Response> => {
@@ -48,6 +49,21 @@ serve(async (req: Request): Promise<Response> => {
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return new Response(
       JSON.stringify({ error: "Unauthorized" }),
+      { status: 401, headers: { "Content-Type": "application/json" } }
+    );
+  }
+
+  // CR-01: Verify JWT signature via Supabase auth — presence of a Bearer token is not enough.
+  // adapt-plan and regenerate-plan both call getUser; coach-chat must too.
+  const token = authHeader.slice(7);
+  const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+  const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+  const anonClient = createClient(supabaseUrl, supabaseAnonKey);
+  const { data: { user }, error: authError } = await anonClient.auth.getUser(token);
+
+  if (authError || !user) {
+    return new Response(
+      JSON.stringify({ error: "Unauthorized: invalid or expired token" }),
       { status: 401, headers: { "Content-Type": "application/json" } }
     );
   }
