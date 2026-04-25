@@ -12,14 +12,14 @@ This roadmap builds a conversational AI personal trainer for iPhone in eight pha
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation** - iOS project, Supabase auth, backend schema, safety guardrails, and video content sourcing
-- [ ] **Phase 2: Exercise Library** - Animatic video delivery via Mux, exercise browse/search/detail UI
-- [ ] **Phase 3: AI Onboarding and Plan Generation** - Conversational onboarding, AI-generated personalized plan, pre-paywall plan preview
-- [ ] **Phase 4: In-Session Workout Experience** - Offline-first session tracking, video playback, timers, rep/set logging
-- [ ] **Phase 5: AI Coach Chat** - Persistent conversational coach with full user context and plan modification
-- [ ] **Phase 6: Progress Tracking** - Workout history, streaks, volume charts, personal record notifications
-- [ ] **Phase 7: Subscriptions and Paywall** - Animated paywall, free trial, monthly/annual IAP, cancellation retention flow
-- [ ] **Phase 8: Adaptive AI** - Post-session adaptation, AI plan evolution, smart push notifications
+- [x] **Phase 1: Foundation** - iOS project, Supabase auth, backend schema, safety guardrails, and video content sourcing
+- [x] **Phase 2: Exercise Library** - Animatic video delivery via Mux, exercise browse/search/detail UI
+- [x] **Phase 3: AI Onboarding and Plan Generation** - Conversational onboarding, AI-generated personalized plan, pre-paywall plan preview
+- [x] **Phase 4: In-Session Workout Experience** - Offline-first session tracking, video playback, timers, rep/set logging
+- [x] **Phase 5: AI Coach Chat** - Persistent conversational coach with full user context and plan modification
+- [x] **Phase 6: Progress Tracking** - Workout history, streaks, volume charts, personal record notifications
+- [x] **Phase 7: Subscriptions and Paywall** - Animated paywall, free trial, monthly/annual IAP, cancellation retention flow
+- [x] **Phase 8: Adaptive AI** - Post-session adaptation, AI plan evolution, smart push notifications
 
 ## Phase Details
 
@@ -161,10 +161,10 @@ Plans:
 Plans:
 - [x] 08-01-PLAN.md — Schema migration, CoreData model, shared Edge Function modules, sync layer extension
 - [ ] 08-02-PLAN.md — Post-session difficulty rating emoji picker UI
-- [ ] 08-03-PLAN.md — adapt-plan and regenerate-plan Edge Functions
-- [ ] 08-04-PLAN.md — AdaptationService, MissedSessionDetector, TrainView integration
-- [ ] 08-05-PLAN.md — Re-engagement notifications with guilt-free guardrails
-- [ ] 08-06-PLAN.md — [BLOCKING] Supabase schema push, Edge Function deploy, human verification
+- [x] 08-03-PLAN.md — adapt-plan and regenerate-plan Edge Functions
+- [x] 08-04-PLAN.md — AdaptationService, MissedSessionDetector, TrainView integration
+- [x] 08-05-PLAN.md — Re-engagement notifications with guilt-free guardrails
+- [x] 08-06-PLAN.md — [BLOCKING] Supabase schema push, Edge Function deploy, human verification
 
 ## Progress
 
@@ -173,11 +173,11 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 3/3 | Complete | - |
-| 2. Exercise Library | 0/4 | Planned | - |
-| 3. AI Onboarding and Plan Generation | 0/5 | Planned | - |
-| 4. In-Session Workout Experience | 0/5 | Planned | - |
-| 5. AI Coach Chat | 0/5 | Planned | - |
-| 6. Progress Tracking | 0/4 | Planned | - |
-| 7. Subscriptions and Paywall | 8/8 | Human needed | - |
-| 8. Adaptive AI | 1/6 | In progress | - |
+| 1. Foundation | 3/3 | Complete | 2026-04-16 |
+| 2. Exercise Library | 4/4 | Complete | 2026-04-17 |
+| 3. AI Onboarding and Plan Generation | 5/5 | Complete | 2026-04-18 |
+| 4. In-Session Workout Experience | 5/5 | Complete | 2026-04-19 |
+| 5. AI Coach Chat | 5/5 | Complete | 2026-04-20 |
+| 6. Progress Tracking | 4/4 | Complete | 2026-04-21 |
+| 7. Subscriptions and Paywall | 8/8 | Complete | 2026-04-24 |
+| 8. Adaptive AI | 6/6 | Complete (human UAT pending) | 2026-04-25 |
