@@ -21,15 +21,20 @@ A conversational AI personal trainer in your pocket — one that knows you, buil
 
 ### Active
 
-- [ ] AI onboarding that captures fitness level, goals, and available equipment to generate a personalized program
-- [ ] AI-generated workout plans that adapt based on user progress and feedback
-- [ ] Conversational AI coach (chat interface) for questions, plan modifications, and motivation
-- [ ] In-session workout experience with exercise animatic videos, timers, and rep/set tracking
-- [ ] Exercise library with animatic-style instructional videos showing proper form
-- [ ] Progress tracking — workout history, streaks, volume, and improvement over time
-- [ ] Real-time adaptive workouts that adjust difficulty based on session performance
-- [ ] Monthly and annual subscription billing with annual discount
-- [ ] Support for all equipment contexts: bodyweight, home gym, full gym
+*(All v1.0 requirements validated — see Validated section)*
+
+### Validated (continued)
+
+- [x] Exercise library with animatic-style instructional videos showing proper form (EXRC-01–04) — Validated in Phase 2: Exercise Library
+- [x] AI onboarding that captures fitness level, goals, and available equipment (ONBD-01–02) — Validated in Phase 3: AI Onboarding
+- [x] AI-generated workout plans with rationale and regeneration (AIPL-01–04) — Validated in Phase 3: AI Onboarding
+- [x] In-session workout experience with videos, timers, rep/set tracking (SESS-01–04) — Validated in Phase 4: In-Session
+- [x] Conversational AI coach for questions, plan modifications, and motivation (CHAT-01–04) — Validated in Phase 5: AI Coach Chat
+- [x] Progress tracking — workout history, streaks, volume, PR notifications (PROG-01–04) — Validated in Phase 6: Progress Tracking
+- [x] Monthly and annual subscription billing with annual discount (SUBS-01–04) — Validated in Phase 7: Subscriptions
+- [x] Real-time adaptive workouts that adjust difficulty based on session performance (ADPT-01–02) — Validated in Phase 8: Adaptive AI
+- [x] Smart re-engagement notifications for lapsed users (ADPT-03) — Validated in Phase 8: Adaptive AI
+- [x] Support for all equipment contexts: bodyweight, home gym, full gym — Validated across Phases 3–8
 
 ### Out of Scope
 
@@ -80,5 +85,9 @@ This document evolves at phase transitions and milestone boundaries.
 3. Audit Out of Scope — reasons still valid?
 4. Update Context with current state
 
+## Current State
+
+v1.0 milestone code-complete (2026-04-25). All 8 phases executed across 40 plans. Phase 8 human UAT pending (Supabase deployed, Edge Functions live, Xcode build passing). Code review issues resolved (12 findings: 2 critical, 6 warning, 4 info — all fixed).
+
 ---
-*Last updated: 2026-04-16 after Phase 1: Foundation complete*
+*Last updated: 2026-04-25 after Phase 8: Adaptive AI complete (v1.0 milestone)*
