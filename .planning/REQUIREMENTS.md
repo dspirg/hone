@@ -69,8 +69,10 @@
 
 - [x] **ADPT-01
 **: User can rate workout difficulty after each session; AI adjusts the next workout based on the rating
-- [ ] **ADPT-02**: AI automatically evolves the user's training plan over weeks as performance data accumulates
-- [ ] **ADPT-03**: AI detects missed or skipped sessions and adapts the week's remaining plan accordingly
+- [x] **ADPT-02
+**: AI automatically evolves the user's training plan over weeks as performance data accumulates
+- [x] **ADPT-03
+**: AI detects missed or skipped sessions and adapts the week's remaining plan accordingly
 
 ### Safety & Compliance
 

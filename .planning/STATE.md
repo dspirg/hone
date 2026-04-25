@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 08-03-PLAN.md — adapt-plan and regenerate-plan Edge Functions
-last_updated: "2026-04-25T13:41:28.892Z"
+stopped_at: "Completed 08-04-PLAN.md — iOS adaptation client: AdaptationService, MissedSessionDetector, MainTabView/SessionView/TrainView integration"
+last_updated: "2026-04-25T14:42:18.508Z"
 last_activity: 2026-04-25 -- Phase --phase execution started
 progress:
   total_phases: 8
   completed_phases: 7
   total_plans: 40
-  completed_plans: 37
-  percent: 93
+  completed_plans: 38
+  percent: 95
 ---
 
 # Project State
@@ -30,7 +30,7 @@ Plan: 1 of --name
 Status: Executing Phase --phase
 Last activity: 2026-04-25 -- Phase --phase execution started
 
-Progress: [█████████░] 93%
+Progress: [██████████] 95%
 
 ## Performance Metrics
 
@@ -59,6 +59,7 @@ Progress: [█████████░] 93%
 | Phase 06 P02 | 23m | 2 tasks | 9 files |
 | Phase 08-adaptive-ai P02 | 18min | 2 tasks | 5 files |
 | Phase 08-adaptive-ai P03 | 25min | 2 tasks | 1 files |
+| Phase 08-adaptive-ai P04 | 23min | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -78,6 +79,9 @@ Recent decisions affecting current work:
 - Done button uses .disabled + .opacity(0.5) pattern rather than hiding to preserve layout stability
 - regenerate-plan uses planSchema for OpenAI Structured Outputs; weekly_days inner structure validated separately via AdaptedPlanSchema
 - historySummary compresses 4-week session data into ~100 tokens for regenerate-plan prompt efficiency
+- AdaptationService fetches own access token via supabase.auth.session — not passed from AppState — consistent with PlanSSEClient and CoachSSEClient (SDK issue #634)
+- ISO week key uses Calendar(identifier: .iso8601) with yearForWeekOfYear for correct YYYY-Www computation across year boundaries
+- Post-session adaptation is fire-and-forget: Task fires after saveDifficultyRating, dismiss runs synchronously without blocking on network
 
 ### Pending Todos
 
@@ -101,8 +105,8 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-25T13:41:28.882Z
-Stopped at: Completed 08-03-PLAN.md — adapt-plan and regenerate-plan Edge Functions
+Last session: 2026-04-25T14:42:18.500Z
+Stopped at: Completed 08-04-PLAN.md — iOS adaptation client: AdaptationService, MissedSessionDetector, MainTabView/SessionView/TrainView integration
 Resume file: None
 
 **Planned Phase:** 8 (Adaptive AI) — 6 plans — 2026-04-25T13:14:01.102Z
