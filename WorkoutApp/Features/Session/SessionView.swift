@@ -103,19 +103,23 @@ struct SessionView: View {
                     .padding(.top, 8)
                     .padding(.bottom, 8)
 
-                    // Exercise cards ZStack with horizontal offset slide navigation
-                    // UIScreen.main.bounds.width offset per RESEARCH.md Pattern 7 and UI-SPEC
-                    ZStack {
-                        ForEach(Array(vm.exercises.enumerated()), id: \.offset) { index, exercise in
-                            ExerciseCardView(
-                                exercise: exercise,
-                                exerciseIndex: index,
-                                viewModel: vm
-                            )
-                            .offset(x: CGFloat(index - vm.currentExerciseIndex) * UIScreen.main.bounds.width)
+                    // Exercise cards ZStack with horizontal offset slide navigation.
+                    // WR-05: Use GeometryReader instead of deprecated UIScreen.main.bounds.width
+                    // which returns incorrect values on Stage Manager and future window layouts.
+                    GeometryReader { geometry in
+                        ZStack {
+                            ForEach(Array(vm.exercises.enumerated()), id: \.offset) { index, exercise in
+                                ExerciseCardView(
+                                    exercise: exercise,
+                                    exerciseIndex: index,
+                                    viewModel: vm
+                                )
+                                .offset(x: CGFloat(index - vm.currentExerciseIndex) * geometry.size.width)
+                            }
                         }
+                        .animation(animation, value: vm.currentExerciseIndex)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
-                    .animation(animation, value: vm.currentExerciseIndex)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
 
                     // "Next Exercise" / "Finish Session" CTA button
