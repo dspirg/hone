@@ -5,7 +5,7 @@ import SwiftUI
 // Displays total exercises, sets, reps, session duration, and PR badges.
 // Done button dismisses SessionView (pops back to TrainView via NavigationStack).
 //
-// No difficulty rating — deferred to Phase 8 per CONTEXT.md.
+// Difficulty rating captured via emoji picker (D-01, D-02) — required before dismissal.
 // No weight logging — deferred per CONTEXT.md.
 //
 // UI-SPEC: Phase 4 "SessionSummaryView — Completion Screen"
@@ -18,7 +18,9 @@ struct SessionSummaryView: View {
     let totalReps: Int
     let duration: TimeInterval     // sessionDuration from SessionViewModel
     let prs: [PRResult]            // Personal records detected this session (D-14)
-    let onDone: () -> Void         // Dismisses SessionView
+    let onDone: (DifficultyRating) -> Void  // Dismisses SessionView with rating
+
+    @State private var selectedRating: DifficultyRating? = nil
 
     var body: some View {
         ScrollView {
@@ -63,15 +65,46 @@ struct SessionSummaryView: View {
                     }
                 }
 
+                // Difficulty rating (D-01: emoji scale, D-02: required before dismissal)
+                VStack(spacing: 12) {
+                    Text("How was that?")
+                        .font(.headline)
+
+                    HStack(spacing: 24) {
+                        ForEach(DifficultyRating.allCases, id: \.self) { rating in
+                            Button {
+                                selectedRating = rating
+                            } label: {
+                                VStack(spacing: 4) {
+                                    Text(rating.emoji)
+                                        .font(.system(size: 44))
+                                        .opacity(selectedRating == nil || selectedRating == rating ? 1.0 : 0.3)
+                                        .scaleEffect(selectedRating == rating ? 1.15 : 1.0)
+                                        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: selectedRating)
+                                    Text(rating.label)
+                                        .font(.caption2)
+                                        .foregroundStyle(selectedRating == rating ? .primary : .secondary)
+                                }
+                            }
+                            .accessibilityLabel(rating.label)
+                        }
+                    }
+                }
+
                 Spacer()
 
-                // Done button — no difficulty rating (Phase 8 scope per CONTEXT.md deferred)
-                Button("Done", action: onDone)
-                    .buttonStyle(.borderedProminent)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 52)
-                    .padding(.horizontal, 16)
-                    .padding(.bottom, 32)
+                Button("Done") {
+                    if let rating = selectedRating {
+                        onDone(rating)
+                    }
+                }
+                .buttonStyle(.borderedProminent)
+                .frame(maxWidth: .infinity)
+                .frame(height: 52)
+                .padding(.horizontal, 16)
+                .padding(.bottom, 32)
+                .disabled(selectedRating == nil)
+                .opacity(selectedRating == nil ? 0.5 : 1.0)
             }
             .padding(.horizontal, 16)
         }
@@ -122,7 +155,7 @@ struct StatCell: View {
             totalReps: 120,
             duration: 2527,
             prs: [],
-            onDone: {}
+            onDone: { _ in }
         )
     }
 }
