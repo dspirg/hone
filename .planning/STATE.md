@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 08-02-PLAN.md — difficulty rating UI and CoreData wiring
-last_updated: "2026-04-25T13:30:08.696Z"
+stopped_at: Completed 08-03-PLAN.md — adapt-plan and regenerate-plan Edge Functions
+last_updated: "2026-04-25T13:41:28.892Z"
 last_activity: 2026-04-25 -- Phase --phase execution started
 progress:
   total_phases: 8
   completed_phases: 7
   total_plans: 40
-  completed_plans: 36
-  percent: 90
+  completed_plans: 37
+  percent: 93
 ---
 
 # Project State
@@ -30,7 +30,7 @@ Plan: 1 of --name
 Status: Executing Phase --phase
 Last activity: 2026-04-25 -- Phase --phase execution started
 
-Progress: [██████████] 97%
+Progress: [█████████░] 93%
 
 ## Performance Metrics
 
@@ -58,6 +58,7 @@ Progress: [██████████] 97%
 | Phase 04 P04 | 16m | 2 tasks | 3 files |
 | Phase 06 P02 | 23m | 2 tasks | 9 files |
 | Phase 08-adaptive-ai P02 | 18min | 2 tasks | 5 files |
+| Phase 08-adaptive-ai P03 | 25min | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -75,6 +76,8 @@ Recent decisions affecting current work:
 - WorkoutProgressView named to avoid SwiftUI.ProgressView collision — tab struct uses WorkoutProgressView, all existing ProgressView() spinner usages unaffected
 - DifficultyRating.swift added to Xcode project pbxproj (was created in plan 01 but not registered)
 - Done button uses .disabled + .opacity(0.5) pattern rather than hiding to preserve layout stability
+- regenerate-plan uses planSchema for OpenAI Structured Outputs; weekly_days inner structure validated separately via AdaptedPlanSchema
+- historySummary compresses 4-week session data into ~100 tokens for regenerate-plan prompt efficiency
 
 ### Pending Todos
 
@@ -98,8 +101,8 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-25T13:30:08.683Z
-Stopped at: Completed 08-02-PLAN.md — difficulty rating UI and CoreData wiring
+Last session: 2026-04-25T13:41:28.882Z
+Stopped at: Completed 08-03-PLAN.md — adapt-plan and regenerate-plan Edge Functions
 Resume file: None
 
 **Planned Phase:** 8 (Adaptive AI) — 6 plans — 2026-04-25T13:14:01.102Z
