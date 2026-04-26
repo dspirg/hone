@@ -24,17 +24,17 @@ struct SessionSummaryView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 32) {
-                Spacer().frame(height: 48)  // 2xl breathing room above icon
+            VStack(spacing: 20) {
+                Spacer().frame(height: 16)
 
                 // Completion icon
                 Image(systemName: "checkmark.circle.fill")
-                    .font(.system(size: 72))
+                    .font(.system(size: 56))
                     .foregroundStyle(Color("AccentColor"))
                     .accessibilityLabel("Session complete")
 
                 // Headings
-                VStack(spacing: 8) {
+                VStack(spacing: 4) {
                     Text("Great work.")
                         .font(.title.weight(.semibold))
 
@@ -42,8 +42,6 @@ struct SessionSummaryView: View {
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
-
-                Spacer().frame(height: 8)  // sm between headings and stats
 
                 // Stats row — Exercises / Sets / Reps
                 HStack(spacing: 32) {
