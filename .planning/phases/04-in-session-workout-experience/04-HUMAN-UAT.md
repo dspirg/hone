@@ -1,5 +1,5 @@
 ---
-status: partial
+status: resolved
 phase: 04-in-session-workout-experience
 source: [04-VERIFICATION.md]
 started: 2026-04-23T07:45:00Z
@@ -18,18 +18,18 @@ result: passed (2026-04-23 — approved by user after 6/6 scenarios verified on 
 
 ### 2. Offline Write-Ahead Verification
 expected: Sets log normally offline with no errors; sync happens silently on reconnect; banner only after 3 failures
-result: [pending]
+result: PASSED (2026-04-26 — human verified on simulator)
 
 ### 3. VoiceOver Accessibility Spot-Check
 expected: Stepper buttons announce Decrease/Increase reps; checkmark announces Mark set N complete; rest timer announces Rest timer
-result: [pending]
+result: PASSED (2026-04-26 — human verified on simulator)
 
 ## Summary
 
 total: 3
-passed: 1
+passed: 3
 issues: 0
-pending: 2
+pending: 0
 skipped: 0
 blocked: 0
 
