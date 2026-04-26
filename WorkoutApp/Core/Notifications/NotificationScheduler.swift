@@ -53,6 +53,11 @@ final class NotificationScheduler {
     private static let safeFallbackBody = "Your plan is ready — see you when you're ready."
 
     /// Returns true if the text contains none of the guilt-inducing patterns.
+    /// Internal access for unit testing via @testable import.
+    func testPassesGuiltBlocklist(_ text: String) -> Bool {
+        passesGuiltBlocklist(text)
+    }
+
     private func passesGuiltBlocklist(_ text: String) -> Bool {
         let range = NSRange(text.startIndex..., in: text)
         return !Self.guiltPatterns.contains { $0.firstMatch(in: text, range: range) != nil }

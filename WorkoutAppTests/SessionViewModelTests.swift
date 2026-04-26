@@ -75,9 +75,7 @@ final class SessionViewModelTests: XCTestCase {
             userId: "user-2",
             repository: repository
         )
-        viewModel.startSession()
-        // Allow startSession Task to create CDSessionLog
-        try? await Task.sleep(nanoseconds: 100_000_000)
+        await viewModel.startSession()
 
         let beforeComplete = Date()
         viewModel.completeSet(setIndex: 0, repsLogged: 10)
@@ -106,8 +104,7 @@ final class SessionViewModelTests: XCTestCase {
             userId: "user-3",
             repository: repository
         )
-        viewModel.startSession()
-        try? await Task.sleep(nanoseconds: 100_000_000)
+        await viewModel.startSession()
 
         // Manually force timer state as if completeSet had been called with a sessionLog
         viewModel.forceTimerActiveForTesting(endDate: Date().addingTimeInterval(60))
@@ -151,9 +148,7 @@ final class SessionViewModelTests: XCTestCase {
             userId: "user-5",
             repository: repository
         )
-        viewModel.startSession()
-        // Allow startSession Task to complete
-        try? await Task.sleep(nanoseconds: 200_000_000)
+        await viewModel.startSession()
 
         XCTAssertFalse(viewModel.isSessionComplete)
         viewModel.completeSet(setIndex: 0, repsLogged: 8)

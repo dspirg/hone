@@ -115,6 +115,8 @@
 		B005004100000007 /* PlanModificationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B005004000000007 /* PlanModificationCard.swift */; };
 		B006000100000001 /* NotificationScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B006000000000001 /* NotificationScheduler.swift */; };
 		B006001100000001 /* NotificationSchedulerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B006001000000001 /* NotificationSchedulerTests.swift */; };
+		B008001100000001 /* MissedSessionDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B008001000000001 /* MissedSessionDetectorTests.swift */; };
+		B008001100000002 /* ReengagementNotificationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B008001000000002 /* ReengagementNotificationTests.swift */; };
 		B00600A100000001 /* ProgressViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00600A000000001 /* ProgressViewModel.swift */; };
 		B00600A100000002 /* PRResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00600A000000002 /* PRResult.swift */; };
 		B00600A100000003 /* WeekBucket.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00600A000000003 /* WeekBucket.swift */; };
@@ -260,6 +262,8 @@
 		B005004000000007 /* PlanModificationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanModificationCard.swift; sourceTree = "<group>"; };
 		B006000000000001 /* NotificationScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationScheduler.swift; sourceTree = "<group>"; };
 		B006001000000001 /* NotificationSchedulerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSchedulerTests.swift; sourceTree = "<group>"; };
+		B008001000000001 /* MissedSessionDetectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissedSessionDetectorTests.swift; sourceTree = "<group>"; };
+		B008001000000002 /* ReengagementNotificationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReengagementNotificationTests.swift; sourceTree = "<group>"; };
 		B00600A000000001 /* ProgressViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressViewModel.swift; sourceTree = "<group>"; };
 		B00600A000000002 /* PRResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PRResult.swift; sourceTree = "<group>"; };
 		B00600A000000003 /* WeekBucket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekBucket.swift; sourceTree = "<group>"; };
@@ -407,6 +411,8 @@
 				B005001000000001 /* CoachViewModelTests.swift */,
 				B005001000000002 /* CoachSSEClientTests.swift */,
 				B006001000000001 /* NotificationSchedulerTests.swift */,
+				B008001000000001 /* MissedSessionDetectorTests.swift */,
+				B008001000000002 /* ReengagementNotificationTests.swift */,
 				B00600B000000001 /* ProgressViewModelTests.swift */,
 			);
 			path = WorkoutAppTests;
@@ -1011,6 +1017,8 @@
 				B005001100000001 /* CoachViewModelTests.swift in Sources */,
 				B005001100000002 /* CoachSSEClientTests.swift in Sources */,
 				B006001100000001 /* NotificationSchedulerTests.swift in Sources */,
+				B008001100000001 /* MissedSessionDetectorTests.swift in Sources */,
+				B008001100000002 /* ReengagementNotificationTests.swift in Sources */,
 				B00600B100000001 /* ProgressViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
