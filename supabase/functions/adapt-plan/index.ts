@@ -308,8 +308,8 @@ serve(async (req: Request): Promise<Response> => {
       .order("started_at", { ascending: false })
       .limit(4),
     supabase
-      .from("user_plans")
-      .select("plan_data, id")
+      .from("workout_plans")
+      .select("plan_json, id")
       .eq("user_id", userId)
       .eq("is_active", true)
       .single(),
@@ -336,7 +336,7 @@ serve(async (req: Request): Promise<Response> => {
     });
   }
 
-  const currentPlan = currentPlanResult.data.plan_data as Record<string, unknown>;
+  const currentPlan = currentPlanResult.data.plan_json as Record<string, unknown>;
   const planId = currentPlanResult.data.id as string;
   const profile = profileResult.data as {
     goal: string;
@@ -523,8 +523,8 @@ serve(async (req: Request): Promise<Response> => {
 
   // ── Update user_plans with adapted plan ───────────────────────────────────
   const { error: updateError } = await supabase
-    .from("user_plans")
-    .update({ plan_data: sanitizedPlan })
+    .from("workout_plans")
+    .update({ plan_json: sanitizedPlan })
     .eq("id", planId)
     .eq("user_id", userId);
 
