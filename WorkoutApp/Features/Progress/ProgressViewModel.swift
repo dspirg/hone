@@ -62,6 +62,12 @@ final class ProgressViewModel {
             let fetchedSessions = try fetchCompletedSessions()
             sessions = fetchedSessions
             computeStreak(from: fetchedSessions)
+            // FIX-04: fetch planned days count from active plan (per D-09, D-10)
+            if let userId = cachedUserId {
+                let repo = WorkoutPlanRepository(context: viewContext)
+                let plan = try? repo.fetchActivePlan(userId: userId)
+                weeklyPlanned = plan?.weeklyDays.count ?? 3
+            }
             computeWeeklyRing(from: fetchedSessions)
             weekBuckets = computeWeekBuckets(from: fetchedSessions)
         } catch {
@@ -158,13 +164,12 @@ final class ProgressViewModel {
 
     // MARK: - Weekly Ring Computation
     // Counts sessions completed in the current calendar week (weekOfYear).
-    // weeklyPlanned defaults to 4 if no active plan data is available.
+    // weeklyPlanned is set from the active plan in loadProgress before this is called (FIX-04).
 
     func computeWeeklyRing(from sessions: [CDSessionLog]) {
         let calendar = Calendar.current
         guard let weekInterval = calendar.dateInterval(of: .weekOfYear, for: Date()) else {
             weeklyCompleted = 0
-            weeklyPlanned = 4
             return
         }
 
@@ -174,9 +179,6 @@ final class ProgressViewModel {
         }
 
         weeklyCompleted = completed.count
-        // Default to 4 planned sessions per week — can be overridden by UI layer
-        // when active plan data is available
-        weeklyPlanned = max(weeklyPlanned, 4)
     }
 
     // MARK: - Week Buckets Computation
