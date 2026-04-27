@@ -38,8 +38,16 @@ final class SessionViewModel {
     private let repository: SessionRepository
     private var sessionLog: CDSessionLog?
     private let planId: String
-    private let userId: String
+    // Phase 11: made internal (not private) so ExerciseCardView.loadContextData can read it
+    // for scoped fetchPreviousReps/fetchBestReps queries (D-07, T-11-05).
+    let userId: String
     private let notificationScheduler = NotificationScheduler.shared
+
+    // MARK: - Phase 11: Context Card Access (D-07)
+
+    /// Exposes the current session log's UUID for fetchPreviousReps exclusion.
+    /// Returns nil if session has not yet started (startSession not yet awaited).
+    var sessionLogId: UUID? { sessionLog?.id }
 
     // MARK: - Init
 
@@ -160,6 +168,25 @@ final class SessionViewModel {
             isRestTimerActive = true
             scheduleRestNotification(at: endDate, sessionId: session.id?.uuidString ?? "")
         }
+    }
+
+    /// Completes the next incomplete set for the current exercise using the default rep count.
+    /// Called by the "Complete Set" CTA button in SessionView (D-09).
+    /// T-11-06: uses same completeSet path with T-04-01 repsLogged clamping.
+    func completeCurrentSet() {
+        guard let exercise = currentExercise else { return }
+        let completedCount = completedSets[currentExerciseIndex]?.count ?? 0
+        guard completedCount < exercise.sets else { return }
+        // Parse lower bound of rep range as the default (e.g., "8-12" → 8, "10" → 10)
+        let defaultReps = Int(
+            exercise.reps
+                .split(separator: "-")
+                .first
+                .flatMap { Int(String($0)) }
+                ?? Int(exercise.reps)
+                ?? 8
+        ) ?? 8
+        completeSet(setIndex: completedCount, repsLogged: defaultReps)
     }
 
     // MARK: - Rest Timer

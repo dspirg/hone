@@ -81,6 +81,7 @@ struct SessionView: View {
                     Task {
                         await adaptationService.requestPostSessionAdaptation(rating: rating)
                     }
+                    appState.selectedTab = 0  // D-14: Switch to Home tab before dismiss
                     dismiss()
                 }
             )
@@ -122,17 +123,39 @@ struct SessionView: View {
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-                    // "Next Exercise" / "Finish Session" CTA button
-                    let isLast = vm.currentExerciseIndex == vm.exercises.count - 1
-                    Button(isLast ? "Finish Session" : "Next Exercise") {
-                        vm.advanceExercise()
+                    // Context-aware CTA (D-09): three states based on set completion progress
+                    let ctaLabel = computeCtaLabel(vm: vm)
+                    let isCompleteSetAction = ctaLabel == "Complete Set"
+
+                    Button(ctaLabel) {
+                        if isCompleteSetAction {
+                            vm.completeCurrentSet()
+                        } else {
+                            vm.advanceExercise()
+                        }
                     }
-                    .buttonStyle(.borderedProminent)
+                    .font(.body.weight(.bold))
+                    .foregroundStyle(isCompleteSetAction ? .black : .primary)
                     .frame(maxWidth: .infinity)
                     .frame(height: 52)
-                    .padding(.horizontal, 16)
-                    .padding(.bottom, 16)
-                    .accessibilityLabel(isLast ? "Finish Session" : "Next Exercise")
+                    .background(
+                        isCompleteSetAction || ctaLabel == "Finish Session"
+                            ? AnyShapeStyle(LinearGradient(
+                                colors: [Theme.accent, Color(red: 249/255, green: 115/255, blue: 22/255)],
+                                startPoint: .leading, endPoint: .trailing))
+                            : AnyShapeStyle(Theme.surface)
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .overlay {
+                        if !isCompleteSetAction && ctaLabel != "Finish Session" {
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(Theme.accent, lineWidth: 1)
+                        }
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 36)
+                    .accessibilityLabel(ctaLabel)
+                    .animation(.default, value: ctaLabel)
                 }
 
                 // Rest timer overlay — ZStack layer (NOT fullScreenCover) so AVPlayer stays alive beneath
@@ -161,6 +184,23 @@ struct SessionView: View {
                 syncService?.stopMonitoring()
             }
         }
+    }
+
+    // MARK: - CTA Logic (D-09)
+
+    /// Returns the context-aware CTA label based on current set completion state.
+    /// - "Complete Set": sets remain for the current exercise
+    /// - "Next Exercise": all sets done, more exercises remain
+    /// - "Finish Session": all sets done on the last exercise
+    private func computeCtaLabel(vm: SessionViewModel) -> String {
+        guard let currentExercise = vm.currentExercise else { return "Next Exercise" }
+        let completedCount = vm.completedSets[vm.currentExerciseIndex]?.count ?? 0
+        let allSetsComplete = completedCount >= currentExercise.sets
+        let isLastExercise = vm.currentExerciseIndex == vm.exercises.count - 1
+
+        if !allSetsComplete { return "Complete Set" }
+        else if isLastExercise { return "Finish Session" }
+        else { return "Next Exercise" }
     }
 
     // MARK: - Session Setup
