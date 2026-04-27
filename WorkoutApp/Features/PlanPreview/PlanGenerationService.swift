@@ -118,6 +118,20 @@ final class PlanGenerationService {
                         try await setOnboardingCompleted()
 
                         state = .completed(plan)
+
+                        // FIX-03: Schedule workout reminders after plan generation (per D-06, D-08)
+                        let dayOfWeekMap: [String: Int] = [
+                            "Sunday": 1, "Monday": 2, "Tuesday": 3,
+                            "Wednesday": 4, "Thursday": 5, "Friday": 6, "Saturday": 7
+                        ]
+                        let planDays = plan.weeklyDays.compactMap { day -> (weekday: Int, workoutType: String)? in
+                            guard let weekday = dayOfWeekMap[day.dayLabel] else { return nil }
+                            return (weekday: weekday, workoutType: day.sessionName)
+                        }
+                        await NotificationScheduler.shared.scheduleWorkoutReminders(
+                            planDays: planDays,
+                            currentStreak: 0  // Streak not available in service; 0 produces standard notification copy
+                        )
                     }
                 }
             } catch {
