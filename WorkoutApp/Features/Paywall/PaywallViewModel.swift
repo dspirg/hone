@@ -2,6 +2,12 @@ import Foundation
 import Observation
 import RevenueCat
 
+// MARK: - PaywallLoadState
+// Typed load state eliminates fragile string-literal equality comparisons in the view.
+enum PaywallLoadState {
+    case idle, loading, loaded, pricingError
+}
+
 @Observable
 @MainActor
 final class PaywallViewModel {
@@ -11,6 +17,7 @@ final class PaywallViewModel {
     var selectedPackage: Package?  // D-08: annual pre-selected by default after load
 
     // MARK: - UI State
+    var loadState: PaywallLoadState = .idle
     var isLoading = false
     var isPurchasing = false
     var purchaseCompleted = false
@@ -74,6 +81,7 @@ final class PaywallViewModel {
     // MARK: - Load Offerings
     func loadOfferings() async {
         isLoading = true
+        loadState = .loading
         errorMessage = nil
         defer { isLoading = false }
         do {
@@ -81,8 +89,10 @@ final class PaywallViewModel {
             annualPackage = offerings.current?.annual
             monthlyPackage = offerings.current?.monthly
             selectedPackage = annualPackage  // D-08: annual pre-selected
+            loadState = .loaded
         } catch {
             errorMessage = "Couldn't load pricing"
+            loadState = .pricingError
         }
     }
 

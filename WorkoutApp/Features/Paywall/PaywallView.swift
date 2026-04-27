@@ -66,7 +66,7 @@ struct PaywallView: View {
                     .padding(.top, 24)
 
                 // CTA button (only shown when not in error state)
-                if viewModel.errorMessage != "Couldn't load pricing" {
+                if viewModel.loadState != .pricingError {
                     ctaButton
                         .padding(.horizontal, 32)
                         .padding(.top, 24)
@@ -120,7 +120,7 @@ struct PaywallView: View {
                     .frame(height: 88)
                     .redacted(reason: .placeholder)
             }
-        } else if viewModel.errorMessage == "Couldn't load pricing" {
+        } else if viewModel.loadState == .pricingError {
             // Error state with retry
             VStack(spacing: 12) {
                 Image(systemName: "exclamationmark.triangle")
