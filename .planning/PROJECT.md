@@ -21,7 +21,7 @@ A conversational AI personal trainer in your pocket — one that knows you, buil
 
 ### Active
 
-*(All v1.0 requirements validated — see Validated section)*
+*(v1.1 requirements — see REQUIREMENTS.md)*
 
 ### Validated (continued)
 
@@ -85,9 +85,20 @@ This document evolves at phase transitions and milestone boundaries.
 3. Audit Out of Scope — reasons still valid?
 4. Update Context with current state
 
+## Current Milestone: v1.1 Polish & Ship
+
+**Goal:** Fix integration bugs from v1.0 audit, redesign UI with dark mode + amber brand, prepare App Store submission.
+
+**Target features:**
+- Fix 5 integration gaps (ADPT-01/02/03, PROG-02/03)
+- Dark mode + amber accent redesign across all screens
+- Coach "Hone" branding
+- Video thumbnails with tap-to-fullscreen
+- App Store assets (icon, screenshots, description, privacy manifest, signing)
+
 ## Current State
 
-v1.0 milestone code-complete (2026-04-25). All 8 phases executed across 40 plans. Phase 8 human UAT pending (Supabase deployed, Edge Functions live, Xcode build passing). Code review issues resolved (12 findings: 2 critical, 6 warning, 4 info — all fixed).
+v1.0 shipped 2026-04-26 (8 phases, 40 plans, 36 requirements). Retroactive audit found 5 partial requirements (3 in adaptive AI, 2 in progress tracking). UI redesign direction locked via sketches: dark mode, amber accents, coach named "Hone".
 
 ---
-*Last updated: 2026-04-25 after Phase 8: Adaptive AI complete (v1.0 milestone)*
+*Last updated: 2026-04-26 after v1.1 milestone initialized*
