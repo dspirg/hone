@@ -75,7 +75,15 @@ Plans:
   1. The Home screen uses a card-stack layout showing today's workout, weekly streak, and quick stats matching Sketch 001-A
   2. The Session screen uses a compact video layout with Previous and Best context cards visible alongside the exercise, matching Sketch 002-B
   3. The Session Summary screen fits the emoji difficulty picker on screen without scrolling on a standard iPhone display
-**Plans**: TBD
+**Plans:** 4 plans
+Plans:
+**Wave 1**
+- [ ] 11-01-PLAN.md — Shared components + data layer: StatPillView, WeekStreakBar, HomeExerciseRowView, AdaptationBannerView, ContextCardView, SessionRepository queries, AppState.selectedTab
+
+**Wave 2** *(blocked on Wave 1 completion)*
+- [ ] 11-02-PLAN.md — HomeView full rebuild: greeting, adaptation banner, workout card, streak bar, quick stats, fullScreenCover session launch
+- [ ] 11-03-PLAN.md — Session modifications: compact 2:1 video, context cards, three-state CTA, MainTabView tab selection
+- [ ] 11-04-PLAN.md — SessionSummaryView conversion: fixed VStack, merged stats, capped PR section
 **UI hint**: yes
 
 ### Phase 12: App Store Submission
@@ -104,5 +112,5 @@ Plans:
 | 8. Adaptive AI | v1.0 | 6/6 | Complete | 2026-04-25 |
 | 9. Bug Fixes | v1.1 | 0/2 | Planning complete | - |
 | 10. Design System and Visual Identity | v1.1 | 4/4 | Complete    | 2026-04-27 |
-| 11. Screen Redesigns | v1.1 | 0/TBD | Not started | - |
+| 11. Screen Redesigns | v1.1 | 0/4 | Planning complete | - |
 | 12. App Store Submission | v1.1 | 0/TBD | Not started | - |
