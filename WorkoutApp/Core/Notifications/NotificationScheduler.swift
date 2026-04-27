@@ -32,7 +32,7 @@ final class NotificationScheduler {
 
     // MARK: - Init
 
-    init(context: NSManagedObjectContext? = nil) {
+    private init(context: NSManagedObjectContext? = nil) {
         self.context = context ?? PersistenceController.shared.container.viewContext
     }
 
