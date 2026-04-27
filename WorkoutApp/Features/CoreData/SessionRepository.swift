@@ -81,9 +81,15 @@ final class SessionRepository {
             setLog.completedAt = Date()
             setLog.syncedToSupabase = false
 
-            // Wire inverse relationship by fetching session in this background context
+            // Wire inverse relationship by fetching session in this background context.
+            // Guard against nil sessionId — normally set by startSession, but defensive code
+            // must not force-unwrap in a background task where the crash cannot be caught.
+            guard let safeSessionId = sessionId else {
+                try? bgCtx.save()
+                return
+            }
             let req = CDSessionLog.fetchRequest()
-            req.predicate = NSPredicate(format: "id == %@", sessionId! as CVarArg)
+            req.predicate = NSPredicate(format: "id == %@", safeSessionId as CVarArg)
             req.fetchLimit = 1
             if let bgSession = (try? bgCtx.fetch(req))?.first {
                 bgSession.addToSetLogs(setLog)
