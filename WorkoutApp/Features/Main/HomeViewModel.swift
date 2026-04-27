@@ -148,9 +148,13 @@ final class HomeViewModel {
         // T-11-03: filter to user's sessions via userId predicate on CDSessionLog first.
         let userSessionIds = Set(sessions.compactMap { $0.id })
 
+        // T-11-03: scope CDSetLog fetch to user's session IDs at the CoreData layer —
+        // avoids loading all users' set data into memory (mirrors SessionRepository.fetchBestReps).
         let setRequest = CDSetLog.fetchRequest()
-        let allSets = try context.fetch(setRequest)
-        let userSets = allSets.filter { userSessionIds.contains($0.sessionId ?? UUID()) }
+        setRequest.predicate = NSPredicate(
+            format: "sessionId IN %@", userSessionIds as CVarArg
+        )
+        let userSets = try context.fetch(setRequest)
 
         // Build per-session, per-exercise max reps
         var sessionExerciseMax: [UUID: [String: Int]] = [:]
