@@ -57,7 +57,7 @@ None — discussion stayed within phase scope.
 |----|-------------|------------------|
 | UI-04 | Home screen uses card-stack layout with today's workout, weekly streak, and quick stats (per Sketch 001-A) | HomeView full rebuild; data from WorkoutPlanRepository + ProgressViewModel + AdaptationService |
 | UI-05 | Session screen uses compact video layout with Previous/Best context cards (per Sketch 002-B) | ExerciseCardView video aspect ratio change; new SessionRepository queries for previous/best reps |
-| UI-07 | Session summary screen uses tighter layout so emoji difficulty picker is visible without scrolling | ScrollView → fixed VStack conversion; StatCell → StatPillView merge with duration |
+| UI-07 | Session summary screen uses tighter layout so emoji difficulty picker is visible without scrolling | ScrollView -> fixed VStack conversion; StatCell -> StatPillView merge with duration |
 </phase_requirements>
 
 ---
@@ -118,29 +118,29 @@ This phase adds zero new Swift Package dependencies. All required capabilities (
 
 ```
 AppState (currentUser, selectedTab)
-    │
-    ├─── MainTabView (TabView, .fullScreenCover host for session)
-    │       │
-    │       ├─── HomeView (@Observable HomeViewModel)
-    │       │       ├─── WorkoutPlanRepository → CDWorkoutPlan (today's workout)
-    │       │       ├─── ProgressViewModel → CDSessionLog (streak, stats)
-    │       │       ├─── AdaptationService.lastAdjustmentSummary (banner)
-    │       │       └─── ──► .fullScreenCover ──► SessionView
-    │       │                                          │
-    │       │                                          ├─── SessionViewModel (completedSets, isSessionComplete)
-    │       │                                          ├─── ExerciseCardView (video 2:1 + context cards)
-    │       │                                          │       └─── SessionRepository ──► CDSetLog queries
-    │       │                                          └─── SessionSummaryView (fixed VStack)
-    │       │                                                    └─── dismiss() ──► Home tab (selectedTab)
-    │       │
-    │       └─── TrainView (unchanged — plan browsing entry point)
-    │
-    └─── ProgressViewModel (streak + quick stats source)
+    |
+    +--- MainTabView (TabView, .fullScreenCover host for session)
+    |       |
+    |       +--- HomeView (@Observable HomeViewModel)
+    |       |       +--- WorkoutPlanRepository -> CDWorkoutPlan (today's workout)
+    |       |       +--- ProgressViewModel -> CDSessionLog (streak, stats)
+    |       |       +--- AdaptationService.lastAdjustmentSummary (banner)
+    |       |       +--- --> .fullScreenCover --> SessionView
+    |       |                                          |
+    |       |                                          +--- SessionViewModel (completedSets, isSessionComplete)
+    |       |                                          +--- ExerciseCardView (video 2:1 + context cards)
+    |       |                                          |       +--- SessionRepository --> CDSetLog queries
+    |       |                                          +--- SessionSummaryView (fixed VStack)
+    |       |                                                    +--- dismiss() --> Home tab (selectedTab)
+    |       |
+    |       +--- TrainView (unchanged — plan browsing entry point)
+    |
+    +--- ProgressViewModel (streak + quick stats source)
 ```
 
 Data flows:
 - Home load: parallel async fetches for plan (WorkoutPlanRepository) + stats (ProgressViewModel) on .task
-- Session launch: "Start Workout" sets `showSession = true` on HomeView → .fullScreenCover
+- Session launch: "Start Workout" sets `showSession = true` on HomeView -> .fullScreenCover
 - Context cards load: ExerciseCardView .task queries SessionRepository for previousReps + bestReps per exercise name
 - Post-dismiss: Summary "Done" calls dismiss(); HomeViewModel re-fetches stats to reflect completed session
 
@@ -148,23 +148,23 @@ Data flows:
 
 ```
 WorkoutApp/Features/Main/
-├── Tabs/
-│   └── HomeView.swift              # Full rebuild (existing file, rewritten)
-├── Components/
-│   ├── StatPillView.swift          # New shared component (D-15)
-│   ├── WeekStreakBar.swift          # New shared component (D-15)
-│   ├── ExerciseRowView.swift        # New shared component (D-15)
-│   └── AdaptationBannerView.swift  # New component (D-03)
++-- Tabs/
+|   +-- HomeView.swift              # Full rebuild (existing file, rewritten)
++-- Components/
+    +-- StatPillView.swift          # New shared component (D-15)
+    +-- WeekStreakBar.swift          # New shared component (D-15)
+    +-- ExerciseRowView.swift        # New shared component (D-15)
+    +-- AdaptationBannerView.swift  # New component (D-03)
 
 WorkoutApp/Features/Session/
-├── SessionView.swift               # Modified — context-aware CTA (D-09)
-└── Components/
-    ├── ExerciseCardView.swift      # Modified — 2:1 video, tap-to-expand (D-06)
-    ├── ContextCardView.swift       # New component (D-07)
-    └── SessionSummaryView.swift    # Modified — fixed VStack, merged stats (D-10 to D-12)
++-- SessionView.swift               # Modified — context-aware CTA (D-09)
++-- Components/
+    +-- ExerciseCardView.swift      # Modified — 2:1 video, tap-to-expand (D-06)
+    +-- ContextCardView.swift       # New component (D-07)
+    +-- SessionSummaryView.swift    # Modified — fixed VStack, merged stats (D-10 to D-12)
 
 WorkoutApp/Features/CoreData/
-└── SessionRepository.swift        # Modified — two new fetch methods (D-07)
++-- SessionRepository.swift        # Modified — two new fetch methods (D-07)
 ```
 
 ### Pattern 1: @Observable HomeViewModel with parallel data fetch
@@ -290,7 +290,7 @@ VStack(spacing: 0) {
 .frame(maxWidth: .infinity, maxHeight: .infinity)
 ```
 
-[VERIFIED: codebase — current SessionSummaryView.swift confirmed ScrollView wrapping; checkmark icon at line 32–35 uses .system(size: 56)]
+[VERIFIED: codebase — current SessionSummaryView.swift confirmed ScrollView wrapping; checkmark icon at line 32-35 uses .system(size: 56)]
 
 ### Anti-Patterns to Avoid
 
@@ -344,7 +344,7 @@ VStack(spacing: 0) {
 ### Pitfall 5: AdaptationBannerView shows stale adaptation text
 **What goes wrong:** `AdaptationService.lastAdjustmentSummary` persists across sessions. If the user opens Home the next day, a 24-hour-old adaptation message still shows.
 **Why it happens:** AdaptationService is injected as a @State on MainTabView with lifetime tied to the app session. The property is never cleared.
-**How to avoid:** The UI-SPEC (line 286–288) specifies: shown when adaptation occurred "within the last 24 hours". AdaptationService needs a `lastAdjustmentDate: Date?` companion property. HomeViewModel checks if `lastAdjustmentDate` is within 24 hours before showing the banner. [VERIFIED: UI-SPEC line 286 — "within the last 24 hours" is the specified visibility rule]
+**How to avoid:** The UI-SPEC (line 286-288) specifies: shown when adaptation occurred "within the last 24 hours". AdaptationService needs a `lastAdjustmentDate: Date?` companion property. HomeViewModel checks if `lastAdjustmentDate` is within 24 hours before showing the banner. [VERIFIED: UI-SPEC line 286 — "within the last 24 hours" is the specified visibility rule]
 
 ### Pitfall 6: WeekStreakBar day order depends on locale
 **What goes wrong:** Building the 7-day streak bar as a hardcoded M-T-W-T-F-S-S array fails for locales where the week starts on Sunday or Saturday.
@@ -357,7 +357,7 @@ VStack(spacing: 0) {
 
 ### AsyncImage thumbnail pattern (40x40 in Home exercise rows)
 ```swift
-// Source: codebase — WorkoutApp/Features/Train/ExerciseLibraryRowView.swift (lines 25–44)
+// Source: codebase — WorkoutApp/Features/Train/ExerciseLibraryRowView.swift (lines 25-44)
 // Adapt for 40x40 Home card rows (D-04 specifies 40x40, ExerciseLibraryRowView uses 52x52)
 AsyncImage(url: URL(string: exercise.thumbnailURL ?? "")) { phase in
     switch phase {
@@ -457,7 +457,7 @@ struct WeekStreakBar: View {
                     streakTile(label: day.label, date: day.date)
                 }
             }
-            Text("🔥 \(currentStreak) day streak")
+            Text("fire_emoji \(currentStreak) day streak")
                 .font(.body)
                 .foregroundStyle(.secondary)
         }
@@ -475,7 +475,7 @@ struct WeekStreakBar: View {
 | HomeView minimal plan card | Card-stack with greeting + workout + streak + stats | Phase 11 (this phase) | Full workout loop visible from Home |
 | 16:9 video in ExerciseCardView | 2:1 compact video with tap-to-expand | Phase 11 (this phase) | More screen space for set logging; context cards visible |
 | CTA: "Next Exercise" / "Finish Session" | Three-state CTA: "Complete Set" / "Next Exercise" / "Finish Session" | Phase 11 (this phase) | Better contextual affordance; explicit set completion action |
-| Session launched from TrainView | Session launched from HomeView .fullScreenCover | Phase 11 (this phase) | Direct workout loop: Home → Session → Summary → Home |
+| Session launched from TrainView | Session launched from HomeView .fullScreenCover | Phase 11 (this phase) | Direct workout loop: Home -> Session -> Summary -> Home |
 
 ---
 
@@ -485,28 +485,31 @@ struct WeekStreakBar: View {
 |---|-------|---------|---------------|
 | A1 | AppState has no `selectedTab` property — must be added | Architecture Patterns / Pattern 4 | If AppState already had this, no work needed; if not, adding it is safe and low-risk |
 | A2 | .task does not re-run on a view that is covered by .fullScreenCover | Common Pitfalls / Pitfall 4 | If .task does re-run on fullScreenCover dismiss, the stats-refresh issue is auto-solved; if not, explicit reload needed |
-| A3 | Time-of-day greeting thresholds (morning 5–12, afternoon 12–17, evening 17–21) | Code Examples | Subjective UX choice; wrong thresholds won't break anything but may feel off |
+| A3 | Time-of-day greeting thresholds (morning 5-12, afternoon 12-17, evening 17-21) | Code Examples | Subjective UX choice; wrong thresholds won't break anything but may feel off |
 | A4 | Calendar.current.shortWeekdaySymbols rotated by firstWeekday gives correct locale-safe week display | Common Pitfalls / Pitfall 6 | Minor visual bug in non-Monday-first locales; app is English-only for v1.1 so low real-world risk |
 | A5 | fetchPreviousReps should return max reps from the immediately prior session (not any prior session) | Architecture Patterns / Pattern 2 | Affects what "Previous" means; if user had 10 reps then 8 reps in prior session, showing 8 vs 10 affects reference value shown |
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **HomeViewModel vs. re-using ProgressViewModel for streak/stats**
    - What we know: ProgressViewModel.loadProgress() already fetches sessions, computes streak, weeklyCompleted, weekBuckets.
    - What's unclear: Should HomeView create its own ProgressViewModel instance, or share the one from WorkoutProgressView? Creating two instances means two CoreData fetches for the same data on app start.
    - Recommendation: Create a lightweight HomeViewModel that calls ProgressViewModel's public methods directly (sharing the logic but not the instance), or pass a shared ProgressViewModel via @Environment. Since MainTabView does not currently inject ProgressViewModel, the simplest path is HomeViewModel creating its own instance — the CoreData cost is negligible for the data sizes involved.
+   - RESOLVED: HomeViewModel creates its own instance with dedicated loadStats() method. The CoreData query cost is negligible for the data volumes involved, and this avoids coupling HomeView to ProgressViewModel's lifecycle.
 
 2. **"Previous" rep definition in context cards**
    - What we know: D-07 says "query SessionRepository for last session's reps". CDSetLog stores exerciseName, repsLogged, and sessionId. Multiple sets in one session produce multiple CDSetLog rows.
    - What's unclear: "Previous reps" — is this the max reps logged in the prior session, or the last set logged, or the average?
    - Recommendation: Use max reps from the most recent prior session (highest rep count achieved), matching how "Best" is defined. This makes Previous and Best semantically comparable: "I did 10 before, my best is 12."
+   - RESOLVED: fetchPreviousReps returns max reps from the most recent prior session (excludingSessionId filters out the current session). This makes Previous and Best semantically parallel.
 
 3. **ExerciseRowView vs. ExerciseLibraryRowView naming conflict**
    - What we know: ExerciseLibraryRowView.swift has a comment (line 8) explicitly noting the naming conflict with ExerciseRowView in PlanPreviewView. The UI-SPEC names the new Home card row component `ExerciseRowView` in `Features/Main/Components/`.
    - What's unclear: Will a new `ExerciseRowView` in Main/Components/ conflict with the existing `ExerciseRowView` in PlanPreview/Components/?
    - Recommendation: Name the new Home component `HomeExerciseRowView` to avoid any collision, or confirm the existing PlanPreview ExerciseRowView is in a different module scope. Read the existing file before naming. [ASSUMED — need to verify PlanPreview/Components/ file contents]
+   - RESOLVED: Named `HomeExerciseRowView` in all plans to avoid collision with the existing PlanPreview ExerciseRowView. Single-target Swift project means no module scoping — same-named structs would conflict at compile time.
 
 ---
 
@@ -526,17 +529,17 @@ Step 2.6: SKIPPED — Phase 11 is purely iOS client code (SwiftUI layout + CoreD
 | Quick run command | `xcodebuild test -scheme WorkoutApp -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing WorkoutAppTests/SessionViewModelTests` |
 | Full suite command | `xcodebuild test -scheme WorkoutApp -destination 'platform=iOS Simulator,name=iPhone 16'` |
 
-### Phase Requirements → Test Map
+### Phase Requirements -> Test Map
 
 | Req ID | Behavior | Test Type | Automated Command | File Exists? |
 |--------|----------|-----------|-------------------|-------------|
-| UI-04 | Home greeting uses time-of-day prefix | unit | `SessionViewModelTests` is existing; new `HomeViewModelTests` needed | ❌ Wave 0 |
-| UI-04 | Home data loads plan + streak in parallel without blocking | unit | `HomeViewModelTests.testParallelLoad` | ❌ Wave 0 |
-| UI-05 | Previous reps query returns max reps from most recent prior session | unit | `SessionRepositoryTests.testFetchPreviousReps` | ❌ Wave 0 (new method on existing test file) |
-| UI-05 | Best reps query returns all-time max across all sessions | unit | `SessionRepositoryTests.testFetchBestReps` | ❌ Wave 0 (new method on existing test file) |
-| UI-05 | CTA label is "Complete Set" when sets remain | unit | `SessionViewModelTests.testCTALabel` | ❌ Wave 0 |
-| UI-05 | CTA label is "Next Exercise" when all sets done, more exercises remain | unit | `SessionViewModelTests.testCTALabel` | ❌ Wave 0 |
-| UI-05 | CTA label is "Finish Session" on last exercise all sets done | unit | `SessionViewModelTests.testCTALabel` | ❌ Wave 0 |
+| UI-04 | Home greeting uses time-of-day prefix | unit | `SessionViewModelTests` is existing; new `HomeViewModelTests` needed | Wave 0 (Plan 01) |
+| UI-04 | Home data loads plan + streak in parallel without blocking | unit | `HomeViewModelTests.testParallelLoad` | Wave 0 (Plan 01) |
+| UI-05 | Previous reps query returns max reps from most recent prior session | unit | `SessionRepositoryTests.testFetchPreviousReps` | Wave 0 (Plan 01) |
+| UI-05 | Best reps query returns all-time max across all sessions | unit | `SessionRepositoryTests.testFetchBestReps` | Wave 0 (Plan 01) |
+| UI-05 | CTA label is "Complete Set" when sets remain | unit | `SessionViewModelTests.testCTALabel` | Wave 0 (Plan 01) |
+| UI-05 | CTA label is "Next Exercise" when all sets done, more exercises remain | unit | `SessionViewModelTests.testCTALabel` | Wave 0 (Plan 01) |
+| UI-05 | CTA label is "Finish Session" on last exercise all sets done | unit | `SessionViewModelTests.testCTALabel` | Wave 0 (Plan 01) |
 | UI-07 | Summary fixed VStack shows difficulty picker without scroll on SE | manual (visual) | Launch on iPhone SE simulator | N/A — manual only |
 
 ### Sampling Rate
@@ -544,10 +547,10 @@ Step 2.6: SKIPPED — Phase 11 is purely iOS client code (SwiftUI layout + CoreD
 - **Per wave merge:** Full suite
 - **Phase gate:** Full suite green before `/gsd-verify-work`
 
-### Wave 0 Gaps
-- [ ] `WorkoutAppTests/HomeViewModelTests.swift` — covers UI-04 data loading
-- [ ] Add `testFetchPreviousReps` and `testFetchBestReps` to existing `WorkoutAppTests/SessionRepositoryTests.swift`
-- [ ] Add CTA label tests to existing `WorkoutAppTests/SessionViewModelTests.swift`
+### Wave 0 Test Coverage
+- [x] `WorkoutAppTests/HomeViewModelTests.swift` — covers UI-04 data loading (created in Plan 01, Task 0)
+- [x] Add `testFetchPreviousReps` and `testFetchBestReps` to existing `WorkoutAppTests/SessionRepositoryTests.swift` (created in Plan 01, Task 0)
+- [x] Add CTA label tests to existing `WorkoutAppTests/SessionViewModelTests.swift` (created in Plan 01, Task 0)
 
 *(Existing test infrastructure: XCTest target confirmed at `WorkoutAppTests/` — no framework install needed)*
 
