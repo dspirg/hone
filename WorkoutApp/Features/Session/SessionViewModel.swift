@@ -28,6 +28,9 @@ final class SessionViewModel {
     private(set) var isSessionComplete: Bool = false
     private(set) var sessionStartDate: Date = Date()
     private(set) var detectedPRs: [PRResult] = []
+    /// True if startSession() CoreData write failed permanently — used by SessionView
+    /// to show an error banner rather than silently no-oping all completeSet calls.
+    private(set) var sessionSetupFailed: Bool = false
 
     /// Per-exercise set tracking: [exerciseIndex: [setIndex: repsLogged]]
     private(set) var completedSets: [Int: [Int: Int]] = [:]
@@ -109,6 +112,7 @@ final class SessionViewModel {
         } catch {
             // CoreData write failure is non-fatal — session continues in memory.
             // No timer/sync until sessionLog is non-nil.
+            sessionSetupFailed = true
             print("SessionViewModel: startSession CoreData write failed: \(error)")
         }
         // Notification permission is requested after first session completes (D-24 earned moment),
@@ -122,8 +126,16 @@ final class SessionViewModel {
     ///   - setIndex: 0-indexed set position within the current exercise.
     ///   - repsLogged: Actual reps performed (clamped in repository to 0–999).
     func completeSet(setIndex: Int, repsLogged: Int) {
-        guard let exercise = currentExercise,
-              let session = sessionLog else { return }
+        guard let exercise = currentExercise else { return }
+        guard let session = sessionLog else {
+            // If setup definitively failed, the error banner in SessionView should already
+            // be visible via sessionSetupFailed. Either way, silently return — there is
+            // no session to write to.
+            if sessionSetupFailed {
+                print("SessionViewModel: completeSet called but sessionSetupFailed — set not recorded")
+            }
+            return
+        }
 
         // Record in local state
         if completedSets[currentExerciseIndex] == nil {
