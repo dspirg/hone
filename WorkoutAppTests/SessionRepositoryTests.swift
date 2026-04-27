@@ -158,6 +158,33 @@ final class SessionRepositoryTests: XCTestCase {
         XCTAssertTrue(remaining.isEmpty, "No unsynced sessions after markSynced")
     }
 
+    // MARK: - Phase 11: Previous/Best Reps (UI-05)
+
+    func testFetchPreviousReps_returnsNilWhenNoHistory() throws {
+        // Given: no CDSetLog entries for "Bench Press"
+        // When: fetchPreviousReps(exerciseName: "Bench Press", excludingSessionId: nil, userId: testUserId)
+        // Then: returns nil
+        let testUserId = "user-123"
+        let result = try repository.fetchPreviousReps(
+            exerciseName: "Bench Press",
+            excludingSessionId: nil,
+            userId: testUserId
+        )
+        XCTAssertNil(result, "Should return nil when no prior session data exists")
+    }
+
+    func testFetchBestReps_returnsNilWhenNoHistory() throws {
+        // Given: no CDSetLog entries for "Bench Press"
+        // When: fetchBestReps(exerciseName: "Bench Press", userId: testUserId)
+        // Then: returns nil
+        let testUserId = "user-123"
+        let result = try repository.fetchBestReps(
+            exerciseName: "Bench Press",
+            userId: testUserId
+        )
+        XCTAssertNil(result, "Should return nil when no session data exists")
+    }
+
     // MARK: - Test 5: repsLogged clamping (T-04-01)
 
     func testRepCountClamping() throws {

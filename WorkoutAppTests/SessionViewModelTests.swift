@@ -139,6 +139,33 @@ final class SessionViewModelTests: XCTestCase {
                        "extendRest should add 30 seconds to timerEndDate")
     }
 
+    // MARK: - Phase 11: CTA Label Logic (UI-05, D-09)
+    // Note: The computeCtaLabel function will live in SessionView (Plan 03).
+    // These tests verify the underlying SessionViewModel state that drives the CTA.
+
+    func testCompletedSetsCount_initiallyZero() {
+        // The CTA label depends on completedSets[exerciseIndex]?.count
+        // When no sets are completed, this should be 0 or nil
+        let viewModel = SessionViewModel(
+            workoutDay: Self.threeExerciseDay(),
+            planId: "plan-cta",
+            userId: "user-cta",
+            repository: repository
+        )
+        let count = viewModel.completedSets[0]?.count ?? 0
+        XCTAssertEqual(count, 0, "No sets should be completed initially")
+    }
+
+    func testCurrentExerciseIndex_startsAtZero() {
+        let viewModel = SessionViewModel(
+            workoutDay: Self.threeExerciseDay(),
+            planId: "plan-idx",
+            userId: "user-idx",
+            repository: repository
+        )
+        XCTAssertEqual(viewModel.currentExerciseIndex, 0, "Should start at first exercise")
+    }
+
     // MARK: - Test 5: isSessionComplete true when last set of last exercise is logged
 
     func testSessionCompleteOnLastSetOfLastExercise() async {

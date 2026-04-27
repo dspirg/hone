@@ -134,6 +134,13 @@
 		B010000100000001 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B010000000000001 /* Theme.swift */; };
 		B010000100000002 /* HoneAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B010000000000002 /* HoneAvatarView.swift */; };
 		B010000100000003 /* VideoOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B010000000000003 /* VideoOverlayView.swift */; };
+		B011000100000001 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B011000000000001 /* HomeViewModel.swift */; };
+		B011000100000002 /* StatPillView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B011000000000002 /* StatPillView.swift */; };
+		B011000100000003 /* WeekStreakBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B011000000000003 /* WeekStreakBar.swift */; };
+		B011000100000004 /* HomeExerciseRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B011000000000004 /* HomeExerciseRowView.swift */; };
+		B011000100000005 /* AdaptationBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B011000000000005 /* AdaptationBannerView.swift */; };
+		B011000100000006 /* ContextCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B011000000000006 /* ContextCardView.swift */; };
+		B011001100000001 /* HomeViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B011001000000001 /* HomeViewModelTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -284,6 +291,13 @@
 		B010000000000001 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		B010000000000002 /* HoneAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoneAvatarView.swift; sourceTree = "<group>"; };
 		B010000000000003 /* VideoOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoOverlayView.swift; sourceTree = "<group>"; };
+		B011000000000001 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		B011000000000002 /* StatPillView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatPillView.swift; sourceTree = "<group>"; };
+		B011000000000003 /* WeekStreakBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekStreakBar.swift; sourceTree = "<group>"; };
+		B011000000000004 /* HomeExerciseRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeExerciseRowView.swift; sourceTree = "<group>"; };
+		B011000000000005 /* AdaptationBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptationBannerView.swift; sourceTree = "<group>"; };
+		B011000000000006 /* ContextCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCardView.swift; sourceTree = "<group>"; };
+		B011001000000001 /* HomeViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModelTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -421,6 +435,7 @@
 				B008001000000001 /* MissedSessionDetectorTests.swift */,
 				B008001000000002 /* ReengagementNotificationTests.swift */,
 				B00600B000000001 /* ProgressViewModelTests.swift */,
+				B011001000000001 /* HomeViewModelTests.swift */,
 			);
 			path = WorkoutAppTests;
 			sourceTree = "<group>";
@@ -502,6 +517,7 @@
 				B004003000000003 /* SetLogRow.swift */,
 				B004003000000004 /* ExerciseCardView.swift */,
 				B004003000000006 /* SessionSummaryView.swift */,
+				B011000000000006 /* ContextCardView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -656,9 +672,22 @@
 			isa = PBXGroup;
 			children = (
 				B00F000000000006 /* MainTabView.swift */,
+				B011000000000001 /* HomeViewModel.swift */,
 				B00F000030000005 /* Tabs */,
+				B011000030000001 /* Components */,
 			);
 			path = Main;
+			sourceTree = "<group>";
+		};
+		B011000030000001 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				B011000000000002 /* StatPillView.swift */,
+				B011000000000003 /* WeekStreakBar.swift */,
+				B011000000000004 /* HomeExerciseRowView.swift */,
+				B011000000000005 /* AdaptationBannerView.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		B00F000030000005 /* Tabs */ = {
@@ -1000,6 +1029,12 @@
 				B010000100000001 /* Theme.swift in Sources */,
 				B010000100000002 /* HoneAvatarView.swift in Sources */,
 				B010000100000003 /* VideoOverlayView.swift in Sources */,
+				B011000100000001 /* HomeViewModel.swift in Sources */,
+				B011000100000002 /* StatPillView.swift in Sources */,
+				B011000100000003 /* WeekStreakBar.swift in Sources */,
+				B011000100000004 /* HomeExerciseRowView.swift in Sources */,
+				B011000100000005 /* AdaptationBannerView.swift in Sources */,
+				B011000100000006 /* ContextCardView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1032,6 +1067,7 @@
 				B008001100000001 /* MissedSessionDetectorTests.swift in Sources */,
 				B008001100000002 /* ReengagementNotificationTests.swift in Sources */,
 				B00600B100000001 /* ProgressViewModelTests.swift in Sources */,
+				B011001100000001 /* HomeViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

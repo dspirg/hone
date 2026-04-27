@@ -163,6 +163,23 @@ final class SessionRepository {
         return try context.fetch(req)
     }
 
+    // MARK: - Phase 11: Previous/Best Reps Queries (UI-05)
+    // Stub signatures added in Task 0 so test stubs compile.
+    // Full implementation provided in Task 2.
+
+    /// Returns the max repsLogged from the most recent prior session for the given exercise,
+    /// scoped to the userId. Excludes the current session (excludingSessionId).
+    /// Returns nil if no prior session data exists.
+    func fetchPreviousReps(exerciseName: String, excludingSessionId: UUID?, userId: String) throws -> Int? {
+        return nil // Stub — full implementation in Task 2
+    }
+
+    /// Returns the all-time max repsLogged for the given exercise, scoped to the userId.
+    /// Returns nil if no session data exists.
+    func fetchBestReps(exerciseName: String, userId: String) throws -> Int? {
+        return nil // Stub — full implementation in Task 2
+    }
+
     // MARK: - Mark Synced
 
     /// Marks a session and its set logs as synced to Supabase.
