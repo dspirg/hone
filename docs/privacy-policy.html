@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy - Hone</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #0a0a0a;
+      color: #e5e5e5;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      padding: 0 16px;
+    }
+
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 48px 0 80px;
+    }
+
+    header {
+      margin-bottom: 48px;
+      border-bottom: 1px solid #2a2a2a;
+      padding-bottom: 32px;
+    }
+
+    .app-name {
+      color: #f59e0b;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 12px;
+    }
+
+    .effective-date {
+      color: #888888;
+      font-size: 14px;
+    }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #f59e0b;
+      margin-top: 40px;
+      margin-bottom: 16px;
+    }
+
+    p {
+      color: #d4d4d4;
+      margin-bottom: 16px;
+    }
+
+    ul {
+      list-style: none;
+      margin-bottom: 16px;
+    }
+
+    ul li {
+      color: #d4d4d4;
+      padding: 4px 0 4px 20px;
+      position: relative;
+    }
+
+    ul li::before {
+      content: "—";
+      position: absolute;
+      left: 0;
+      color: #f59e0b;
+    }
+
+    a {
+      color: #f59e0b;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .service-list {
+      background: #141414;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+    }
+
+    .service-item {
+      display: flex;
+      flex-direction: column;
+      padding: 12px 0;
+      border-bottom: 1px solid #222222;
+    }
+
+    .service-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .service-item:first-child {
+      padding-top: 0;
+    }
+
+    .service-name {
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .service-desc {
+      color: #888888;
+      font-size: 14px;
+    }
+
+    footer {
+      margin-top: 64px;
+      padding-top: 24px;
+      border-top: 1px solid #2a2a2a;
+      color: #555555;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="app-name">Hone - AI Workout Coach</div>
+      <h1>Privacy Policy</h1>
+      <p class="effective-date">Effective Date: April 2026</p>
+    </header>
+
+    <p>
+      This Privacy Policy describes how Hone - AI Workout Coach ("we", "us", or "our") collects,
+      uses, and shares information when you use our iOS application. We are committed to protecting
+      your privacy and handling your data with care.
+    </p>
+
+    <h2>1. Information We Collect</h2>
+    <p>We collect the following information when you use Hone:</p>
+    <ul>
+      <li><strong>Email address</strong> — your email is collected when you create an account or sign in.</li>
+      <li><strong>Workout history</strong> — session logs, exercises performed, sets and reps completed, and difficulty ratings.</li>
+      <li><strong>Fitness preferences</strong> — fitness level, training goals, available equipment, and injury notes you provide during onboarding or coaching.</li>
+      <li><strong>Exercise performance data</strong> — adaptations and progress tracked over time to personalize your training program.</li>
+      <li><strong>Subscription status</strong> — whether you have an active subscription and your billing period.</li>
+    </ul>
+
+    <h2>2. How We Use Your Information</h2>
+    <p>We use the information we collect to:</p>
+    <ul>
+      <li>Generate personalized workout plans tailored to your fitness level, goals, and equipment.</li>
+      <li>Power the Hone AI coach — answering your questions, adapting plans in real time, and providing guidance during sessions.</li>
+      <li>Track your progress, streaks, personal records, and training volume over time.</li>
+      <li>Manage your subscription and provide access to premium features.</li>
+      <li>Improve the app experience and fix issues.</li>
+    </ul>
+
+    <h2>3. AI Processing</h2>
+    <p>
+      Hone uses OpenAI's API to generate workout plans and power the AI coach. When you request a
+      workout plan or send a message to the coach, relevant context — including your fitness profile,
+      goals, equipment, and recent session data — is sent to OpenAI's servers for processing.
+    </p>
+    <p>
+      OpenAI does not retain data submitted via the API to train their models, per their
+      <a href="https://openai.com/policies/api-data-usage-policies" target="_blank" rel="noopener">API data usage policy</a>.
+      All communications with OpenAI's API are encrypted in transit.
+    </p>
+
+    <h2>4. Third-Party Services</h2>
+    <p>Hone relies on the following third-party services to operate:</p>
+    <div class="service-list">
+      <div class="service-item">
+        <span class="service-name">Supabase</span>
+        <span class="service-desc">
+          Provides our database and authentication infrastructure. Your account data, workout history,
+          and fitness profile are stored in Supabase's PostgreSQL database with row-level security
+          enforcing per-user data isolation. Privacy policy: <a href="https://supabase.com/privacy" target="_blank" rel="noopener">supabase.com/privacy</a>
+        </span>
+      </div>
+      <div class="service-item">
+        <span class="service-name">RevenueCat</span>
+        <span class="service-desc">
+          Manages subscription billing and entitlements. RevenueCat processes purchase history and
+          subscription status to unlock premium features. Privacy policy: <a href="https://www.revenuecat.com/privacy" target="_blank" rel="noopener">revenuecat.com/privacy</a>
+        </span>
+      </div>
+      <div class="service-item">
+        <span class="service-name">Mux</span>
+        <span class="service-desc">
+          Delivers exercise instructional videos via HLS streaming. Mux may log video playback
+          analytics (buffering, quality, watch time) to monitor delivery performance. Privacy policy: <a href="https://mux.com/privacy" target="_blank" rel="noopener">mux.com/privacy</a>
+        </span>
+      </div>
+      <div class="service-item">
+        <span class="service-name">OpenAI</span>
+        <span class="service-desc">
+          Powers AI workout plan generation and the Hone coaching chat. See Section 3 for details.
+          Privacy policy: <a href="https://openai.com/privacy" target="_blank" rel="noopener">openai.com/privacy</a>
+        </span>
+      </div>
+    </div>
+
+    <h2>5. Data Security</h2>
+    <p>We take the following steps to protect your data:</p>
+    <ul>
+      <li>All data is transmitted over HTTPS — encrypted in transit.</li>
+      <li>Authentication tokens are stored in the iOS Keychain — not in UserDefaults or plain text files.</li>
+      <li>Row-level security on our database ensures users can only access their own data.</li>
+      <li>We use industry-standard third-party infrastructure (Supabase) for data storage.</li>
+    </ul>
+
+    <h2>6. Your Rights</h2>
+    <p>You have the right to:</p>
+    <ul>
+      <li><strong>Access</strong> the personal data we hold about you.</li>
+      <li><strong>Correct</strong> inaccurate or incomplete data.</li>
+      <li><strong>Delete</strong> your account and all associated data.</li>
+    </ul>
+    <p>
+      To exercise any of these rights, contact us at
+      <a href="mailto:support@honefitness.com">support@honefitness.com</a>.
+      Account deletion requests will result in permanent removal of your profile, workout history,
+      and all associated data from our systems.
+    </p>
+
+    <h2>7. Children's Privacy</h2>
+    <p>
+      Hone is not directed at children under the age of 13. We do not knowingly collect personal
+      information from children under 13. If you believe a child under 13 has provided us with
+      personal information, please contact us so we can delete it promptly.
+    </p>
+
+    <h2>8. Changes to This Policy</h2>
+    <p>
+      We may update this Privacy Policy from time to time. When we do, we will revise the
+      "Effective Date" at the top of this page. We encourage you to review this policy
+      periodically to stay informed about how we protect your information. Continued use of
+      the app after changes constitutes acceptance of the updated policy.
+    </p>
+
+    <h2>9. Contact Us</h2>
+    <p>
+      If you have questions or concerns about this Privacy Policy or your data, please contact us:
+    </p>
+    <ul>
+      <li>Email: <a href="mailto:support@honefitness.com">support@honefitness.com</a></li>
+    </ul>
+
+    <footer>
+      <p>Hone - AI Workout Coach &bull; Privacy Policy &bull; Effective April 2026</p>
+    </footer>
+  </div>
+</body>
+</html>
