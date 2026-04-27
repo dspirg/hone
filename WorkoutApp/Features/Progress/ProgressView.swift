@@ -142,10 +142,10 @@ struct WorkoutProgressView: View {
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
 
-            Button("Go to Train") {
-                // Visual cue only — tab switching handled by MainTabView
-            }
-            .buttonStyle(.borderedProminent)
+            Text("Go to the Train tab to start a workout")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
         }
         .padding(32)
     }
