@@ -126,4 +126,11 @@ final class AppState {
     /// Used by ExerciseCacheManager to prioritise caching plan exercises over recently-viewed ones.
     /// Populated when the active plan is loaded; cleared on sign-out.
     var activePlanExerciseIDs: Set<UUID> = []
+
+    // MARK: - Phase 11: Tab Navigation Routing (D-14)
+
+    /// Selected tab index for programmatic tab navigation.
+    /// Used post-session to route user back to Home tab.
+    /// 0 = Home, 1 = Train, 2 = Coach, 3 = Progress, 4 = Profile
+    var selectedTab: Int = 0
 }

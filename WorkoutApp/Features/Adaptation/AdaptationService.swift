@@ -25,6 +25,11 @@ final class AdaptationService {
     /// The most recent adjustment summary text — shown in TrainView (D-05).
     var lastAdjustmentSummary: String? = nil
 
+    /// The date of the most recent adaptation — used by HomeView to check if adaptation
+    /// occurred within the last 24 hours (UI-SPEC line 286, RESEARCH Pitfall 5).
+    /// Set alongside lastAdjustmentSummary in all three adaptation paths.
+    var lastAdjustmentDate: Date? = nil
+
     // MARK: - Private
 
     private let supabaseURL: String
@@ -61,6 +66,7 @@ final class AdaptationService {
                 accessToken: accessToken
             )
             lastAdjustmentSummary = response.adjustmentSummary
+            lastAdjustmentDate = Date()
             let userId = try await supabase.auth.session.user.id.uuidString
             await persistAdaptedPlan(response, userId: userId)
             await scheduleReminders(for: response)
@@ -89,6 +95,7 @@ final class AdaptationService {
                 accessToken: accessToken
             )
             lastAdjustmentSummary = response.adjustmentSummary
+            lastAdjustmentDate = Date()
             let userId = try await supabase.auth.session.user.id.uuidString
             await persistAdaptedPlan(response, userId: userId)
             await scheduleReminders(for: response)
@@ -114,6 +121,7 @@ final class AdaptationService {
                 accessToken: accessToken
             )
             lastAdjustmentSummary = response.adjustmentSummary
+            lastAdjustmentDate = Date()
         } catch {
             print("AdaptationService: weekly regeneration failed: \(error)")
         }

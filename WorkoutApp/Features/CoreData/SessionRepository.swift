@@ -164,20 +164,86 @@ final class SessionRepository {
     }
 
     // MARK: - Phase 11: Previous/Best Reps Queries (UI-05)
-    // Stub signatures added in Task 0 so test stubs compile.
-    // Full implementation provided in Task 2.
+    // T-11-01, T-11-02: All queries scoped to userId via fetchUserSessionIds
+    // to prevent cross-user data leakage (same pattern as ProgressViewModel.detectPRs).
+
+    /// Returns the set of CDSessionLog UUIDs belonging to the given user.
+    /// Used to scope CDSetLog queries to the correct user without a join.
+    /// T-11-01, T-11-02: filtering through this set enforces userId isolation.
+    private func fetchUserSessionIds(userId: String) throws -> Set<UUID> {
+        let request = CDSessionLog.fetchRequest()
+        request.predicate = NSPredicate(format: "userId == %@", userId)
+        request.propertiesToFetch = ["id"]
+        let sessions = try context.fetch(request)
+        return Set(sessions.compactMap { $0.id })
+    }
 
     /// Returns the max repsLogged from the most recent prior session for the given exercise,
     /// scoped to the userId. Excludes the current session (excludingSessionId).
     /// Returns nil if no prior session data exists.
+    /// T-11-01: userId scoping via fetchUserSessionIds prevents cross-user data leakage.
     func fetchPreviousReps(exerciseName: String, excludingSessionId: UUID?, userId: String) throws -> Int? {
-        return nil // Stub — full implementation in Task 2
+        let userSessionIds = try fetchUserSessionIds(userId: userId)
+        guard !userSessionIds.isEmpty else { return nil }
+
+        let request = CDSetLog.fetchRequest()
+        request.predicate = NSPredicate(format: "exerciseName == %@", exerciseName)
+        request.sortDescriptors = [NSSortDescriptor(key: "completedAt", ascending: false)]
+        let allLogs = try context.fetch(request)
+
+        // Filter to user's sessions, excluding the current session
+        let filtered = allLogs.filter { log in
+            guard let sessionId = log.sessionId else { return false }
+            guard userSessionIds.contains(sessionId) else { return false }
+            if let excludeId = excludingSessionId, sessionId == excludeId { return false }
+            return true
+        }
+
+        guard !filtered.isEmpty else { return nil }
+
+        // Group by sessionId, take the most recent session group
+        var sessionGroups: [[CDSetLog]] = []
+        var currentSessionId: UUID? = nil
+        var currentGroup: [CDSetLog] = []
+
+        for log in filtered {
+            if log.sessionId != currentSessionId {
+                if !currentGroup.isEmpty {
+                    sessionGroups.append(currentGroup)
+                }
+                currentSessionId = log.sessionId
+                currentGroup = [log]
+            } else {
+                currentGroup.append(log)
+            }
+        }
+        if !currentGroup.isEmpty {
+            sessionGroups.append(currentGroup)
+        }
+
+        guard let mostRecentGroup = sessionGroups.first else { return nil }
+        let maxReps = mostRecentGroup.map { Int($0.repsLogged) }.max()
+        return maxReps
     }
 
     /// Returns the all-time max repsLogged for the given exercise, scoped to the userId.
     /// Returns nil if no session data exists.
+    /// T-11-02: userId scoping via fetchUserSessionIds prevents cross-user data leakage.
     func fetchBestReps(exerciseName: String, userId: String) throws -> Int? {
-        return nil // Stub — full implementation in Task 2
+        let userSessionIds = try fetchUserSessionIds(userId: userId)
+        guard !userSessionIds.isEmpty else { return nil }
+
+        let request = CDSetLog.fetchRequest()
+        request.predicate = NSPredicate(format: "exerciseName == %@", exerciseName)
+        let allLogs = try context.fetch(request)
+
+        let filtered = allLogs.filter { log in
+            guard let sessionId = log.sessionId else { return false }
+            return userSessionIds.contains(sessionId)
+        }
+
+        guard !filtered.isEmpty else { return nil }
+        return filtered.map { Int($0.repsLogged) }.max()
     }
 
     // MARK: - Mark Synced
