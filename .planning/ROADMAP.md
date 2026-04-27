@@ -44,8 +44,8 @@
   5. The dead `AppState.isOnboarded` property is removed and no call sites reference it
 **Plans:** 2 plans
 Plans:
-- [ ] 09-01-PLAN.md — Wire AdaptationService to persist plans, convert ISO dates, and schedule notifications (FIX-01, FIX-02, FIX-03)
-- [ ] 09-02-PLAN.md — Dynamic weekly ring + dead property removal (FIX-04, FIX-05)
+- [x] 09-01-PLAN.md — Wire AdaptationService to persist plans, convert ISO dates, and schedule notifications (FIX-01, FIX-02, FIX-03)
+- [x] 09-02-PLAN.md — Dynamic weekly ring + dead property removal (FIX-04, FIX-05)
 
 ### Phase 10: Design System and Visual Identity
 **Goal**: The app uses a consistent dark mode + amber design language throughout, exercise videos are surfaced as thumbnails, and the AI coach presents as "Hone" with a distinct branded identity
