@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=390, initial-scale=1, maximum-scale=1">
+<title>Sketch 002: Workout Session</title>
+<link rel="stylesheet" href="../themes/default.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: var(--font-sans);
+  background: var(--color-bg);
+  color: var(--color-text);
+  max-width: 390px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding-top: 52px;
+  -webkit-font-smoothing: antialiased;
+}
+#variant-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 9998;
+  background: #111; border-bottom: 1px solid var(--color-border);
+  padding: 10px 16px; display: flex; gap: 6px;
+  font-family: var(--font-sans); justify-content: center;
+}
+.variant-tab {
+  padding: 6px 14px; border-radius: var(--radius-full);
+  border: 1px solid var(--color-border); background: transparent;
+  color: var(--color-text-secondary); font-size: var(--text-sm);
+  cursor: pointer; transition: all 0.2s;
+}
+.variant-tab.active {
+  background: var(--color-primary); color: #000;
+  border-color: var(--color-primary); font-weight: 600;
+}
+.variant { display: none; }
+.variant.active { display: block; }
+.screen { min-height: calc(100vh - 52px); position: relative; }
+
+/* ═══ Session Header ═══ */
+.session-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px 20px 12px;
+}
+.session-close { font-size: 18px; color: var(--color-text-muted); background: var(--color-surface); border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; }
+.session-title { font-size: var(--text-base); font-weight: 600; }
+.session-timer { font-size: var(--text-sm); color: var(--color-primary); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* ═══ Progress dots ═══ */
+.progress-dots { display: flex; gap: 4px; justify-content: center; padding: 0 20px 16px; }
+.dot { height: 3px; flex: 1; border-radius: 2px; background: var(--color-border); }
+.dot.done { background: var(--color-primary); }
+.dot.current { background: var(--color-primary); opacity: 0.5; }
+
+/* ═══ Exercise Card (shared) ═══ */
+.exercise-hero {
+  margin: 0 20px; border-radius: var(--radius-lg);
+  overflow: hidden; position: relative;
+}
+.video-placeholder {
+  width: 100%; aspect-ratio: 16/9; background: var(--color-surface);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 48px; color: var(--color-text-muted);
+  background: linear-gradient(135deg, #1a1a1a 0%, #111 100%);
+}
+.exercise-info { padding: 16px 20px; }
+.exercise-name-lg { font-size: var(--text-2xl); font-weight: 700; }
+.exercise-muscle { font-size: var(--text-sm); color: var(--color-primary); margin-top: 2px; }
+
+/* ═══ Set Logging ═══ */
+.sets-container { padding: 0 20px; margin-top: 16px; }
+.set-header {
+  display: flex; padding: 0 0 8px;
+  font-size: var(--text-xs); color: var(--color-text-muted);
+  text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;
+}
+.set-row {
+  display: flex; align-items: center; padding: 12px 0;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+.set-row:last-child { border-bottom: none; }
+.set-number {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: var(--text-sm); font-weight: 700; flex-shrink: 0;
+  background: var(--color-surface-elevated); color: var(--color-text-secondary);
+}
+.set-number.done { background: var(--color-primary); color: #000; }
+.set-number.active { border: 2px solid var(--color-primary); background: transparent; color: var(--color-primary); }
+.set-target { flex: 1; text-align: center; font-size: var(--text-sm); color: var(--color-text-secondary); }
+.set-reps {
+  width: 64px; text-align: center; font-size: var(--text-xl); font-weight: 700;
+  background: transparent; border: none; color: var(--color-text);
+  font-family: var(--font-sans);
+}
+.set-reps-box {
+  width: 72px; height: 44px; background: var(--color-surface-elevated);
+  border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--color-border);
+}
+.set-reps-box.active { border-color: var(--color-primary); }
+.set-check {
+  width: 44px; height: 44px; border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; cursor: pointer; flex-shrink: 0;
+  background: var(--color-surface-elevated); border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+}
+.set-check.done { background: var(--color-primary); border-color: var(--color-primary); color: #000; }
+
+/* ═══ Rest Timer Overlay ═══ */
+.rest-overlay {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 390px; background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  padding: 24px 20px 40px; text-align: center;
+  box-shadow: 0 -8px 32px rgba(0,0,0,0.6);
+}
+.rest-time { font-size: 64px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--color-primary); line-height: 1; }
+.rest-label { font-size: var(--text-sm); color: var(--color-text-secondary); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.1em; }
+.rest-bar { width: 100%; height: 4px; background: var(--color-border); border-radius: 2px; margin-top: 16px; overflow: hidden; }
+.rest-bar-fill { height: 100%; width: 65%; background: var(--gradient-primary); border-radius: 2px; }
+.rest-actions { display: flex; gap: 12px; margin-top: 20px; }
+.rest-btn {
+  flex: 1; padding: 14px; border-radius: var(--radius-md); border: none;
+  font-size: var(--text-base); font-weight: 600; cursor: pointer;
+  font-family: var(--font-sans);
+}
+.rest-btn-skip { background: var(--color-surface-elevated); color: var(--color-text); border: 1px solid var(--color-border); }
+.rest-btn-extend { background: var(--color-surface-elevated); color: var(--color-primary); border: 1px solid rgba(245,158,11,0.2); }
+
+/* ═══ Bottom action ═══ */
+.bottom-action {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 390px; padding: 16px 20px 36px;
+  background: linear-gradient(transparent, var(--color-bg) 30%);
+}
+.btn-primary {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 16px; border: none; border-radius: var(--radius-md);
+  background: var(--gradient-primary); color: #000;
+  font-size: var(--text-base); font-weight: 700; cursor: pointer;
+  font-family: var(--font-sans); box-shadow: var(--shadow-glow);
+}
+.btn-secondary {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 16px; border: 1px solid var(--color-border);
+  border-radius: var(--radius-md); background: var(--color-surface);
+  color: var(--color-text); font-size: var(--text-base); font-weight: 600;
+  cursor: pointer; font-family: var(--font-sans);
+}
+
+/* ═══ Variant A: Immersive ═══ */
+.immersive-video {
+  width: 100%; aspect-ratio: 4/3;
+  background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 64px; position: relative;
+}
+.immersive-video::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 60px;
+  background: linear-gradient(transparent, var(--color-bg));
+}
+
+/* ═══ Variant B: Compact ═══ */
+.compact-video {
+  width: 100%; aspect-ratio: 2/1;
+  background: linear-gradient(135deg, #1a1a1a 0%, #111 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40px; border-radius: var(--radius-lg);
+  margin: 0 20px; width: calc(100% - 40px);
+}
+
+/* ═══ Variant C: Split ═══ */
+.split-top {
+  display: flex; gap: 12px; padding: 0 20px;
+}
+.split-video {
+  width: 140px; height: 140px; flex-shrink: 0;
+  background: linear-gradient(135deg, #1a1a1a 0%, #111 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px; border-radius: var(--radius-lg);
+}
+.split-info { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+</style>
+</head>
+<body>
+
+<div id="variant-nav">
+  <button class="variant-tab active" onclick="showVariant('a')">A: Immersive</button>
+  <button class="variant-tab" onclick="showVariant('b')">B: Compact</button>
+  <button class="variant-tab" onclick="showVariant('c')">C: Split</button>
+</div>
+
+<!-- ═══ VARIANT A: Immersive ═══ -->
+<div id="variant-a" class="variant active">
+<div class="screen">
+  <div class="session-header">
+    <button class="session-close">✕</button>
+    <div class="session-title">Push Day</div>
+    <div class="session-timer">12:34</div>
+  </div>
+  <div class="progress-dots">
+    <div class="dot done"></div>
+    <div class="dot current"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+
+  <div class="immersive-video">🏋️</div>
+
+  <div class="exercise-info">
+    <div class="exercise-name-lg">Bench Press</div>
+    <div class="exercise-muscle">Chest · Barbell</div>
+  </div>
+
+  <div class="sets-container">
+    <div class="set-header">
+      <span style="width:32px"></span>
+      <span style="flex:1;text-align:center">Target</span>
+      <span style="width:72px;text-align:center">Reps</span>
+      <span style="width:44px"></span>
+    </div>
+    <div class="set-row">
+      <div class="set-number done">1</div>
+      <div class="set-target">8-10 reps</div>
+      <div class="set-reps-box"><span class="set-reps">10</span></div>
+      <div class="set-check done">✓</div>
+    </div>
+    <div class="set-row">
+      <div class="set-number active">2</div>
+      <div class="set-target">8-10 reps</div>
+      <div class="set-reps-box active"><span class="set-reps">8</span></div>
+      <div class="set-check">✓</div>
+    </div>
+    <div class="set-row">
+      <div class="set-number">3</div>
+      <div class="set-target">8-10 reps</div>
+      <div class="set-reps-box"><span class="set-reps">—</span></div>
+      <div class="set-check">✓</div>
+    </div>
+  </div>
+
+  <div style="height: 200px;"></div>
+
+  <div class="rest-overlay">
+    <div class="rest-label">Rest</div>
+    <div class="rest-time">0:54</div>
+    <div class="rest-bar"><div class="rest-bar-fill"></div></div>
+    <div class="rest-actions">
+      <button class="rest-btn rest-btn-skip">Skip</button>
+      <button class="rest-btn rest-btn-extend">+30s</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ VARIANT B: Compact ═══ -->
+<div id="variant-b" class="variant">
+<div class="screen">
+  <div class="session-header">
+    <button class="session-close">✕</button>
+    <div class="session-title">Push Day</div>
+    <div class="session-timer">12:34</div>
+  </div>
+  <div class="progress-dots">
+    <div class="dot done"></div>
+    <div class="dot current"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+
+  <div class="compact-video">🏋️</div>
+
+  <div style="padding: 12px 20px 0;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline;">
+      <div class="exercise-name-lg">Bench Press</div>
+      <div style="font-size: var(--text-sm); color: var(--color-text-muted);">Set 2 of 3</div>
+    </div>
+    <div class="exercise-muscle">Chest · Barbell</div>
+  </div>
+
+  <div class="sets-container" style="margin-top: 12px;">
+    <div class="set-row">
+      <div class="set-number done">1</div>
+      <div class="set-target">8-10 reps</div>
+      <div class="set-reps-box"><span class="set-reps">10</span></div>
+      <div class="set-check done">✓</div>
+    </div>
+    <div class="set-row">
+      <div class="set-number active">2</div>
+      <div class="set-target">8-10 reps</div>
+      <div class="set-reps-box active"><span class="set-reps">8</span></div>
+      <div class="set-check" style="background: var(--color-primary); border-color: var(--color-primary); color: #000;">✓</div>
+    </div>
+    <div class="set-row">
+      <div class="set-number">3</div>
+      <div class="set-target">8-10 reps</div>
+      <div class="set-reps-box"><span class="set-reps">—</span></div>
+      <div class="set-check">✓</div>
+    </div>
+  </div>
+
+  <div style="padding: 20px 20px 0;">
+    <div style="display: flex; gap: 8px;">
+      <div style="flex:1; background: var(--color-surface); border-radius: var(--radius-md); padding: 12px; text-align: center; border: 1px solid var(--color-border-subtle);">
+        <div style="font-size: var(--text-xs); color: var(--color-text-muted);">Previous</div>
+        <div style="font-size: var(--text-lg); font-weight: 700;">10 reps</div>
+      </div>
+      <div style="flex:1; background: var(--color-surface); border-radius: var(--radius-md); padding: 12px; text-align: center; border: 1px solid var(--color-border-subtle);">
+        <div style="font-size: var(--text-xs); color: var(--color-text-muted);">Best</div>
+        <div style="font-size: var(--text-lg); font-weight: 700; color: var(--color-primary);">12 reps</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="height: 120px;"></div>
+  <div class="bottom-action">
+    <button class="btn-primary">✓ Complete Set</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══ VARIANT C: Split ═══ -->
+<div id="variant-c" class="variant">
+<div class="screen">
+  <div class="session-header">
+    <button class="session-close">✕</button>
+    <div class="session-title">Push Day · 12:34</div>
+    <div style="width: 36px;"></div>
+  </div>
+  <div class="progress-dots">
+    <div class="dot done"></div>
+    <div class="dot current"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+
+  <div class="split-top">
+    <div class="split-video">🏋️</div>
+    <div class="split-info">
+      <div class="exercise-name-lg" style="font-size: var(--text-xl);">Bench Press</div>
+      <div class="exercise-muscle">Chest · Barbell</div>
+      <div style="margin-top: 12px; display: flex; gap: 8px;">
+        <div style="background: var(--color-primary-soft); padding: 4px 10px; border-radius: var(--radius-full); font-size: var(--text-xs); color: var(--color-primary); font-weight: 600;">Set 2/3</div>
+        <div style="background: var(--color-surface-elevated); padding: 4px 10px; border-radius: var(--radius-full); font-size: var(--text-xs); color: var(--color-text-secondary);">8-10 reps</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin: 20px 20px 0; text-align: center;">
+    <div style="font-size: 80px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; color: var(--color-text);">8</div>
+    <div style="font-size: var(--text-sm); color: var(--color-text-secondary); margin-top: 4px;">reps</div>
+    <div style="display: flex; justify-content: center; gap: 24px; margin-top: 16px;">
+      <button style="width: 56px; height: 56px; border-radius: 50%; background: var(--color-surface-elevated); border: 1px solid var(--color-border); color: var(--color-text); font-size: 24px; cursor: pointer;">−</button>
+      <button style="width: 56px; height: 56px; border-radius: 50%; background: var(--color-surface-elevated); border: 1px solid var(--color-border); color: var(--color-text); font-size: 24px; cursor: pointer;">+</button>
+    </div>
+  </div>
+
+  <div style="padding: 24px 20px 0;">
+    <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+      <div style="flex:1; text-align:center; padding: 8px; background: var(--color-surface); border-radius: var(--radius-sm); border: 1px solid var(--color-border-subtle);">
+        <div style="font-size: var(--text-xs); color: var(--color-text-muted);">Last time</div>
+        <div style="font-size: var(--text-base); font-weight: 600;">10</div>
+      </div>
+      <div style="flex:1; text-align:center; padding: 8px; background: var(--color-surface); border-radius: var(--radius-sm); border: 1px solid var(--color-border-subtle);">
+        <div style="font-size: var(--text-xs); color: var(--color-text-muted);">PR</div>
+        <div style="font-size: var(--text-base); font-weight: 600; color: var(--color-primary);">12</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 0 20px;">
+    <div style="display: flex; gap: 6px; align-items: center; justify-content: center; margin-bottom: 8px;">
+      <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--color-primary); display: flex; align-items: center; justify-content: center; font-size: 12px; color: #000; font-weight: 700;">1</div>
+      <div style="width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--color-primary); display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--color-primary); font-weight: 700;">2</div>
+      <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--color-surface-elevated); display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--color-text-muted); font-weight: 700;">3</div>
+    </div>
+  </div>
+
+  <div style="height: 100px;"></div>
+  <div class="bottom-action">
+    <button class="btn-primary">✓ Log Set</button>
+  </div>
+</div>
+</div>
+
+<script>
+function showVariant(id) {
+  document.querySelectorAll('.variant').forEach(v => { v.style.display = 'none'; v.classList.remove('active'); });
+  document.querySelectorAll('.variant-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('variant-' + id).style.display = 'block';
+  document.getElementById('variant-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>

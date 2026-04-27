@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=390, initial-scale=1, maximum-scale=1">
+<title>Sketch 003: Coach Chat</title>
+<link rel="stylesheet" href="../themes/default.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: var(--font-sans);
+  background: var(--color-bg);
+  color: var(--color-text);
+  max-width: 390px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding-top: 52px;
+  -webkit-font-smoothing: antialiased;
+}
+#variant-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 9998;
+  background: #111; border-bottom: 1px solid var(--color-border);
+  padding: 10px 16px; display: flex; gap: 6px;
+  font-family: var(--font-sans); justify-content: center;
+}
+.variant-tab {
+  padding: 6px 14px; border-radius: var(--radius-full);
+  border: 1px solid var(--color-border); background: transparent;
+  color: var(--color-text-secondary); font-size: var(--text-sm);
+  cursor: pointer; transition: all 0.2s;
+}
+.variant-tab.active {
+  background: var(--color-primary); color: #000;
+  border-color: var(--color-primary); font-weight: 600;
+}
+.variant { display: none; }
+.variant.active { display: block; }
+.screen { min-height: calc(100vh - 52px); display: flex; flex-direction: column; }
+
+/* ═══ Chat Header ═══ */
+.chat-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 20px; border-bottom: 1px solid var(--color-border-subtle);
+}
+.coach-avatar-circle {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--gradient-primary);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 800; color: #000;
+}
+.coach-header-name { font-size: var(--text-base); font-weight: 600; }
+.coach-header-status { font-size: var(--text-xs); color: var(--color-success); }
+.coach-header-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--color-success); margin-right: 4px; }
+
+/* ═══ Chat Area ═══ */
+.chat-area { flex: 1; overflow-y: auto; padding: 16px 16px 100px; }
+.msg-date {
+  text-align: center; font-size: var(--text-xs); color: var(--color-text-muted);
+  margin: 16px 0 12px; font-weight: 500;
+}
+
+/* User bubble */
+.msg-user { display: flex; justify-content: flex-end; margin-bottom: 8px; }
+.msg-user .bubble {
+  max-width: 75%; padding: 10px 14px; border-radius: 18px 18px 4px 18px;
+  background: var(--color-primary); color: #000; font-size: var(--text-base);
+  font-weight: 500; line-height: 1.45;
+}
+
+/* Coach bubble */
+.msg-coach { display: flex; gap: 8px; margin-bottom: 8px; align-items: flex-end; }
+.msg-coach-avatar {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  background: var(--gradient-primary);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 800; color: #000;
+}
+.msg-coach .bubble {
+  max-width: 75%; padding: 10px 14px; border-radius: 18px 18px 18px 4px;
+  background: var(--color-surface-elevated); color: var(--color-text);
+  font-size: var(--text-base); line-height: 1.45;
+  border: 1px solid var(--color-border-subtle);
+}
+
+/* Typing indicator */
+.typing-dots { display: flex; gap: 4px; padding: 4px 0; }
+.typing-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--color-text-muted);
+  animation: typingBounce 1.4s infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
+
+/* Plan modification card */
+.plan-card {
+  margin: 8px 0 8px 36px; max-width: 280px;
+  background: var(--color-surface); border: 1px solid rgba(245,158,11,0.2);
+  border-radius: var(--radius-md); overflow: hidden;
+}
+.plan-card-header {
+  padding: 10px 14px; background: var(--color-primary-soft);
+  display: flex; align-items: center; gap: 8px;
+  font-size: var(--text-sm); font-weight: 600; color: var(--color-primary);
+}
+.plan-card-body { padding: 12px 14px; }
+.plan-card-change {
+  display: flex; align-items: center; gap: 8px; font-size: var(--text-sm);
+  margin-bottom: 6px;
+}
+.plan-card-old { color: var(--color-text-muted); text-decoration: line-through; }
+.plan-card-new { color: var(--color-success); font-weight: 600; }
+.plan-card-arrow { color: var(--color-text-muted); }
+.plan-card-actions { display: flex; gap: 8px; margin-top: 12px; }
+.plan-btn {
+  flex: 1; padding: 10px; border-radius: var(--radius-sm); border: none;
+  font-size: var(--text-sm); font-weight: 600; cursor: pointer;
+  font-family: var(--font-sans);
+}
+.plan-btn-confirm { background: var(--color-primary); color: #000; }
+.plan-btn-dismiss { background: var(--color-surface-elevated); color: var(--color-text-secondary); border: 1px solid var(--color-border); }
+
+/* Input bar */
+.input-bar {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 390px; padding: 12px 16px 32px;
+  background: rgba(10,10,10,0.95); backdrop-filter: blur(20px);
+  border-top: 1px solid var(--color-border-subtle);
+}
+.input-row { display: flex; gap: 8px; align-items: flex-end; }
+.input-field {
+  flex: 1; padding: 10px 16px; border-radius: 22px;
+  background: var(--color-surface-elevated); border: 1px solid var(--color-border);
+  color: var(--color-text); font-size: var(--text-base);
+  font-family: var(--font-sans); outline: none; resize: none;
+  min-height: 44px; max-height: 120px;
+}
+.input-field::placeholder { color: var(--color-text-muted); }
+.input-field:focus { border-color: var(--color-primary); }
+.send-btn {
+  width: 44px; height: 44px; border-radius: 50%; border: none;
+  background: var(--color-primary); color: #000;
+  font-size: 18px; cursor: pointer; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.send-btn.disabled { background: var(--color-surface-elevated); color: var(--color-text-muted); }
+
+/* Quick actions */
+.quick-actions { display: flex; gap: 6px; margin-bottom: 8px; overflow-x: auto; }
+.quick-chip {
+  white-space: nowrap; padding: 6px 12px; border-radius: var(--radius-full);
+  background: var(--color-surface-elevated); border: 1px solid var(--color-border);
+  color: var(--color-text-secondary); font-size: var(--text-xs); cursor: pointer;
+  font-family: var(--font-sans);
+}
+.quick-chip:hover { border-color: var(--color-primary); color: var(--color-primary); }
+
+/* Variant C: personality */
+.coach-intro {
+  text-align: center; padding: 24px 20px 8px;
+}
+.coach-big-avatar {
+  width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 12px;
+  background: var(--gradient-primary);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; font-weight: 800; color: #000;
+  box-shadow: var(--shadow-glow);
+}
+.coach-big-name { font-size: var(--text-lg); font-weight: 700; }
+.coach-big-subtitle { font-size: var(--text-sm); color: var(--color-text-secondary); margin-top: 2px; }
+
+/* Context card */
+.context-card {
+  margin: 0 36px 12px; padding: 10px 14px;
+  background: var(--color-surface); border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-subtle);
+  font-size: var(--text-xs); color: var(--color-text-secondary);
+}
+.context-label { font-weight: 600; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+.context-items { display: flex; flex-wrap: wrap; gap: 4px; }
+.context-tag {
+  padding: 2px 8px; border-radius: var(--radius-full);
+  background: var(--color-surface-elevated); font-size: 10px;
+}
+
+/* Offline banner */
+.offline-banner {
+  padding: 8px 16px; background: rgba(248,113,113,0.1);
+  border-bottom: 1px solid rgba(248,113,113,0.2);
+  text-align: center; font-size: var(--text-xs); color: var(--color-danger);
+  font-weight: 500;
+}
+
+/* Tab bar */
+.tab-bar {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 390px; background: rgba(16,16,16,0.95); backdrop-filter: blur(20px);
+  border-top: 1px solid var(--color-border-subtle);
+  display: flex; justify-content: space-around; padding: 8px 0 28px;
+}
+.tab-item {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  font-size: 10px; color: var(--color-text-muted); text-decoration: none;
+}
+.tab-item.active { color: var(--color-primary); }
+.tab-icon { font-size: 22px; }
+</style>
+</head>
+<body>
+
+<div id="variant-nav">
+  <button class="variant-tab active" onclick="showVariant('a')">A: Minimal</button>
+  <button class="variant-tab" onclick="showVariant('b')">B: Contextual</button>
+  <button class="variant-tab" onclick="showVariant('c')">C: Personality</button>
+</div>
+
+<!-- ═══ VARIANT A: Minimal — Clean iMessage-style ═══ -->
+<div id="variant-a" class="variant active">
+<div class="screen">
+  <div class="chat-header">
+    <div class="coach-avatar-circle">AI</div>
+    <div>
+      <div class="coach-header-name">Coach</div>
+      <div class="coach-header-status"><span class="coach-header-dot"></span>Online</div>
+    </div>
+  </div>
+
+  <div class="chat-area">
+    <div class="msg-date">Today</div>
+
+    <div class="msg-coach">
+      <div class="msg-coach-avatar">AI</div>
+      <div class="bubble">Hey Dan, nice push day yesterday. How are you feeling today? Any soreness?</div>
+    </div>
+
+    <div class="msg-user">
+      <div class="bubble">Shoulders are a bit tight from the overhead press. Can we swap that for something easier today?</div>
+    </div>
+
+    <div class="msg-coach">
+      <div class="msg-coach-avatar">AI</div>
+      <div class="bubble">Good call on listening to your body. I'd swap Overhead Press for Lateral Raises — still hits the delts but with much less shoulder joint stress. 3×12-15 with lighter weight.</div>
+    </div>
+
+    <div class="plan-card">
+      <div class="plan-card-header">📋 Plan Change</div>
+      <div class="plan-card-body">
+        <div class="plan-card-change">
+          <span class="plan-card-old">Overhead Press 3×10</span>
+          <span class="plan-card-arrow">→</span>
+          <span class="plan-card-new">Lateral Raises 3×15</span>
+        </div>
+        <div class="plan-card-actions">
+          <button class="plan-btn plan-btn-confirm">Confirm</button>
+          <button class="plan-btn plan-btn-dismiss">Dismiss</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="msg-user">
+      <div class="bubble">Perfect, that sounds way better</div>
+    </div>
+
+    <div class="msg-coach">
+      <div class="msg-coach-avatar">AI</div>
+      <div class="bubble">
+        <div class="typing-dots">
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="input-bar">
+    <div class="input-row">
+      <input class="input-field" placeholder="Ask your coach anything..." />
+      <button class="send-btn disabled">↑</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ VARIANT B: Contextual — Shows what AI knows ═══ -->
+<div id="variant-b" class="variant">
+<div class="screen">
+  <div class="chat-header">
+    <div class="coach-avatar-circle">AI</div>
+    <div style="flex: 1;">
+      <div class="coach-header-name">Coach</div>
+      <div class="coach-header-status"><span class="coach-header-dot"></span>Online</div>
+    </div>
+    <div style="font-size: var(--text-xs); color: var(--color-text-muted); text-align: right;">
+      <div>Push Day today</div>
+      <div style="color: var(--color-primary);">🔥 12 day streak</div>
+    </div>
+  </div>
+
+  <div class="chat-area">
+    <div class="msg-date">Today</div>
+
+    <div class="msg-coach">
+      <div class="msg-coach-avatar">AI</div>
+      <div class="bubble">Hey Dan, nice push day yesterday. How are you feeling today? Any soreness?</div>
+    </div>
+
+    <div class="context-card">
+      <div class="context-label">Coach knows</div>
+      <div class="context-items">
+        <span class="context-tag">🎯 Build muscle</span>
+        <span class="context-tag">💪 Intermediate</span>
+        <span class="context-tag">🏋️ Full gym</span>
+        <span class="context-tag">📊 12 sessions</span>
+        <span class="context-tag">😤 Last: too hard</span>
+      </div>
+    </div>
+
+    <div class="msg-user">
+      <div class="bubble">Shoulders are a bit tight from the overhead press. Can we swap that for something easier today?</div>
+    </div>
+
+    <div class="msg-coach">
+      <div class="msg-coach-avatar">AI</div>
+      <div class="bubble">Good call on listening to your body. I'd swap Overhead Press for Lateral Raises — still hits the delts but with much less shoulder joint stress. 3×12-15 with lighter weight.</div>
+    </div>
+
+    <div class="plan-card">
+      <div class="plan-card-header">📋 Plan Change</div>
+      <div class="plan-card-body">
+        <div class="plan-card-change">
+          <span class="plan-card-old">Overhead Press 3×10</span>
+          <span class="plan-card-arrow">→</span>
+          <span class="plan-card-new">Lateral Raises 3×15</span>
+        </div>
+        <div style="font-size: var(--text-xs); color: var(--color-text-muted); margin-top: 6px;">
+          Reason: Reduced shoulder joint load while maintaining delt activation
+        </div>
+        <div class="plan-card-actions">
+          <button class="plan-btn plan-btn-confirm">Confirm</button>
+          <button class="plan-btn plan-btn-dismiss">Dismiss</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="msg-user">
+      <div class="bubble">Perfect, that sounds way better</div>
+    </div>
+
+    <div class="msg-coach">
+      <div class="msg-coach-avatar">AI</div>
+      <div class="bubble">Done! Your push day is updated. One more thing — you've been hitting chest hard for 3 weeks straight. Next week I'll rotate in some incline work to balance upper chest development. Sound good?</div>
+    </div>
+  </div>
+
+  <div class="input-bar">
+    <div class="quick-actions">
+      <div class="quick-chip">💡 Suggest alternatives</div>
+      <div class="quick-chip">📊 Show my progress</div>
+      <div class="quick-chip">🔄 Regenerate plan</div>
+    </div>
+    <div class="input-row">
+      <input class="input-field" placeholder="Ask your coach anything..." />
+      <button class="send-btn disabled">↑</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ VARIANT C: Personality — Coach has a presence ═══ -->
+<div id="variant-c" class="variant">
+<div class="screen">
+  <div class="chat-header">
+    <div class="coach-avatar-circle" style="background: var(--gradient-warm);">H</div>
+    <div>
+      <div class="coach-header-name">Hone</div>
+      <div class="coach-header-status"><span class="coach-header-dot"></span>Your AI Coach</div>
+    </div>
+  </div>
+
+  <div class="chat-area">
+    <div class="coach-intro">
+      <div class="coach-big-avatar">H</div>
+      <div class="coach-big-name">Hone</div>
+      <div class="coach-big-subtitle">Your AI Coach · Knows your goals, plan & history</div>
+    </div>
+
+    <div class="msg-date">Today</div>
+
+    <div class="msg-coach">
+      <div class="msg-coach-avatar" style="background: var(--gradient-warm);">H</div>
+      <div class="bubble">Hey Dan — 12 days in a row, that's serious consistency. 💪 Shoulders feeling tight after yesterday? I noticed you rated it "too hard" so I've already lightened today's volume.</div>
+    </div>
+
+    <div class="msg-user">
+      <div class="bubble">Yeah the overhead press was rough. Can we do something easier on the shoulders?</div>
+    </div>
+
+    <div class="msg-coach">
+      <div class="msg-coach-avatar" style="background: var(--gradient-warm);">H</div>
+      <div class="bubble">Already on it. Swapping OHP for Lateral Raises — same delt work, way less joint stress. You'll thank me tomorrow.</div>
+    </div>
+
+    <div class="plan-card" style="border-color: rgba(249,115,22,0.2);">
+      <div class="plan-card-header" style="background: rgba(249,115,22,0.08); color: var(--color-accent);">🔄 Updated Your Plan</div>
+      <div class="plan-card-body">
+        <div class="plan-card-change">
+          <span class="plan-card-old">Overhead Press 3×10</span>
+          <span class="plan-card-arrow">→</span>
+          <span class="plan-card-new">Lateral Raises 3×15</span>
+        </div>
+        <div class="plan-card-actions">
+          <button class="plan-btn plan-btn-confirm" style="background: var(--color-accent);">Looks good</button>
+          <button class="plan-btn plan-btn-dismiss">Undo</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="msg-user">
+      <div class="bubble">Perfect</div>
+    </div>
+
+    <div class="msg-coach">
+      <div class="msg-coach-avatar" style="background: var(--gradient-warm);">H</div>
+      <div class="bubble">Ready to crush push day? Your warmup is Bench Press — 3 sets, aim for 8-10. Hit Start when you're good to go. 🔥</div>
+    </div>
+
+    <div style="margin: 8px 0 8px 36px;">
+      <button style="padding: 12px 24px; border-radius: var(--radius-full); background: var(--gradient-primary); border: none; color: #000; font-weight: 700; font-size: var(--text-sm); cursor: pointer; font-family: var(--font-sans); box-shadow: var(--shadow-glow);">▶ Start Push Day</button>
+    </div>
+  </div>
+
+  <div class="input-bar">
+    <div class="input-row">
+      <input class="input-field" placeholder="Message Hone..." />
+      <button class="send-btn" style="background: var(--gradient-warm);">↑</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+function showVariant(id) {
+  document.querySelectorAll('.variant').forEach(v => { v.style.display = 'none'; v.classList.remove('active'); });
+  document.querySelectorAll('.variant-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('variant-' + id).style.display = 'block';
+  document.getElementById('variant-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
