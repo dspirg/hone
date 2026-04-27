@@ -54,7 +54,7 @@ struct AuthView: View {
                     TextField("Display Name", text: $viewModel.displayName)
                         .padding(16)
                         .background(Theme.surface)
-                        .cornerRadius(12)
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
                         .padding(.horizontal, 16)
                         .padding(.bottom, 12)
                 }
@@ -65,7 +65,7 @@ struct AuthView: View {
                     .autocapitalization(.none)
                     .padding(16)
                     .background(Theme.surface)
-                    .cornerRadius(12)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
                     .padding(.horizontal, 16)
                     .padding(.bottom, 12)
 
@@ -73,7 +73,7 @@ struct AuthView: View {
                 SecureField("Password", text: $viewModel.password)
                     .padding(16)
                     .background(Theme.surface)
-                    .cornerRadius(12)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
                     .padding(.horizontal, 16)
 
                 // Inline error display — subheadline, red, below fields (UI-SPEC Error Display Pattern)
@@ -113,7 +113,7 @@ struct AuthView: View {
                 .frame(height: 52)
                 .buttonStyle(.borderedProminent)
                 .tint(Theme.accent)
-                .cornerRadius(12)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
                 .disabled(viewModel.isLoading)
                 .padding(.horizontal, 16)
                 .padding(.top, 24)

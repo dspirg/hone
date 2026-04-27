@@ -47,7 +47,7 @@ struct PasswordResetView: View {
                     .autocapitalization(.none)
                     .padding(16)
                     .background(Theme.surface)
-                    .cornerRadius(12)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
                     .padding(.horizontal, 16)
 
                 // Inline error display — subheadline, red, left-aligned (UI-SPEC Error Display Pattern)
@@ -79,7 +79,7 @@ struct PasswordResetView: View {
                 .frame(height: 52)
                 .buttonStyle(.borderedProminent)
                 .tint(Theme.accent)
-                .cornerRadius(12)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
                 .disabled(viewModel.isLoading)
                 .padding(.horizontal, 16)
 
