@@ -1,6 +1,7 @@
 import Foundation
 import Observation
 import Supabase
+import CoreData
 
 // MARK: - AdaptationService
 // iOS client for adapt-plan and regenerate-plan Supabase Edge Functions.
@@ -60,6 +61,9 @@ final class AdaptationService {
                 accessToken: accessToken
             )
             lastAdjustmentSummary = response.adjustmentSummary
+            let userId = try await supabase.auth.session.user.id.uuidString
+            await persistAdaptedPlan(response, userId: userId)
+            await scheduleReminders(for: response)
         } catch {
             // Non-fatal: adaptation is best-effort. Log for diagnostics.
             print("AdaptationService: post-session adaptation failed: \(error)")
@@ -85,6 +89,9 @@ final class AdaptationService {
                 accessToken: accessToken
             )
             lastAdjustmentSummary = response.adjustmentSummary
+            let userId = try await supabase.auth.session.user.id.uuidString
+            await persistAdaptedPlan(response, userId: userId)
+            await scheduleReminders(for: response)
         } catch {
             print("AdaptationService: missed session adaptation failed: \(error)")
         }
@@ -143,8 +150,12 @@ final class AdaptationService {
             today: today,
             calendar: calendar
         )
-        if !missedDays.isEmpty {
-            await requestMissedSessionAdaptation(missedDays: missedDays)
+        // FIX-02: Convert day-label strings to ISO dates before sending to Edge Function (per D-03, D-04, D-05)
+        let missedIsoDates = missedDays.compactMap {
+            MissedSessionDetector.isoDateString(for: $0, relativeTo: today, calendar: calendar)
+        }
+        if !missedIsoDates.isEmpty {
+            await requestMissedSessionAdaptation(missedDays: missedIsoDates)
         }
 
         // Re-engagement notification: schedule if 2+ consecutive missed sessions (D-08, ADPT-03)
@@ -199,5 +210,75 @@ final class AdaptationService {
         let week = calendar.component(.weekOfYear, from: date)
         let year = calendar.component(.yearForWeekOfYear, from: date)
         return String(format: "%04d-W%02d", year, week)
+    }
+
+    // MARK: - FIX-01: Persist Adapted Plan to CoreData
+
+    /// Persists an adapted plan response to CoreData, replacing the current active plan.
+    /// Maps AdaptedPlanResponse -> WorkoutPlan using 1:1 field mapping (per D-01, D-02).
+    /// Uses the existing active plan's name/goalSummary for continuity; falls back to defaults.
+    /// Non-fatal: errors are logged but do not interrupt the adaptation flow (best-effort).
+    /// Threat: T-09-01 — uses WorkoutPlanRepository.save() which enforces Int16 clamping.
+    private func persistAdaptedPlan(_ response: AdaptedPlanResponse, userId: String) async {
+        do {
+            let context = PersistenceController.shared.container.viewContext
+            let repo = WorkoutPlanRepository(context: context)
+
+            // Preserve name/goalSummary from current active plan for continuity
+            let existingPlan = try repo.fetchActivePlan(userId: userId)
+            let planName = existingPlan?.planName ?? "Adapted Plan"
+            let goalSummary = existingPlan?.goalSummary ?? ""
+
+            // Map AdaptedDay -> WorkoutDay and AdaptedExercise -> PlannedExercise (1:1 field mapping)
+            let weeklyDays: [WorkoutDay] = response.weeklyDays.map { adaptedDay in
+                let exercises: [PlannedExercise] = adaptedDay.exercises.map { adaptedExercise in
+                    PlannedExercise(
+                        exerciseName: adaptedExercise.exerciseName,
+                        sets: adaptedExercise.sets,
+                        reps: adaptedExercise.reps,
+                        restSeconds: adaptedExercise.restSeconds,
+                        rationale: adaptedExercise.rationale
+                    )
+                }
+                return WorkoutDay(
+                    dayLabel: adaptedDay.dayLabel,
+                    sessionName: adaptedDay.sessionName,
+                    exercises: exercises
+                )
+            }
+
+            let updatedPlan = WorkoutPlan(
+                planName: planName,
+                goalSummary: goalSummary,
+                weeklyDays: weeklyDays
+            )
+
+            // Exact pattern from CoachViewModel.applyPlanUpdate() lines 411-427
+            try repo.deactivateAllPlans(userId: userId)
+            try repo.save(plan: updatedPlan, supabaseId: UUID().uuidString, userId: userId)
+        } catch {
+            // Non-fatal: best-effort persistence; adaptation summary still displayed
+            print("AdaptationService: persistAdaptedPlan failed: \(error)")
+        }
+    }
+
+    // MARK: - FIX-03: Schedule Workout Reminders After Adaptation
+
+    /// Schedules workout reminders based on the adapted plan's weekly days (per D-06, D-07, D-08).
+    /// Cancel+reschedule is handled internally by NotificationScheduler.scheduleWorkoutReminders.
+    /// Call sites are inside service (not view layer) per D-08.
+    private func scheduleReminders(for response: AdaptedPlanResponse) async {
+        let dayOfWeekMap: [String: Int] = [
+            "Sunday": 1, "Monday": 2, "Tuesday": 3,
+            "Wednesday": 4, "Thursday": 5, "Friday": 6, "Saturday": 7
+        ]
+        let planDays: [(weekday: Int, workoutType: String)] = response.weeklyDays.compactMap { day in
+            guard let weekday = dayOfWeekMap[day.dayLabel] else { return nil }
+            return (weekday: weekday, workoutType: day.sessionName)
+        }
+        await NotificationScheduler.shared.scheduleWorkoutReminders(
+            planDays: planDays,
+            currentStreak: 0  // Streak not available in service; 0 produces standard notification copy
+        )
     }
 }
