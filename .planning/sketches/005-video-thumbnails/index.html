@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=390, initial-scale=1, maximum-scale=1">
+<title>Sketch 005: Video Thumbnails</title>
+<link rel="stylesheet" href="../themes/default.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, 'SF Pro Display', system-ui, sans-serif;
+  background: #0a0a0a;
+  color: #f5f5f5;
+  max-width: 390px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding-top: 52px;
+  -webkit-font-smoothing: antialiased;
+}
+#variant-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 9998;
+  background: #111; border-bottom: 1px solid #222;
+  padding: 10px 16px; display: flex; gap: 6px;
+  justify-content: center;
+}
+.variant-tab {
+  padding: 6px 14px; border-radius: 9999px;
+  border: 1px solid #333; background: transparent;
+  color: #999; font-size: 12px; cursor: pointer; transition: all 0.2s;
+  font-family: inherit;
+}
+.variant-tab.active {
+  background: #f59e0b; color: #000; border-color: #f59e0b; font-weight: 600;
+}
+.variant { display: none; }
+.variant.active { display: block; }
+.screen { min-height: calc(100vh - 52px); padding-bottom: 90px; }
+
+/* Greeting */
+.greeting { padding: 20px 20px 4px; }
+.greeting-sub { font-size: 13px; color: #888; }
+.greeting-main { font-size: 30px; font-weight: 700; margin-top: 2px; }
+
+/* Labels */
+.section-label {
+  font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.08em; color: #555; margin: 24px 20px 8px;
+}
+
+/* Card */
+.card {
+  background: #161616; border-radius: 16px; padding: 20px; margin: 0 20px;
+  border: 1px solid #1f1f1f;
+}
+
+/* Adapt banner */
+.adapt-banner {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.12);
+  border-radius: 12px; padding: 12px 16px; margin: 0 20px;
+}
+
+/* Exercise row with thumbnail */
+.exercise-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 8px 0; border-bottom: 1px solid #1a1a1a;
+}
+.exercise-row:last-child { border-bottom: none; }
+
+/* Thumbnail styles */
+.thumb {
+  width: 56px; height: 56px; border-radius: 10px; flex-shrink: 0;
+  overflow: hidden; position: relative;
+  background: #1a1a1a;
+}
+.thumb-img {
+  width: 100%; height: 100%; object-fit: cover;
+  /* Using gradient placeholders that look like exercise video stills */
+}
+.thumb-play {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 8px; color: white;
+}
+/* Fake exercise thumbnails using CSS gradients to simulate video stills */
+.thumb-bench {
+  background: linear-gradient(135deg, #2a1a0a 0%, #1a1210 40%, #221815 100%);
+}
+.thumb-bench::before {
+  content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  width: 32px; height: 6px; background: #444; border-radius: 3px;
+}
+.thumb-bench::after {
+  content: ''; position: absolute; top: 30%; left: 50%; transform: translateX(-50%);
+  width: 6px; height: 20px; background: #383838; border-radius: 2px;
+}
+.thumb-ohp {
+  background: linear-gradient(180deg, #1a1510 0%, #151210 50%, #1a1815 100%);
+}
+.thumb-ohp::before {
+  content: ''; position: absolute; top: 25%; left: 50%; transform: translateX(-50%);
+  width: 28px; height: 5px; background: #444; border-radius: 3px;
+}
+.thumb-fly {
+  background: linear-gradient(135deg, #1a150f 0%, #15120e 50%, #1a1510 100%);
+}
+.thumb-fly::before {
+  content: ''; position: absolute; top: 45%; left: 30%;
+  width: 10px; height: 10px; background: #3a3a3a; border-radius: 50%;
+}
+.thumb-fly::after {
+  content: ''; position: absolute; top: 45%; right: 30%;
+  width: 10px; height: 10px; background: #3a3a3a; border-radius: 50%;
+}
+.thumb-push {
+  background: linear-gradient(135deg, #151215 0%, #121015 50%, #181520 100%);
+}
+.thumb-push::before {
+  content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  width: 4px; height: 28px; background: #3a3a3a; border-radius: 2px;
+}
+
+/* Rounded thumb variant */
+.thumb-round { border-radius: 12px; width: 52px; height: 52px; }
+
+/* Wider thumb variant */
+.thumb-wide { width: 72px; height: 48px; border-radius: 8px; }
+
+.exercise-name { font-size: 15px; font-weight: 500; }
+.exercise-detail { font-size: 11px; color: #888; }
+.exercise-meta { margin-left: auto; text-align: right; }
+.exercise-sets { font-size: 13px; font-weight: 600; color: #f59e0b; }
+
+/* Silhouette thumbnail - more realistic */
+.thumb-silhouette {
+  position: relative; overflow: hidden;
+}
+.sil-figure {
+  position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%);
+  width: 20px; height: 32px;
+}
+.sil-head { width: 8px; height: 8px; border-radius: 50%; background: #4a4a4a; margin: 0 auto 2px; }
+.sil-body { width: 10px; height: 14px; background: #3a3a3a; margin: 0 auto; border-radius: 2px 2px 0 0; }
+.sil-legs { display: flex; justify-content: center; gap: 2px; }
+.sil-leg { width: 4px; height: 10px; background: #3a3a3a; border-radius: 0 0 2px 2px; }
+
+/* CTA */
+.btn-start {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 16px; border: none; border-radius: 12px;
+  background: linear-gradient(135deg, #f59e0b, #f97316);
+  color: #000; font-size: 15px; font-weight: 700; cursor: pointer;
+  font-family: inherit; margin-top: 20px; box-shadow: 0 0 20px rgba(245,158,11,0.2);
+}
+
+/* Streak */
+.streak-bar { display: flex; gap: 6px; justify-content: center; margin-top: 12px; }
+.streak-day {
+  width: 36px; height: 36px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 600;
+}
+
+/* Stats */
+.stat-row { display: flex; gap: 12px; margin: 0 20px; }
+.stat-pill { flex: 1; background: #1e1e1e; border-radius: 12px; padding: 12px 16px; text-align: center; }
+.stat-value { font-size: 20px; font-weight: 700; }
+.stat-label { font-size: 11px; color: #888; margin-top: 2px; }
+
+/* Tab bar */
+.tab-bar {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 390px; background: rgba(16,16,16,0.95); backdrop-filter: blur(20px);
+  border-top: 1px solid #1a1a1a;
+  display: flex; justify-content: space-around; padding: 8px 0 28px;
+}
+.tab-item { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 10px; color: #555; text-decoration: none; }
+.tab-item.active { color: #f59e0b; }
+.tab-icon { font-size: 22px; }
+
+/* Variant B: image thumbnails with actual photos */
+.thumb-photo {
+  width: 56px; height: 56px; border-radius: 10px; flex-shrink: 0;
+  overflow: hidden; position: relative;
+}
+.thumb-photo img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: brightness(0.7) contrast(1.1);
+}
+
+/* Variant C: animated silhouettes */
+.thumb-anim {
+  width: 56px; height: 56px; border-radius: 10px; flex-shrink: 0;
+  overflow: hidden; position: relative;
+  background: linear-gradient(135deg, #1e1a14 0%, #161310 100%);
+  border: 1px solid #2a2520;
+}
+.stick-figure {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+}
+.stick-figure svg { width: 28px; height: 36px; }
+</style>
+</head>
+<body>
+
+<div id="variant-nav">
+  <button class="variant-tab active" onclick="showVariant('a')">A: Dark Stills</button>
+  <button class="variant-tab" onclick="showVariant('b')">B: Warm Tint</button>
+  <button class="variant-tab" onclick="showVariant('c')">C: Silhouettes</button>
+</div>
+
+<!-- ═══ VARIANT A: Dark Stills — moody dark thumbnails with subtle equipment shapes ═══ -->
+<div id="variant-a" class="variant active">
+<div class="screen">
+  <div class="greeting">
+    <div class="greeting-sub">Good evening</div>
+    <div class="greeting-main">Hey <span style="color: #f59e0b;">Dan</span></div>
+  </div>
+  <div class="adapt-banner">
+    <div style="font-size: 18px;">✨</div>
+    <div style="font-size: 13px; color: #f59e0b; line-height: 1.4;">Your plan was adjusted — pulled back volume after yesterday's tough session.</div>
+  </div>
+  <div class="section-label">Today's Workout</div>
+  <div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
+      <div>
+        <div style="font-size: 20px; font-weight: 700;">Push Day</div>
+        <div style="font-size: 13px; color: #888;">4 exercises · ~45 min</div>
+      </div>
+      <div style="font-size: 30px; font-weight: 800; color: #f59e0b;">01</div>
+    </div>
+    <div class="exercise-row">
+      <div class="thumb thumb-silhouette" style="background: linear-gradient(135deg, #1e1a14, #14110e);">
+        <svg viewBox="0 0 56 56" style="width:100%;height:100%;position:absolute;top:0;left:0;">
+          <line x1="16" y1="28" x2="40" y2="28" stroke="#555" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="14" cy="28" r="4" fill="none" stroke="#666" stroke-width="1.5"/>
+          <circle cx="42" cy="28" r="4" fill="none" stroke="#666" stroke-width="1.5"/>
+          <circle cx="28" cy="18" r="4" fill="#4a4a4a"/>
+          <line x1="28" y1="22" x2="28" y2="34" stroke="#4a4a4a" stroke-width="2" stroke-linecap="round"/>
+          <line x1="28" y1="27" x2="22" y2="28" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="28" y1="27" x2="34" y2="28" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="28" y1="34" x2="24" y2="42" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="28" y1="34" x2="32" y2="42" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div><div class="exercise-name">Bench Press</div><div class="exercise-detail">Chest · Barbell</div></div>
+      <div class="exercise-meta"><div class="exercise-sets">3 × 8-10</div></div>
+    </div>
+    <div class="exercise-row">
+      <div class="thumb thumb-silhouette" style="background: linear-gradient(135deg, #1e1a14, #14110e);">
+        <svg viewBox="0 0 56 56" style="width:100%;height:100%;position:absolute;top:0;left:0;">
+          <line x1="16" y1="18" x2="40" y2="18" stroke="#555" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="14" cy="18" r="3.5" fill="none" stroke="#666" stroke-width="1.5"/>
+          <circle cx="42" cy="18" r="3.5" fill="none" stroke="#666" stroke-width="1.5"/>
+          <circle cx="28" cy="22" r="4" fill="#4a4a4a"/>
+          <line x1="28" y1="26" x2="28" y2="38" stroke="#4a4a4a" stroke-width="2" stroke-linecap="round"/>
+          <line x1="28" y1="29" x2="22" y2="20" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="28" y1="29" x2="34" y2="20" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="28" y1="38" x2="24" y2="46" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="28" y1="38" x2="32" y2="46" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div><div class="exercise-name">Overhead Press</div><div class="exercise-detail">Shoulders · Barbell</div></div>
+      <div class="exercise-meta"><div class="exercise-sets">3 × 10-12</div></div>
+    </div>
+    <div class="exercise-row">
+      <div class="thumb thumb-silhouette" style="background: linear-gradient(135deg, #1e1a14, #14110e);">
+        <svg viewBox="0 0 56 56" style="width:100%;height:100%;position:absolute;top:0;left:0;">
+          <circle cx="20" cy="28" r="4" fill="none" stroke="#666" stroke-width="1.5"/>
+          <circle cx="36" cy="28" r="4" fill="none" stroke="#666" stroke-width="1.5"/>
+          <circle cx="28" cy="20" r="4" fill="#4a4a4a"/>
+          <line x1="28" y1="24" x2="28" y2="36" stroke="#4a4a4a" stroke-width="2" stroke-linecap="round"/>
+          <line x1="28" y1="28" x2="20" y2="24" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="28" y1="28" x2="36" y2="24" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="28" y1="36" x2="24" y2="44" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="28" y1="36" x2="32" y2="44" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div><div class="exercise-name">Incline DB Fly</div><div class="exercise-detail">Upper Chest · Dumbbells</div></div>
+      <div class="exercise-meta"><div class="exercise-sets">3 × 12-15</div></div>
+    </div>
+    <div class="exercise-row">
+      <div class="thumb thumb-silhouette" style="background: linear-gradient(135deg, #1e1a14, #14110e);">
+        <svg viewBox="0 0 56 56" style="width:100%;height:100%;position:absolute;top:0;left:0;">
+          <line x1="28" y1="14" x2="28" y2="22" stroke="#555" stroke-width="2" stroke-linecap="round"/>
+          <rect x="24" y="12" width="8" height="4" rx="1" fill="none" stroke="#666" stroke-width="1"/>
+          <circle cx="28" cy="26" r="4" fill="#4a4a4a"/>
+          <line x1="28" y1="30" x2="28" y2="40" stroke="#4a4a4a" stroke-width="2" stroke-linecap="round"/>
+          <line x1="28" y1="33" x2="22" y2="22" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="28" y1="33" x2="34" y2="22" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="28" y1="40" x2="24" y2="48" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="28" y1="40" x2="32" y2="48" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div><div class="exercise-name">Tricep Pushdown</div><div class="exercise-detail">Triceps · Cable</div></div>
+      <div class="exercise-meta"><div class="exercise-sets">3 × 12-15</div></div>
+    </div>
+    <button class="btn-start">▶ Start Workout</button>
+  </div>
+  <div class="section-label">This Week</div>
+  <div class="card">
+    <div class="streak-bar">
+      <div class="streak-day" style="background:#f59e0b;color:#000;">M</div>
+      <div class="streak-day" style="background:#f59e0b;color:#000;">T</div>
+      <div class="streak-day" style="background:#1e1e1e;border:2px solid #f59e0b;color:#f59e0b;">W</div>
+      <div class="streak-day" style="background:#1e1e1e;color:#555;">T</div>
+      <div class="streak-day" style="background:#1e1e1e;color:#555;">F</div>
+      <div class="streak-day" style="background:#1e1e1e;color:#555;">S</div>
+      <div class="streak-day" style="background:#1e1e1e;color:#555;">S</div>
+    </div>
+    <div style="text-align:center;margin-top:12px;font-size:13px;color:#888;">🔥 2 day streak</div>
+  </div>
+  <div class="section-label">Quick Stats</div>
+  <div class="stat-row">
+    <div class="stat-pill"><div class="stat-value" style="color:#f59e0b;">12</div><div class="stat-label">Sessions</div></div>
+    <div class="stat-pill"><div class="stat-value">156</div><div class="stat-label">Sets</div></div>
+    <div class="stat-pill"><div class="stat-value" style="color:#34d399;">3</div><div class="stat-label">PRs</div></div>
+  </div>
+  <nav class="tab-bar">
+    <a class="tab-item active"><span class="tab-icon">🏠</span>Home</a>
+    <a class="tab-item"><span class="tab-icon">🏋️</span>Train</a>
+    <a class="tab-item"><span class="tab-icon">💬</span>Coach</a>
+    <a class="tab-item"><span class="tab-icon">📊</span>Progress</a>
+    <a class="tab-item"><span class="tab-icon">👤</span>Profile</a>
+  </nav>
+</div>
+</div>
+
+<!-- ═══ VARIANT B: Warm Tint — amber-tinted thumbnails with amber glow border ═══ -->
+<div id="variant-b" class="variant">
+<div class="screen">
+  <div class="greeting">
+    <div class="greeting-sub">Good evening</div>
+    <div class="greeting-main">Hey <span style="color: #f59e0b;">Dan</span></div>
+  </div>
+  <div class="adapt-banner">
+    <div style="font-size: 18px;">✨</div>
+    <div style="font-size: 13px; color: #f59e0b; line-height: 1.4;">Your plan was adjusted — pulled back volume after yesterday's tough session.</div>
+  </div>
+  <div class="section-label">Today's Workout</div>
+  <div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
+      <div>
+        <div style="font-size: 20px; font-weight: 700;">Push Day</div>
+        <div style="font-size: 13px; color: #888;">4 exercises · ~45 min</div>
+      </div>
+      <div style="font-size: 30px; font-weight: 800; color: #f59e0b;">01</div>
+    </div>
+    <div class="exercise-row">
+      <div class="thumb" style="background: linear-gradient(135deg, #2a1f10, #1a150d); border: 1px solid rgba(245,158,11,0.15);">
+        <svg viewBox="0 0 56 56" style="width:100%;height:100%;position:absolute;top:0;left:0;">
+          <line x1="14" y1="28" x2="42" y2="28" stroke="rgba(245,158,11,0.3)" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="12" cy="28" r="4" fill="none" stroke="rgba(245,158,11,0.25)" stroke-width="1.5"/>
+          <circle cx="44" cy="28" r="4" fill="none" stroke="rgba(245,158,11,0.25)" stroke-width="1.5"/>
+          <circle cx="28" cy="18" r="4" fill="rgba(245,158,11,0.35)"/>
+          <line x1="28" y1="22" x2="28" y2="34" stroke="rgba(245,158,11,0.35)" stroke-width="2" stroke-linecap="round"/>
+          <line x1="28" y1="27" x2="20" y2="28" stroke="rgba(245,158,11,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="28" y1="27" x2="36" y2="28" stroke="rgba(245,158,11,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="28" y1="34" x2="24" y2="42" stroke="rgba(245,158,11,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="28" y1="34" x2="32" y2="42" stroke="rgba(245,158,11,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div><div class="exercise-name">Bench Press</div><div class="exercise-detail">Chest · Barbell</div></div>
+      <div class="exercise-meta"><div class="exercise-sets">3 × 8-10</div></div>
+    </div>
+    <div class="exercise-row">
+      <div class="thumb" style="background: linear-gradient(135deg, #2a1f10, #1a150d); border: 1px solid rgba(245,158,11,0.15);">
+        <svg viewBox="0 0 56 56" style="width:100%;height:100%;position:absolute;top:0;left:0;">
+          <line x1="16" y1="16" x2="40" y2="16" stroke="rgba(245,158,11,0.3)" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="14" cy="16" r="3.5" fill="none" stroke="rgba(245,158,11,0.25)" stroke-width="1.5"/>
+          <circle cx="42" cy="16" r="3.5" fill="none" stroke="rgba(245,158,11,0.25)" stroke-width="1.5"/>
+          <circle cx="28" cy="22" r="4" fill="rgba(245,158,11,0.35)"/>
+          <line x1="28" y1="26" x2="28" y2="38" stroke="rgba(245,158,11,0.35)" stroke-width="2" stroke-linecap="round"/>
+          <line x1="28" y1="29" x2="22" y2="18" stroke="rgba(245,158,11,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="28" y1="29" x2="34" y2="18" stroke="rgba(245,158,11,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="28" y1="38" x2="24" y2="46" stroke="rgba(245,158,11,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="28" y1="38" x2="32" y2="46" stroke="rgba(245,158,11,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div><div class="exercise-name">Overhead Press</div><div class="exercise-detail">Shoulders · Barbell</div></div>
+      <div class="exercise-meta"><div class="exercise-sets">3 × 10-12</div></div>
+    </div>
+    <div class="exercise-row">
+      <div class="thumb" style="background: linear-gradient(135deg, #2a1f10, #1a150d); border: 1px solid rgba(245,158,11,0.15);">
+        <svg viewBox="0 0 56 56" style="width:100%;height:100%;position:absolute;top:0;left:0;">
+          <circle cx="18" cy="26" r="4" fill="none" stroke="rgba(245,158,11,0.25)" stroke-width="1.5"/>
+          <circle cx="38" cy="26" r="4" fill="none" stroke="rgba(245,158,11,0.25)" stroke-width="1.5"/>
+          <circle cx="28" cy="20" r="4" fill="rgba(245,158,11,0.35)"/>
+          <line x1="28" y1="24" x2="28" y2="36" stroke="rgba(245,158,11,0.35)" stroke-width="2" stroke-linecap="round"/>
+          <line x1="28" y1="28" x2="18" y2="22" stroke="rgba(245,158,11,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="28" y1="28" x2="38" y2="22" stroke="rgba(245,158,11,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="28" y1="36" x2="24" y2="44" stroke="rgba(245,158,11,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="28" y1="36" x2="32" y2="44" stroke="rgba(245,158,11,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div><div class="exercise-name">Incline DB Fly</div><div class="exercise-detail">Upper Chest · Dumbbells</div></div>
+      <div class="exercise-meta"><div class="exercise-sets">3 × 12-15</div></div>
+    </div>
+    <div class="exercise-row">
+      <div class="thumb" style="background: linear-gradient(135deg, #2a1f10, #1a150d); border: 1px solid rgba(245,158,11,0.15);">
+        <svg viewBox="0 0 56 56" style="width:100%;height:100%;position:absolute;top:0;left:0;">
+          <line x1="28" y1="12" x2="28" y2="20" stroke="rgba(245,158,11,0.3)" stroke-width="2" stroke-linecap="round"/>
+          <rect x="24" y="10" width="8" height="4" rx="1" fill="none" stroke="rgba(245,158,11,0.25)" stroke-width="1"/>
+          <circle cx="28" cy="24" r="4" fill="rgba(245,158,11,0.35)"/>
+          <line x1="28" y1="28" x2="28" y2="38" stroke="rgba(245,158,11,0.35)" stroke-width="2" stroke-linecap="round"/>
+          <line x1="28" y1="31" x2="22" y2="20" stroke="rgba(245,158,11,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="28" y1="31" x2="34" y2="20" stroke="rgba(245,158,11,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="28" y1="38" x2="24" y2="46" stroke="rgba(245,158,11,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="28" y1="38" x2="32" y2="46" stroke="rgba(245,158,11,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div><div class="exercise-name">Tricep Pushdown</div><div class="exercise-detail">Triceps · Cable</div></div>
+      <div class="exercise-meta"><div class="exercise-sets">3 × 12-15</div></div>
+    </div>
+    <button class="btn-start">▶ Start Workout</button>
+  </div>
+  <div class="section-label">This Week</div>
+  <div class="card">
+    <div class="streak-bar">
+      <div class="streak-day" style="background:#f59e0b;color:#000;">M</div>
+      <div class="streak-day" style="background:#f59e0b;color:#000;">T</div>
+      <div class="streak-day" style="background:#1e1e1e;border:2px solid #f59e0b;color:#f59e0b;">W</div>
+      <div class="streak-day" style="background:#1e1e1e;color:#555;">T</div>
+      <div class="streak-day" style="background:#1e1e1e;color:#555;">F</div>
+      <div class="streak-day" style="background:#1e1e1e;color:#555;">S</div>
+      <div class="streak-day" style="background:#1e1e1e;color:#555;">S</div>
+    </div>
+    <div style="text-align:center;margin-top:12px;font-size:13px;color:#888;">🔥 2 day streak</div>
+  </div>
+  <div class="section-label">Quick Stats</div>
+  <div class="stat-row">
+    <div class="stat-pill"><div class="stat-value" style="color:#f59e0b;">12</div><div class="stat-label">Sessions</div></div>
+    <div class="stat-pill"><div class="stat-value">156</div><div class="stat-label">Sets</div></div>
+    <div class="stat-pill"><div class="stat-value" style="color:#34d399;">3</div><div class="stat-label">PRs</div></div>
+  </div>
+  <nav class="tab-bar">
+    <a class="tab-item active"><span class="tab-icon">🏠</span>Home</a>
+    <a class="tab-item"><span class="tab-icon">🏋️</span>Train</a>
+    <a class="tab-item"><span class="tab-icon">💬</span>Coach</a>
+    <a class="tab-item"><span class="tab-icon">📊</span>Progress</a>
+    <a class="tab-item"><span class="tab-icon">👤</span>Profile</a>
+  </nav>
+</div>
+</div>
+
+<!-- ═══ VARIANT C: No thumbnails — clean text only with muscle group color dots ═══ -->
+<div id="variant-c" class="variant">
+<div class="screen">
+  <div class="greeting">
+    <div class="greeting-sub">Good evening</div>
+    <div class="greeting-main">Hey <span style="color: #f59e0b;">Dan</span></div>
+  </div>
+  <div class="adapt-banner">
+    <div style="font-size: 18px;">✨</div>
+    <div style="font-size: 13px; color: #f59e0b; line-height: 1.4;">Your plan was adjusted — pulled back volume after yesterday's tough session.</div>
+  </div>
+  <div class="section-label">Today's Workout</div>
+  <div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
+      <div>
+        <div style="font-size: 20px; font-weight: 700;">Push Day</div>
+        <div style="font-size: 13px; color: #888;">4 exercises · ~45 min</div>
+      </div>
+      <div style="font-size: 30px; font-weight: 800; color: #f59e0b;">01</div>
+    </div>
+    <div class="exercise-row">
+      <div style="width:10px; height:10px; border-radius:50%; background: #f87171; flex-shrink:0; margin-left:4px;"></div>
+      <div style="flex:1;"><div class="exercise-name">Bench Press</div><div class="exercise-detail">Chest · Barbell</div></div>
+      <div class="exercise-meta"><div class="exercise-sets">3 × 8-10</div></div>
+    </div>
+    <div class="exercise-row">
+      <div style="width:10px; height:10px; border-radius:50%; background: #60a5fa; flex-shrink:0; margin-left:4px;"></div>
+      <div style="flex:1;"><div class="exercise-name">Overhead Press</div><div class="exercise-detail">Shoulders · Barbell</div></div>
+      <div class="exercise-meta"><div class="exercise-sets">3 × 10-12</div></div>
+    </div>
+    <div class="exercise-row">
+      <div style="width:10px; height:10px; border-radius:50%; background: #f87171; flex-shrink:0; margin-left:4px;"></div>
+      <div style="flex:1;"><div class="exercise-name">Incline DB Fly</div><div class="exercise-detail">Upper Chest · Dumbbells</div></div>
+      <div class="exercise-meta"><div class="exercise-sets">3 × 12-15</div></div>
+    </div>
+    <div class="exercise-row">
+      <div style="width:10px; height:10px; border-radius:50%; background: #c084fc; flex-shrink:0; margin-left:4px;"></div>
+      <div style="flex:1;"><div class="exercise-name">Tricep Pushdown</div><div class="exercise-detail">Triceps · Cable</div></div>
+      <div class="exercise-meta"><div class="exercise-sets">3 × 12-15</div></div>
+    </div>
+    <button class="btn-start">▶ Start Workout</button>
+  </div>
+  <div class="section-label">This Week</div>
+  <div class="card">
+    <div class="streak-bar">
+      <div class="streak-day" style="background:#f59e0b;color:#000;">M</div>
+      <div class="streak-day" style="background:#f59e0b;color:#000;">T</div>
+      <div class="streak-day" style="background:#1e1e1e;border:2px solid #f59e0b;color:#f59e0b;">W</div>
+      <div class="streak-day" style="background:#1e1e1e;color:#555;">T</div>
+      <div class="streak-day" style="background:#1e1e1e;color:#555;">F</div>
+      <div class="streak-day" style="background:#1e1e1e;color:#555;">S</div>
+      <div class="streak-day" style="background:#1e1e1e;color:#555;">S</div>
+    </div>
+    <div style="text-align:center;margin-top:12px;font-size:13px;color:#888;">🔥 2 day streak</div>
+  </div>
+  <div class="section-label">Quick Stats</div>
+  <div class="stat-row">
+    <div class="stat-pill"><div class="stat-value" style="color:#f59e0b;">12</div><div class="stat-label">Sessions</div></div>
+    <div class="stat-pill"><div class="stat-value">156</div><div class="stat-label">Sets</div></div>
+    <div class="stat-pill"><div class="stat-value" style="color:#34d399;">3</div><div class="stat-label">PRs</div></div>
+  </div>
+  <nav class="tab-bar">
+    <a class="tab-item active"><span class="tab-icon">🏠</span>Home</a>
+    <a class="tab-item"><span class="tab-icon">🏋️</span>Train</a>
+    <a class="tab-item"><span class="tab-icon">💬</span>Coach</a>
+    <a class="tab-item"><span class="tab-icon">📊</span>Progress</a>
+    <a class="tab-item"><span class="tab-icon">👤</span>Profile</a>
+  </nav>
+</div>
+</div>
+
+<script>
+function showVariant(id) {
+  document.querySelectorAll('.variant').forEach(v => { v.style.display = 'none'; v.classList.remove('active'); });
+  document.querySelectorAll('.variant-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('variant-' + id).style.display = 'block';
+  document.getElementById('variant-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>

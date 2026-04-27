@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=390, initial-scale=1, maximum-scale=1">
+<title>Sketch 004: Color Comparison</title>
+<link rel="stylesheet" href="../themes/default.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: var(--font-sans);
+  background: var(--color-bg);
+  color: var(--color-text);
+  max-width: 390px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding-top: 52px;
+  -webkit-font-smoothing: antialiased;
+}
+#variant-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 9998;
+  background: #111; border-bottom: 1px solid #222;
+  padding: 10px 12px; display: flex; gap: 4px;
+  font-family: var(--font-sans); justify-content: center;
+}
+.variant-tab {
+  padding: 6px 11px; border-radius: 9999px;
+  border: 1px solid #333; background: transparent;
+  color: #999; font-size: 12px;
+  cursor: pointer; transition: all 0.2s;
+}
+.variant-tab.active { font-weight: 600; }
+.variant { display: none; }
+.variant.active { display: block; }
+
+/* ═══ Reusable screen shell ═══ */
+.screen { min-height: calc(100vh - 52px); padding-bottom: 90px; }
+.greeting { padding: 20px 20px 4px; }
+.greeting-sub { font-size: 13px; }
+.greeting-main { font-size: 30px; font-weight: 700; margin-top: 2px; }
+.section-label {
+  font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.08em; margin: 24px 20px 8px;
+}
+.card {
+  border-radius: 16px; padding: 20px; margin: 0 20px;
+  border: 1px solid #1f1f1f;
+}
+.card + .card { margin-top: 12px; }
+.exercise-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 0; border-bottom: 1px solid #1a1a1a;
+}
+.exercise-row:last-child { border-bottom: none; }
+.exercise-icon {
+  width: 40px; height: 40px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;
+}
+.exercise-name { font-size: 15px; font-weight: 500; }
+.exercise-detail { font-size: 11px; }
+.exercise-meta { margin-left: auto; }
+.exercise-sets { font-size: 13px; font-weight: 600; }
+.btn-start {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 16px; border: none; border-radius: 12px;
+  color: #000; font-size: 15px; font-weight: 700; cursor: pointer;
+  font-family: -apple-system, system-ui, sans-serif; margin-top: 20px;
+}
+.streak-bar { display: flex; gap: 6px; justify-content: center; margin-top: 12px; }
+.streak-day {
+  width: 36px; height: 36px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 600;
+}
+.stat-row { display: flex; gap: 12px; margin: 0 20px; }
+.stat-pill {
+  flex: 1; border-radius: 12px; padding: 12px 16px; text-align: center;
+}
+.stat-value { font-size: 20px; font-weight: 700; }
+.stat-label { font-size: 11px; margin-top: 2px; }
+.adapt-banner {
+  display: flex; align-items: flex-start; gap: 12px;
+  border-radius: 12px; padding: 12px 16px; margin: 0 20px;
+}
+.tab-bar {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 390px; background: rgba(16,16,16,0.95); backdrop-filter: blur(20px);
+  border-top: 1px solid #1a1a1a;
+  display: flex; justify-content: space-around; padding: 8px 0 28px;
+}
+.tab-item {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  font-size: 10px; color: #555; text-decoration: none;
+}
+.tab-icon { font-size: 22px; }
+</style>
+</head>
+<body>
+
+<div id="variant-nav">
+  <button class="variant-tab active" onclick="showVariant('a')" style="border-color: #f59e0b; color: #f59e0b;">Amber</button>
+  <button class="variant-tab" onclick="showVariant('b')" style="border-color: #f87171; color: #f87171;">Coral</button>
+  <button class="variant-tab" onclick="showVariant('c')" style="border-color: #4ade80; color: #4ade80;">Green</button>
+  <button class="variant-tab" onclick="showVariant('d')" style="border-color: #c084fc; color: #c084fc;">Purple</button>
+</div>
+
+<!-- ═══════════ VARIANT A: AMBER ═══════════ -->
+<div id="variant-a" class="variant active">
+<div class="screen">
+  <div class="greeting">
+    <div class="greeting-sub" style="color: #888;">Good evening</div>
+    <div class="greeting-main">Hey <span style="color: #f59e0b;">Dan</span></div>
+  </div>
+  <div class="adapt-banner" style="background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.12);">
+    <div style="font-size: 18px;">✨</div>
+    <div style="font-size: 13px; color: #f59e0b; line-height: 1.4;">Your plan was adjusted — pulled back volume after yesterday's tough session.</div>
+  </div>
+  <div class="section-label" style="color: #555;">Today's Workout</div>
+  <div class="card" style="background: #161616;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
+      <div>
+        <div style="font-size: 20px; font-weight: 700;">Push Day</div>
+        <div style="font-size: 13px; color: #888;">4 exercises · ~45 min</div>
+      </div>
+      <div style="font-size: 30px; font-weight: 800; color: #f59e0b;">01</div>
+    </div>
+    <div class="exercise-row">
+      <div class="exercise-icon" style="background: rgba(245,158,11,0.08);">🏋️</div>
+      <div><div class="exercise-name">Bench Press</div><div class="exercise-detail" style="color: #888;">Chest · Barbell</div></div>
+      <div class="exercise-meta"><div class="exercise-sets" style="color: #f59e0b;">3 × 8-10</div></div>
+    </div>
+    <div class="exercise-row">
+      <div class="exercise-icon" style="background: rgba(245,158,11,0.08);">💪</div>
+      <div><div class="exercise-name">Overhead Press</div><div class="exercise-detail" style="color: #888;">Shoulders · Barbell</div></div>
+      <div class="exercise-meta"><div class="exercise-sets" style="color: #f59e0b;">3 × 10-12</div></div>
+    </div>
+    <div class="exercise-row">
+      <div class="exercise-icon" style="background: rgba(245,158,11,0.08);">🔥</div>
+      <div><div class="exercise-name">Incline DB Fly</div><div class="exercise-detail" style="color: #888;">Upper Chest · Dumbbells</div></div>
+      <div class="exercise-meta"><div class="exercise-sets" style="color: #f59e0b;">3 × 12-15</div></div>
+    </div>
+    <div class="exercise-row">
+      <div class="exercise-icon" style="background: rgba(245,158,11,0.08);">⚡</div>
+      <div><div class="exercise-name">Tricep Pushdown</div><div class="exercise-detail" style="color: #888;">Triceps · Cable</div></div>
+      <div class="exercise-meta"><div class="exercise-sets" style="color: #f59e0b;">3 × 12-15</div></div>
+    </div>
+    <button class="btn-start" style="background: linear-gradient(135deg, #f59e0b, #f97316); box-shadow: 0 0 20px rgba(245,158,11,0.2);">▶ Start Workout</button>
+  </div>
+  <div class="section-label" style="color: #555;">This Week</div>
+  <div class="card" style="background: #161616;">
+    <div class="streak-bar">
+      <div class="streak-day" style="background: #f59e0b; color: #000;">M</div>
+      <div class="streak-day" style="background: #f59e0b; color: #000;">T</div>
+      <div class="streak-day" style="background: #1e1e1e; border: 2px solid #f59e0b; color: #f59e0b;">W</div>
+      <div class="streak-day" style="background: #1e1e1e; color: #555;">T</div>
+      <div class="streak-day" style="background: #1e1e1e; color: #555;">F</div>
+      <div class="streak-day" style="background: #1e1e1e; color: #555;">S</div>
+      <div class="streak-day" style="background: #1e1e1e; color: #555;">S</div>
+    </div>
+    <div style="text-align: center; margin-top: 12px; font-size: 13px; color: #888;">🔥 2 day streak</div>
+  </div>
+  <div class="section-label" style="color: #555;">Quick Stats</div>
+  <div class="stat-row">
+    <div class="stat-pill" style="background: #1e1e1e;"><div class="stat-value" style="color: #f59e0b;">12</div><div class="stat-label" style="color: #888;">Sessions</div></div>
+    <div class="stat-pill" style="background: #1e1e1e;"><div class="stat-value">156</div><div class="stat-label" style="color: #888;">Sets</div></div>
+    <div class="stat-pill" style="background: #1e1e1e;"><div class="stat-value" style="color: #34d399;">3</div><div class="stat-label" style="color: #888;">PRs</div></div>
+  </div>
+  <nav class="tab-bar">
+    <a class="tab-item" style="color: #f59e0b;"><span class="tab-icon">🏠</span>Home</a>
+    <a class="tab-item"><span class="tab-icon">🏋️</span>Train</a>
+    <a class="tab-item"><span class="tab-icon">💬</span>Coach</a>
+    <a class="tab-item"><span class="tab-icon">📊</span>Progress</a>
+    <a class="tab-item"><span class="tab-icon">👤</span>Profile</a>
+  </nav>
+</div>
+</div>
+
+<!-- ═══════════ VARIANT B: CORAL ═══════════ -->
+<div id="variant-b" class="variant">
+<div class="screen">
+  <div class="greeting">
+    <div class="greeting-sub" style="color: #888;">Good evening</div>
+    <div class="greeting-main">Hey <span style="color: #f87171;">Dan</span></div>
+  </div>
+  <div class="adapt-banner" style="background: rgba(248,113,113,0.06); border: 1px solid rgba(248,113,113,0.12);">
+    <div style="font-size: 18px;">✨</div>
+    <div style="font-size: 13px; color: #fca5a5; line-height: 1.4;">Your plan was adjusted — pulled back volume after yesterday's tough session.</div>
+  </div>
+  <div class="section-label" style="color: #555;">Today's Workout</div>
+  <div class="card" style="background: #161616;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
+      <div>
+        <div style="font-size: 20px; font-weight: 700;">Push Day</div>
+        <div style="font-size: 13px; color: #888;">4 exercises · ~45 min</div>
+      </div>
+      <div style="font-size: 30px; font-weight: 800; color: #f87171;">01</div>
+    </div>
+    <div class="exercise-row">
+      <div class="exercise-icon" style="background: rgba(248,113,113,0.08);">🏋️</div>
+      <div><div class="exercise-name">Bench Press</div><div class="exercise-detail" style="color: #888;">Chest · Barbell</div></div>
+      <div class="exercise-meta"><div class="exercise-sets" style="color: #f87171;">3 × 8-10</div></div>
+    </div>
+    <div class="exercise-row">
+      <div class="exercise-icon" style="background: rgba(248,113,113,0.08);">💪</div>
+      <div><div class="exercise-name">Overhead Press</div><div class="exercise-detail" style="color: #888;">Shoulders · Barbell</div></div>
+      <div class="exercise-meta"><div class="exercise-sets" style="color: #f87171;">3 × 10-12</div></div>
+    </div>
+    <div class="exercise-row">
+      <div class="exercise-icon" style="background: rgba(248,113,113,0.08);">🔥</div>
+      <div><div class="exercise-name">Incline DB Fly</div><div class="exercise-detail" style="color: #888;">Upper Chest · Dumbbells</div></div>
+      <div class="exercise-meta"><div class="exercise-sets" style="color: #f87171;">3 × 12-15</div></div>
+    </div>
+    <div class="exercise-row">
+      <div class="exercise-icon" style="background: rgba(248,113,113,0.08);">⚡</div>
+      <div><div class="exercise-name">Tricep Pushdown</div><div class="exercise-detail" style="color: #888;">Triceps · Cable</div></div>
+      <div class="exercise-meta"><div class="exercise-sets" style="color: #f87171;">3 × 12-15</div></div>
+    </div>
+    <button class="btn-start" style="background: linear-gradient(135deg, #f87171, #fb923c); box-shadow: 0 0 20px rgba(248,113,113,0.2);">▶ Start Workout</button>
+  </div>
+  <div class="section-label" style="color: #555;">This Week</div>
+  <div class="card" style="background: #161616;">
+    <div class="streak-bar">
+      <div class="streak-day" style="background: #f87171; color: #000;">M</div>
+      <div class="streak-day" style="background: #f87171; color: #000;">T</div>
+      <div class="streak-day" style="background: #1e1e1e; border: 2px solid #f87171; color: #f87171;">W</div>
+      <div class="streak-day" style="background: #1e1e1e; color: #555;">T</div>
+      <div class="streak-day" style="background: #1e1e1e; color: #555;">F</div>
+      <div class="streak-day" style="background: #1e1e1e; color: #555;">S</div>
+      <div class="streak-day" style="background: #1e1e1e; color: #555;">S</div>
+    </div>
+    <div style="text-align: center; margin-top: 12px; font-size: 13px; color: #888;">🔥 2 day streak</div>
+  </div>
+  <div class="section-label" style="color: #555;">Quick Stats</div>
+  <div class="stat-row">
+    <div class="stat-pill" style="background: #1e1e1e;"><div class="stat-value" style="color: #f87171;">12</div><div class="stat-label" style="color: #888;">Sessions</div></div>
+    <div class="stat-pill" style="background: #1e1e1e;"><div class="stat-value">156</div><div class="stat-label" style="color: #888;">Sets</div></div>
+    <div class="stat-pill" style="background: #1e1e1e;"><div class="stat-value" style="color: #34d399;">3</div><div class="stat-label" style="color: #888;">PRs</div></div>
+  </div>
+  <nav class="tab-bar">
+    <a class="tab-item" style="color: #f87171;"><span class="tab-icon">🏠</span>Home</a>
+    <a class="tab-item"><span class="tab-icon">🏋️</span>Train</a>
+    <a class="tab-item"><span class="tab-icon">💬</span>Coach</a>
+    <a class="tab-item"><span class="tab-icon">📊</span>Progress</a>
+    <a class="tab-item"><span class="tab-icon">👤</span>Profile</a>
+  </nav>
+</div>
+</div>
+
+<!-- ═══════════ VARIANT C: GREEN ═══════════ -->
+<div id="variant-c" class="variant">
+<div class="screen">
+  <div class="greeting">
+    <div class="greeting-sub" style="color: #888;">Good evening</div>
+    <div class="greeting-main">Hey <span style="color: #4ade80;">Dan</span></div>
+  </div>
+  <div class="adapt-banner" style="background: rgba(74,222,128,0.06); border: 1px solid rgba(74,222,128,0.12);">
+    <div style="font-size: 18px;">✨</div>
+    <div style="font-size: 13px; color: #86efac; line-height: 1.4;">Your plan was adjusted — pulled back volume after yesterday's tough session.</div>
+  </div>
+  <div class="section-label" style="color: #555;">Today's Workout</div>
+  <div class="card" style="background: #161616;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
+      <div>
+        <div style="font-size: 20px; font-weight: 700;">Push Day</div>
+        <div style="font-size: 13px; color: #888;">4 exercises · ~45 min</div>
+      </div>
+      <div style="font-size: 30px; font-weight: 800; color: #4ade80;">01</div>
+    </div>
+    <div class="exercise-row">
+      <div class="exercise-icon" style="background: rgba(74,222,128,0.08);">🏋️</div>
+      <div><div class="exercise-name">Bench Press</div><div class="exercise-detail" style="color: #888;">Chest · Barbell</div></div>
+      <div class="exercise-meta"><div class="exercise-sets" style="color: #4ade80;">3 × 8-10</div></div>
+    </div>
+    <div class="exercise-row">
+      <div class="exercise-icon" style="background: rgba(74,222,128,0.08);">💪</div>
+      <div><div class="exercise-name">Overhead Press</div><div class="exercise-detail" style="color: #888;">Shoulders · Barbell</div></div>
+      <div class="exercise-meta"><div class="exercise-sets" style="color: #4ade80;">3 × 10-12</div></div>
+    </div>
+    <div class="exercise-row">
+      <div class="exercise-icon" style="background: rgba(74,222,128,0.08);">🔥</div>
+      <div><div class="exercise-name">Incline DB Fly</div><div class="exercise-detail" style="color: #888;">Upper Chest · Dumbbells</div></div>
+      <div class="exercise-meta"><div class="exercise-sets" style="color: #4ade80;">3 × 12-15</div></div>
+    </div>
+    <div class="exercise-row">
+      <div class="exercise-icon" style="background: rgba(74,222,128,0.08);">⚡</div>
+      <div><div class="exercise-name">Tricep Pushdown</div><div class="exercise-detail" style="color: #888;">Triceps · Cable</div></div>
+      <div class="exercise-meta"><div class="exercise-sets" style="color: #4ade80;">3 × 12-15</div></div>
+    </div>
+    <button class="btn-start" style="background: linear-gradient(135deg, #4ade80, #22c55e); box-shadow: 0 0 20px rgba(74,222,128,0.2);">▶ Start Workout</button>
+  </div>
+  <div class="section-label" style="color: #555;">This Week</div>
+  <div class="card" style="background: #161616;">
+    <div class="streak-bar">
+      <div class="streak-day" style="background: #4ade80; color: #000;">M</div>
+      <div class="streak-day" style="background: #4ade80; color: #000;">T</div>
+      <div class="streak-day" style="background: #1e1e1e; border: 2px solid #4ade80; color: #4ade80;">W</div>
+      <div class="streak-day" style="background: #1e1e1e; color: #555;">T</div>
+      <div class="streak-day" style="background: #1e1e1e; color: #555;">F</div>
+      <div class="streak-day" style="background: #1e1e1e; color: #555;">S</div>
+      <div class="streak-day" style="background: #1e1e1e; color: #555;">S</div>
+    </div>
+    <div style="text-align: center; margin-top: 12px; font-size: 13px; color: #888;">🔥 2 day streak</div>
+  </div>
+  <div class="section-label" style="color: #555;">Quick Stats</div>
+  <div class="stat-row">
+    <div class="stat-pill" style="background: #1e1e1e;"><div class="stat-value" style="color: #4ade80;">12</div><div class="stat-label" style="color: #888;">Sessions</div></div>
+    <div class="stat-pill" style="background: #1e1e1e;"><div class="stat-value">156</div><div class="stat-label" style="color: #888;">Sets</div></div>
+    <div class="stat-pill" style="background: #1e1e1e;"><div class="stat-value" style="color: #fbbf24;">3</div><div class="stat-label" style="color: #888;">PRs</div></div>
+  </div>
+  <nav class="tab-bar">
+    <a class="tab-item" style="color: #4ade80;"><span class="tab-icon">🏠</span>Home</a>
+    <a class="tab-item"><span class="tab-icon">🏋️</span>Train</a>
+    <a class="tab-item"><span class="tab-icon">💬</span>Coach</a>
+    <a class="tab-item"><span class="tab-icon">📊</span>Progress</a>
+    <a class="tab-item"><span class="tab-icon">👤</span>Profile</a>
+  </nav>
+</div>
+</div>
+
+<!-- ═══════════ VARIANT D: PURPLE ═══════════ -->
+<div id="variant-d" class="variant">
+<div class="screen">
+  <div class="greeting">
+    <div class="greeting-sub" style="color: #888;">Good evening</div>
+    <div class="greeting-main">Hey <span style="color: #c084fc;">Dan</span></div>
+  </div>
+  <div class="adapt-banner" style="background: rgba(192,132,252,0.06); border: 1px solid rgba(192,132,252,0.12);">
+    <div style="font-size: 18px;">✨</div>
+    <div style="font-size: 13px; color: #d8b4fe; line-height: 1.4;">Your plan was adjusted — pulled back volume after yesterday's tough session.</div>
+  </div>
+  <div class="section-label" style="color: #555;">Today's Workout</div>
+  <div class="card" style="background: #161616;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
+      <div>
+        <div style="font-size: 20px; font-weight: 700;">Push Day</div>
+        <div style="font-size: 13px; color: #888;">4 exercises · ~45 min</div>
+      </div>
+      <div style="font-size: 30px; font-weight: 800; color: #c084fc;">01</div>
+    </div>
+    <div class="exercise-row">
+      <div class="exercise-icon" style="background: rgba(192,132,252,0.08);">🏋️</div>
+      <div><div class="exercise-name">Bench Press</div><div class="exercise-detail" style="color: #888;">Chest · Barbell</div></div>
+      <div class="exercise-meta"><div class="exercise-sets" style="color: #c084fc;">3 × 8-10</div></div>
+    </div>
+    <div class="exercise-row">
+      <div class="exercise-icon" style="background: rgba(192,132,252,0.08);">💪</div>
+      <div><div class="exercise-name">Overhead Press</div><div class="exercise-detail" style="color: #888;">Shoulders · Barbell</div></div>
+      <div class="exercise-meta"><div class="exercise-sets" style="color: #c084fc;">3 × 10-12</div></div>
+    </div>
+    <div class="exercise-row">
+      <div class="exercise-icon" style="background: rgba(192,132,252,0.08);">🔥</div>
+      <div><div class="exercise-name">Incline DB Fly</div><div class="exercise-detail" style="color: #888;">Upper Chest · Dumbbells</div></div>
+      <div class="exercise-meta"><div class="exercise-sets" style="color: #c084fc;">3 × 12-15</div></div>
+    </div>
+    <div class="exercise-row">
+      <div class="exercise-icon" style="background: rgba(192,132,252,0.08);">⚡</div>
+      <div><div class="exercise-name">Tricep Pushdown</div><div class="exercise-detail" style="color: #888;">Triceps · Cable</div></div>
+      <div class="exercise-meta"><div class="exercise-sets" style="color: #c084fc;">3 × 12-15</div></div>
+    </div>
+    <button class="btn-start" style="background: linear-gradient(135deg, #c084fc, #a855f7); box-shadow: 0 0 20px rgba(192,132,252,0.2);">▶ Start Workout</button>
+  </div>
+  <div class="section-label" style="color: #555;">This Week</div>
+  <div class="card" style="background: #161616;">
+    <div class="streak-bar">
+      <div class="streak-day" style="background: #c084fc; color: #000;">M</div>
+      <div class="streak-day" style="background: #c084fc; color: #000;">T</div>
+      <div class="streak-day" style="background: #1e1e1e; border: 2px solid #c084fc; color: #c084fc;">W</div>
+      <div class="streak-day" style="background: #1e1e1e; color: #555;">T</div>
+      <div class="streak-day" style="background: #1e1e1e; color: #555;">F</div>
+      <div class="streak-day" style="background: #1e1e1e; color: #555;">S</div>
+      <div class="streak-day" style="background: #1e1e1e; color: #555;">S</div>
+    </div>
+    <div style="text-align: center; margin-top: 12px; font-size: 13px; color: #888;">🔥 2 day streak</div>
+  </div>
+  <div class="section-label" style="color: #555;">Quick Stats</div>
+  <div class="stat-row">
+    <div class="stat-pill" style="background: #1e1e1e;"><div class="stat-value" style="color: #c084fc;">12</div><div class="stat-label" style="color: #888;">Sessions</div></div>
+    <div class="stat-pill" style="background: #1e1e1e;"><div class="stat-value">156</div><div class="stat-label" style="color: #888;">Sets</div></div>
+    <div class="stat-pill" style="background: #1e1e1e;"><div class="stat-value" style="color: #34d399;">3</div><div class="stat-label" style="color: #888;">PRs</div></div>
+  </div>
+  <nav class="tab-bar">
+    <a class="tab-item" style="color: #c084fc;"><span class="tab-icon">🏠</span>Home</a>
+    <a class="tab-item"><span class="tab-icon">🏋️</span>Train</a>
+    <a class="tab-item"><span class="tab-icon">💬</span>Coach</a>
+    <a class="tab-item"><span class="tab-icon">📊</span>Progress</a>
+    <a class="tab-item"><span class="tab-icon">👤</span>Profile</a>
+  </nav>
+</div>
+</div>
+
+<script>
+function showVariant(id) {
+  document.querySelectorAll('.variant').forEach(v => { v.style.display = 'none'; v.classList.remove('active'); });
+  document.querySelectorAll('.variant-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('variant-' + id).style.display = 'block';
+  document.getElementById('variant-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
