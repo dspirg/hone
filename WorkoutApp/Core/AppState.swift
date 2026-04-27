@@ -30,10 +30,6 @@ final class AppState {
     var isSubscribed: Bool = false
     #endif
 
-    // isOnboarded mirrors onboardingCompleted for SUBS-03 compatibility.
-    // Phase 3 populates this; Phase 7 gates paywall on authenticated + onboarded + !isSubscribed
-    var isOnboarded: Bool = false
-
     // Dependency-injected RevenueCat service. Replaced with MockRevenueCatService in tests.
     var revenueCatService: RevenueCatServiceProtocol = RevenueCatService()
 
@@ -112,7 +108,6 @@ final class AppState {
     /// (Pitfall 4 strict ordering in Plan 03) before this is called.
     func markOnboardingComplete() {
         self.onboardingCompleted = true
-        self.isOnboarded = true
     }
 
     // MARK: - Phase 7: Entitlement Refresh
