@@ -1,8 +1,11 @@
 import SwiftUI
+import CoreData
 
 // MARK: - ExerciseRowView
 // Renders a single planned exercise inside a WorkoutDayCardView.
-// Shows exercise name, sets/reps/rest, and AI rationale coach note (D-07, AIPL-02).
+// Shows a leading 52x52 thumbnail (resolved from CoreData by name), exercise name,
+// sets/reps/rest, and AI rationale coach note (D-07, AIPL-02).
+// Tapping the thumbnail (when muxPlaybackId is available) presents VideoOverlayView fullscreen.
 //
 // UI-SPEC: ExerciseRowView contract
 // Typography: exercise name = .subheadline semibold, sets/reps = .subheadline secondary,
@@ -13,27 +16,66 @@ import SwiftUI
 struct ExerciseRowView: View {
     let exercise: PlannedExercise
 
+    @State private var thumbnailURL: String?
+    @State private var muxPlaybackId: String?
+    @State private var showVideo = false
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {  // xs (4pt) spacing between lines
-            // Exercise name — .subheadline semibold (15pt, 600)
-            Text(exercise.exerciseName)
-                .font(.subheadline.weight(.semibold))
+        HStack(spacing: 12) {
+            // MARK: Thumbnail (52x52, matching ExerciseLibraryRowView)
+            AsyncImage(url: URL(string: thumbnailURL ?? "")) { phase in
+                switch phase {
+                case .success(let image):
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 52, height: 52)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                default:
+                    Theme.surface
+                        .frame(width: 52, height: 52)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .overlay {
+                            Image(systemName: "dumbbell")
+                                .font(.body)
+                                .foregroundStyle(Color(UIColor.tertiaryLabel))
+                        }
+                }
+            }
+            .frame(width: 52, height: 52)
+            .onTapGesture {
+                guard muxPlaybackId != nil else { return }
+                showVideo = true
+            }
+            .fullScreenCover(isPresented: $showVideo) {
+                VideoOverlayView(
+                    muxPlaybackId: muxPlaybackId ?? "",
+                    exerciseName: exercise.exerciseName
+                )
+            }
 
-            // Sets/reps/rest — .subheadline regular (15pt, 400), .secondary color
-            // Format: "4 sets × 8-10 — 90s rest"
-            Text("\(exercise.sets) sets \u{00D7} \(exercise.reps) \u{2014} \(exercise.restSeconds)s rest")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+            // MARK: Exercise Info
+            VStack(alignment: .leading, spacing: 4) {  // xs (4pt) spacing between lines
+                // Exercise name — .subheadline semibold (15pt, 600)
+                Text(exercise.exerciseName)
+                    .font(.subheadline.weight(.semibold))
 
-            // AI rationale — .subheadline regular (15pt, 400), .tertiary color (AIPL-02 / D-07)
-            // quote.opening SF Symbol at 11pt as inline leading decoration
-            HStack(alignment: .firstTextBaseline, spacing: 4) {  // xs gap
-                Image(systemName: "quote.opening")
-                    .font(.system(size: 11))
-                    .foregroundStyle(.tertiary)
-                Text("Why: \(exercise.rationale)")
+                // Sets/reps/rest — .subheadline regular (15pt, 400), .secondary color
+                // Format: "4 sets × 8-10 — 90s rest"
+                Text("\(exercise.sets) sets \u{00D7} \(exercise.reps) \u{2014} \(exercise.restSeconds)s rest")
                     .font(.subheadline)
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(.secondary)
+
+                // AI rationale — .subheadline regular (15pt, 400), .tertiary color (AIPL-02 / D-07)
+                // quote.opening SF Symbol at 11pt as inline leading decoration
+                HStack(alignment: .firstTextBaseline, spacing: 4) {  // xs gap
+                    Image(systemName: "quote.opening")
+                        .font(.system(size: 11))
+                        .foregroundStyle(.tertiary)
+                    Text("Why: \(exercise.rationale)")
+                        .font(.subheadline)
+                        .foregroundStyle(.tertiary)
+                }
             }
         }
         .padding(.horizontal, 16)  // md (16pt) inside card
@@ -41,6 +83,21 @@ struct ExerciseRowView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityElement(children: .combine)
         // VoiceOver will read: "[exerciseName], [sets] sets × [reps] — [restSeconds]s rest. Why: [rationale]"
+        .task {
+            await resolveThumbnail()
+        }
+    }
+
+    // MARK: - Thumbnail Resolution
+
+    /// Resolves muxPlaybackId and thumbnailURL from CoreData Exercise cache by exercise name.
+    /// Uses ExerciseRepository.fetchByName(_:) — case/diacritic insensitive match on "Exercise" entity.
+    /// Silently no-ops on miss — dumbbell placeholder is the correct fallback.
+    @MainActor
+    private func resolveThumbnail() async {
+        guard let entity = try? ExerciseRepository.shared.fetchByName(exercise.exerciseName) else { return }
+        muxPlaybackId = entity.value(forKey: "muxPlaybackId") as? String
+        thumbnailURL = entity.value(forKey: "thumbnailURL") as? String
     }
 }
 
