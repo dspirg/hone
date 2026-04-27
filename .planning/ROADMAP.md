@@ -26,7 +26,7 @@
 **Milestone Goal:** Fix integration gaps from v1.0 audit, redesign UI with dark mode + amber brand identity, and ship to the App Store.
 
 - [ ] **Phase 9: Bug Fixes** — Resolve 5 integration gaps identified in v1.0 audit
-- [ ] **Phase 10: Design System and Visual Identity** — Dark mode, amber accent, video thumbnails, Hone coach branding
+- [x] **Phase 10: Design System and Visual Identity** — Dark mode, amber accent, video thumbnails, Hone coach branding (completed 2026-04-27)
 - [ ] **Phase 11: Screen Redesigns** — Rebuild Home, Session, and Summary screens to approved sketches
 - [ ] **Phase 12: App Store Submission** — Icon, screenshots, signing, metadata, and submission
 
@@ -56,15 +56,15 @@ Plans:
   2. Exercise list rows display the video's first-frame thumbnail instead of an emoji icon
   3. Tapping an exercise thumbnail opens a fullscreen video overlay that can be dismissed
   4. The coach chat interface displays the name "Hone", a warm gradient avatar, and personality-driven copy consistent with the Sketch 003-C design
-**Plans:** 1/4 plans executed
+**Plans:** 4/4 plans complete
 Plans:
 **Wave 1**
 - [x] 10-01-PLAN.md — Design system foundation: Theme.swift, asset catalog colors, dark mode forcing, HoneAvatarView, VideoOverlayView
 
 **Wave 2** *(blocked on Wave 1 completion)*
-- [ ] 10-02-PLAN.md — Color sweep: migrate all 35 non-Coach view files to Theme.* tokens
-- [ ] 10-03-PLAN.md — Hone identity: coach branding, chat restyling, notification copy, tab label
-- [ ] 10-04-PLAN.md — Thumbnails + fullscreen: tap-to-play video from library, detail, and plan preview
+- [x] 10-02-PLAN.md — Color sweep: migrate all 35 non-Coach view files to Theme.* tokens
+- [x] 10-03-PLAN.md — Hone identity: coach branding, chat restyling, notification copy, tab label
+- [x] 10-04-PLAN.md — Thumbnails + fullscreen: tap-to-play video from library, detail, and plan preview
 **UI hint**: yes
 
 ### Phase 11: Screen Redesigns
@@ -103,6 +103,6 @@ Plans:
 | 7. Subscriptions and Paywall | v1.0 | 8/8 | Complete | 2026-04-24 |
 | 8. Adaptive AI | v1.0 | 6/6 | Complete | 2026-04-25 |
 | 9. Bug Fixes | v1.1 | 0/2 | Planning complete | - |
-| 10. Design System and Visual Identity | v1.1 | 1/4 | In Progress|  |
+| 10. Design System and Visual Identity | v1.1 | 4/4 | Complete    | 2026-04-27 |
 | 11. Screen Redesigns | v1.1 | 0/TBD | Not started | - |
 | 12. App Store Submission | v1.1 | 0/TBD | Not started | - |
