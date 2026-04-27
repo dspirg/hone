@@ -74,10 +74,10 @@ final class HomeViewModel {
     var timeOfDayGreeting: String {
         let hour = Calendar.current.component(.hour, from: Date())
         switch hour {
-        case 5..<12: return "Good morning"
+        case 5..<12:  return "Good morning"
         case 12..<17: return "Good afternoon"
-        case 17..<21: return "Good evening"
-        default: return "Good night"
+        case 17..<22: return "Good evening"   // extend to 10 PM (22:00)
+        default:      return "Good night"
         }
     }
 
