@@ -32,8 +32,8 @@ struct DiscountOfferView: View {
                     .padding(.horizontal, 32)
                     .padding(.top, 24)
 
-                // Body
-                Text("Get 50% off for the next 3 months — $6.49/month for 3 months, then $12.99/month.")
+                // Body — prices read from RevenueCat SDK via vm.discountPriceLabel / vm.regularPriceLabel
+                Text("Get 50% off for the next 3 months — \(vm.discountPriceLabel)/month for 3 months, then \(vm.regularPriceLabel)/month.")
                     .font(.body)
                     .padding(.horizontal, 32)
                     .padding(.top, 8)
@@ -43,7 +43,7 @@ struct DiscountOfferView: View {
                     Text("50% off")
                         .font(.title.weight(.semibold))
                         .foregroundStyle(Theme.accent)
-                    Text("$6.49/month for 3 months, then $12.99/month")
+                    Text("\(vm.discountPriceLabel)/month for 3 months, then \(vm.regularPriceLabel)/month")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
