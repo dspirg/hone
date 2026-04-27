@@ -53,11 +53,9 @@ struct CoachView: View {
                         if viewModel.isStreaming {
                             HStack {
                                 VStack(alignment: .leading, spacing: 4) {
-                                    HStack(spacing: 4) {
-                                        Image(systemName: "figure.run")
-                                            .font(.caption2)
-                                            .foregroundStyle(.secondary)
-                                        Text("Coach")
+                                    HStack(spacing: 6) {
+                                        HoneAvatarView(diameter: 20)
+                                        Text("Hone")
                                             .font(.caption2)
                                             .foregroundStyle(.secondary)
                                     }
@@ -68,7 +66,7 @@ struct CoachView: View {
                                         StreamingCursorView()
                                     }
                                     .padding(12)
-                                    .background(Color(.systemGray6))
+                                    .background(Theme.surface)
                                     .clipShape(RoundedRectangle(cornerRadius: 16))
                                 }
                                 Spacer(minLength: 60)
@@ -87,7 +85,7 @@ struct CoachView: View {
                                         .foregroundStyle(.secondary)
                                 }
                                 .padding(12)
-                                .background(Color(.systemGray6))
+                                .background(Theme.surface)
                                 .clipShape(RoundedRectangle(cornerRadius: 12))
                             }
                         }

@@ -49,7 +49,7 @@ struct PlanModificationCard: View {
 
                         Button("Confirm") { onConfirm() }
                             .buttonStyle(.borderedProminent)
-                            .tint(Color("AccentColor"))
+                            .tint(Theme.accent)
                     }
                 }
             }

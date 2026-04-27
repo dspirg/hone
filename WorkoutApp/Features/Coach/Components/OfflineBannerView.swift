@@ -7,7 +7,7 @@ struct OfflineBannerView: View {
             .foregroundStyle(.secondary)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 8)
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .transition(.move(edge: .top).combined(with: .opacity))
     }
 }

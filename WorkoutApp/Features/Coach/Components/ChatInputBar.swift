@@ -18,7 +18,7 @@ struct ChatInputBar: View {
             TextField("Ask your coach...", text: $messageText, axis: .vertical)
                 .lineLimit(1...4)
                 .padding(12)
-                .background(Color(.systemGray6))
+                .background(Theme.surface)
                 .clipShape(RoundedRectangle(cornerRadius: 20))
                 .disabled(isStreaming)
 
@@ -29,7 +29,7 @@ struct ChatInputBar: View {
             }) {
                 Image(systemName: "arrow.up.circle.fill")
                     .font(.system(size: 32))
-                    .foregroundStyle(canSend ? Color("AccentColor") : Color(.systemGray4))
+                    .foregroundStyle(canSend ? Theme.accent : Theme.borderSubtle)
             }
             .disabled(!canSend)
         }

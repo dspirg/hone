@@ -3,10 +3,8 @@ import SwiftUI
 struct CoachHeaderView: View {
     var body: some View {
         HStack(spacing: 8) {
-            Image(systemName: "figure.run")
-                .font(.title3)
-                .foregroundStyle(Color("AccentColor"))
-            Text("Coach")
+            HoneAvatarView(diameter: 28)
+            Text("Hone")
                 .font(.headline)
             Spacer()
         }

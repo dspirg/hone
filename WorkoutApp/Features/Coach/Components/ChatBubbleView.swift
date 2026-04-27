@@ -9,12 +9,9 @@ struct ChatBubbleView: View {
 
             VStack(alignment: message.role == .user ? .trailing : .leading, spacing: 4) {
                 if message.role == .coach {
-                    // Coach label with icon (D-27)
-                    HStack(spacing: 4) {
-                        Image(systemName: "figure.run")
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
-                        Text("Coach")
+                    HStack(spacing: 6) {
+                        HoneAvatarView(diameter: 20)
+                        Text("Hone")
                             .font(.caption2)
                             .foregroundStyle(.secondary)
                     }
@@ -23,8 +20,8 @@ struct ChatBubbleView: View {
                 Text(message.content)
                     .padding(12)
                     .background(message.role == .user
-                        ? Color("AccentColor")
-                        : Color(.systemGray6))
+                        ? Theme.accent
+                        : Theme.surface)
                     .foregroundStyle(message.role == .user ? .white : .primary)
                     .clipShape(RoundedRectangle(cornerRadius: 16))
 
