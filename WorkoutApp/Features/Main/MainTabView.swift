@@ -33,7 +33,7 @@ struct MainTabView: View {
 
             CoachView()
                 .tabItem {
-                    Label("Coach", systemImage: "message")
+                    Label("Hone", systemImage: "message")
                 }
 
             WorkoutProgressView()

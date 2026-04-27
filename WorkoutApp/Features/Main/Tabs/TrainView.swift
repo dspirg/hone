@@ -59,7 +59,7 @@ struct TrainView: View {
                                     .foregroundStyle(.secondary)
                             }
                             .padding(16)
-                            .background(Color("CardBackground"))
+                            .background(Theme.surface)
                             .clipShape(RoundedRectangle(cornerRadius: 12))
                             .padding(.horizontal, 16)
                         }
@@ -91,7 +91,7 @@ struct TrainView: View {
                                     .foregroundStyle(.secondary)
                             }
                             .padding(16)
-                            .background(Color("CardBackground"))
+                            .background(Theme.surface)
                             .clipShape(RoundedRectangle(cornerRadius: 12))
                             .padding(.horizontal, 16)
                         }
@@ -168,7 +168,7 @@ private struct WorkoutDayCard: View {
             .buttonStyle(.borderedProminent)
         }
         .padding(16)
-        .background(Color("CardBackground"))
+        .background(Theme.surface)
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .padding(.horizontal, 16)
     }
@@ -183,21 +183,24 @@ private struct AdaptationSummaryBanner: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
-            Image(systemName: "sparkles")
-                .font(.subheadline)
-                .foregroundStyle(Color("AccentColor"))
-            Text(summary)
-                .font(.subheadline)
-                .foregroundStyle(.primary)
-                .fixedSize(horizontal: false, vertical: true)
+            HoneAvatarView(diameter: 20)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Hone")
+                    .font(.caption2.weight(.semibold))
+                    .foregroundStyle(Theme.accent)
+                Text(summary)
+                    .font(.subheadline)
+                    .foregroundStyle(.primary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
         }
         .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color("CardBackground"))
+        .background(Theme.surface)
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .overlay(
             RoundedRectangle(cornerRadius: 12)
-                .stroke(Color("AccentColor").opacity(0.3), lineWidth: 1)
+                .stroke(Theme.accent.opacity(0.3), lineWidth: 1)
         )
     }
 }

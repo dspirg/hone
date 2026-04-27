@@ -24,9 +24,9 @@ struct PlanGenerationLoadingView: View {
 
     // 3 phases per D-15 / UI-SPEC Copywriting Contract
     private let phases = [
-        "Analyzing your goals\u{2026}",
-        "Building your schedule\u{2026}",
-        "Selecting your exercises\u{2026}"
+        "Hone is analyzing your goals\u{2026}",
+        "Hone is building your schedule\u{2026}",
+        "Hone is selecting your exercises\u{2026}"
     ]
 
     var body: some View {

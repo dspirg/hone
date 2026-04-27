@@ -110,7 +110,7 @@ final class NotificationScheduler {
                 content.body = "You're on a \(currentStreak)-day streak — keep it going!"
             } else {
                 // Standard copy (D-22)
-                content.title = "Ready for your \(planDay.workoutType) day?"
+                content.title = "Hone: your \(planDay.workoutType) session is ready"
                 content.body = "Your plan is waiting."
             }
 
@@ -178,7 +178,7 @@ final class NotificationScheduler {
         guard reengagementPending.count < 2 else { return }
 
         let content = UNMutableNotificationContent()
-        content.title = "Your plan is ready"
+        content.title = "Hone updated your plan"
 
         // D-09: Supportive coach tone, no guilt — validated against blocklist
         let body = "Your plan adapted to your schedule — ready when you are."
