@@ -20,31 +20,38 @@ struct MainTabView: View {
     @State private var adaptationService = AdaptationService()
 
     var body: some View {
-        TabView {
+        // D-14: selectedTab binding enables programmatic tab switching
+        // (e.g., post-session routing to Home tab via AppState.selectedTab = 0)
+        TabView(selection: Bindable(appState).selectedTab) {
             HomeView()
                 .tabItem {
                     Label("Home", systemImage: "house")
                 }
+                .tag(0)
 
             TrainView()
                 .tabItem {
                     Label("Train", systemImage: "figure.strengthtraining.traditional")
                 }
+                .tag(1)
 
             CoachView()
                 .tabItem {
                     Label("Hone", systemImage: "message")
                 }
+                .tag(2)
 
             WorkoutProgressView()
                 .tabItem {
                     Label("Progress", systemImage: "chart.bar.fill")
                 }
+                .tag(3)
 
             ProfileView()
                 .tabItem {
                     Label("Profile", systemImage: "person")
                 }
+                .tag(4)
         }
         // Active tab icon + label tint (UI-SPEC Color Token: Accent)
         .tint(Theme.accent)

@@ -170,6 +170,25 @@ final class SessionViewModel {
         }
     }
 
+    /// Completes the next incomplete set for the current exercise using the default rep count.
+    /// Called by the "Complete Set" CTA button in SessionView (D-09).
+    /// T-11-06: uses same completeSet path with T-04-01 repsLogged clamping.
+    func completeCurrentSet() {
+        guard let exercise = currentExercise else { return }
+        let completedCount = completedSets[currentExerciseIndex]?.count ?? 0
+        guard completedCount < exercise.sets else { return }
+        // Parse lower bound of rep range as the default (e.g., "8-12" → 8, "10" → 10)
+        let defaultReps = Int(
+            exercise.reps
+                .split(separator: "-")
+                .first
+                .flatMap { Int(String($0)) }
+                ?? Int(exercise.reps)
+                ?? 8
+        ) ?? 8
+        completeSet(setIndex: completedCount, repsLogged: defaultReps)
+    }
+
     // MARK: - Rest Timer
 
     /// Cancels the rest timer immediately; cancels pending notification.
