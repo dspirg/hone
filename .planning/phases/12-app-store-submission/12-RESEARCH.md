@@ -498,26 +498,21 @@ Note: The `https:/$()/` pattern is Xcode xcconfig URL syntax — the `$()` is a 
 |---|-------|---------|---------------|
 | A1 | Prod.xcconfig should use same Supabase URL/key as Dev.xcconfig (single hosted project) | Pattern 3, Pitfall 7 | If a separate production Supabase project is intended, keys must be sourced from that project instead |
 | A2 | RevenueCat purchase history is the primary data collection to declare in NSPrivacyCollectedDataTypes | PrivacyInfo.xcprivacy code example | May need to add additional data types if Supabase Auth SDK also accesses required-reason APIs |
-| A3 | Screenshot sizes: 6.7" (1290x2796) is sufficient as primary mandatory size; 6.9" is optional | Screenshots section | Apple's requirements may have shifted to require 6.9" as mandatory by April 2026; verify in App Store Connect |
+| A3 | Screenshot sizes: 6.9" (1320x2868) is the primary mandatory size; 6.1" (1179x2556) as secondary (RESOLVED) | Screenshots section | N/A — user confirmed 6.9" as primary, dropping 6.7" since 6.9" covers that device class |
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Supabase: single project or separate prod project?**
+1. **Supabase: single project or separate prod project?** (RESOLVED)
    - What we know: Dev.xcconfig points to the hosted Supabase project `seuzjlqfetbefzdplulz.supabase.co` — not localhost.
-   - What's unclear: Is there a separate production Supabase project, or is this the prod project already?
-   - Recommendation: Treat Dev.xcconfig values as the production values (fill Prod.xcconfig identically). If a separate prod project is needed, that work exceeds phase scope.
+   - Resolution: Plans use same Supabase values as Dev — treat as the production project. Prod.xcconfig filled identically.
 
-2. **Screenshot primary size: 6.7" or 6.9"?**
-   - What we know: CONTEXT.md specifies 6.7" and 6.1". App Store Connect now lists 6.9" as a primary required size following iPhone 16 Pro Max launch.
-   - What's unclear: Whether App Store Connect will reject a submission that provides only 6.7" and 6.1" (without 6.9").
-   - Recommendation: Produce screenshots at 6.9" (1320x2868) as well, using the same compositions. Small extra effort that avoids potential rejection.
+2. **Screenshot primary size: 6.7" or 6.9"?** (RESOLVED)
+   - Resolution: User decided to add 6.9" (1320x2868) as the primary mandatory size. Produce 6.9" + 6.1" (1179x2556). Drop 6.7" since 6.9" covers that device class.
 
-3. **Supabase SDK privacy manifest — does it bundle its own?**
-   - What we know: RevenueCat SDK includes its own privacy manifest (declared NSPrivacyAccessedAPICategoryUserDefaults). Modern SPM packages include their own manifests which Xcode merges.
-   - What's unclear: Whether Supabase Swift SDK 2.x includes a bundled privacy manifest for its own UserDefaults/file access.
-   - Recommendation: After adding PrivacyInfo.xcprivacy and running an archive, check App Store Connect validation output. If ITMS-91053 errors appear for categories not yet declared, add them.
+3. **Supabase SDK privacy manifest — does it bundle its own?** (RESOLVED)
+   - Resolution: Treat as post-archive validation. After adding PrivacyInfo.xcprivacy and running an archive, check App Store Connect validation output. If ITMS-91053 errors appear for categories not yet declared, add them.
 
 ---
 
