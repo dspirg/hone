@@ -1,8 +1,6 @@
 // Production environment configuration
-// DO NOT COMMIT real values — replace placeholders before production build
+// RevenueCat key must be replaced with production key from RevenueCat Dashboard before archive
 
-SUPABASE_URL = REPLACE_WITH_HOSTED_URL
-SUPABASE_ANON_KEY = REPLACE_WITH_HOSTED_ANON_KEY
-// Phase 7: RevenueCat SDK API key (D-17) — replace with real production key from RevenueCat Dashboard
-// RevenueCat Dashboard -> Project -> Apps -> iOS -> Public API Key (starts with appl_)
+SUPABASE_URL = https:/$()/seuzjlqfetbefzdplulz.supabase.co
+SUPABASE_ANON_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNldXpqbHFmZXRiZWZ6ZHBsdWx6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2NTY1NzQsImV4cCI6MjA5MjIzMjU3NH0.DTcyePuQ_JR0YhckdZgo9mGv93OAOc7ZFt20iFpJv7M
 REVENUECAT_API_KEY = appl_REPLACE_WITH_PROD_RC_KEY

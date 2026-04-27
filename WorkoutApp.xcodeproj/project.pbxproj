@@ -11,6 +11,7 @@
 		B001000100000002 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001000000000002 /* AppState.swift */; };
 		B001000100000003 /* SupabaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001000000000003 /* SupabaseClient.swift */; };
 		B001000100000004 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B001000000000004 /* Assets.xcassets */; };
+		B012000100000001 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = B012000000000001 /* PrivacyInfo.xcprivacy */; };
 		B001001100000001 /* WorkoutAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001001000000001 /* WorkoutAppTests.swift */; };
 		B001002100000001 /* WorkoutAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001002000000001 /* WorkoutAppUITests.swift */; };
 		B001003100000001 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = B001003000000001 /* Supabase */; };
@@ -167,6 +168,7 @@
 		B001000000000004 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B001000000000005 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B001000000000006 /* WorkoutApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WorkoutApp.entitlements; sourceTree = "<group>"; };
+		B012000000000001 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		B001000000000007 /* Dev.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Dev.xcconfig; path = Config/Dev.xcconfig; sourceTree = "<group>"; };
 		B001000000000008 /* Prod.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Prod.xcconfig; path = Config/Prod.xcconfig; sourceTree = "<group>"; };
 		B007040000000001 /* WorkoutAppProducts.storekit */ = {isa = PBXFileReference; lastKnownFileType = com.apple.storekit.configuration; path = WorkoutAppProducts.storekit; sourceTree = "<group>"; };
@@ -352,6 +354,7 @@
 				B001000000000004 /* Assets.xcassets */,
 				B001000000000005 /* Info.plist */,
 				B001000000000006 /* WorkoutApp.entitlements */,
+				B012000000000001 /* PrivacyInfo.xcprivacy */,
 			);
 			path = WorkoutApp;
 			sourceTree = "<group>";
@@ -925,6 +928,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B001000100000004 /* Assets.xcassets in Resources */,
+				B012000100000001 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
