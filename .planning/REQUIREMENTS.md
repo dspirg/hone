@@ -46,30 +46,32 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FIX-01 | TBD | Pending |
-| FIX-02 | TBD | Pending |
-| FIX-03 | TBD | Pending |
-| FIX-04 | TBD | Pending |
-| FIX-05 | TBD | Pending |
-| UI-01 | TBD | Pending |
-| UI-02 | TBD | Pending |
-| UI-03 | TBD | Pending |
-| UI-04 | TBD | Pending |
-| UI-05 | TBD | Pending |
-| UI-06 | TBD | Pending |
-| UI-07 | TBD | Pending |
-| SHIP-01 | TBD | Pending |
-| SHIP-02 | TBD | Pending |
-| SHIP-03 | TBD | Pending |
-| SHIP-04 | TBD | Pending |
-| SHIP-05 | TBD | Pending |
-| SHIP-06 | TBD | Pending |
+| FIX-01 | Phase 9 | Pending |
+| FIX-02 | Phase 9 | Pending |
+| FIX-03 | Phase 9 | Pending |
+| FIX-04 | Phase 9 | Pending |
+| FIX-05 | Phase 9 | Pending |
+| UI-01 | Phase 10 | Pending |
+| UI-02 | Phase 10 | Pending |
+| UI-03 | Phase 10 | Pending |
+| UI-04 | Phase 11 | Pending |
+| UI-05 | Phase 11 | Pending |
+| UI-06 | Phase 10 | Pending |
+| UI-07 | Phase 11 | Pending |
+| SHIP-01 | Phase 12 | Pending |
+| SHIP-02 | Phase 12 | Pending |
+| SHIP-03 | Phase 12 | Pending |
+| SHIP-04 | Phase 12 | Pending |
+| SHIP-05 | Phase 12 | Pending |
+| SHIP-06 | Phase 12 | Pending |
 
 **Coverage:**
 - v1.1 requirements: 18 total
-- Bug fixes: 5
-- UI redesign: 7
-- App Store: 6
+- Bug fixes: 5 (Phase 9)
+- UI redesign: 7 (Phases 10-11)
+- App Store: 6 (Phase 12)
+- Mapped: 18/18
 
 ---
 *Requirements defined: 2026-04-26*
+*Traceability updated: 2026-04-26*

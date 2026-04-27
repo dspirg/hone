@@ -3,10 +3,10 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Polish & Ship
 status: planning
-last_updated: "2026-04-27T01:31:12.834Z"
-last_activity: 2026-04-27
+last_updated: "2026-04-26T00:00:00.000Z"
+last_activity: 2026-04-26
 progress:
-  total_phases: 0
+  total_phases: 4
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -17,47 +17,44 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-04-25)
+See: .planning/PROJECT.md (updated 2026-04-26)
 
 **Core value:** A conversational AI personal trainer in your pocket — one that knows you, builds your program, coaches you through sessions, and evolves with you as you improve.
-**Current focus:** v1.0 milestone complete — human verification pending for Phase 8
+**Current focus:** v1.1 Polish & Ship — roadmap defined, ready to plan Phase 9
 
 ## Current Position
 
-Phase: Not started (defining requirements)
+Phase: 9 (Bug Fixes) — not started
 Plan: —
-Status: Defining requirements
-Last activity: 2026-04-27 — Milestone v1.1 started
+Status: Roadmap defined — awaiting phase planning
+Last activity: 2026-04-26 — v1.1 roadmap created (4 phases, 18 requirements)
+
+```
+[Phase 9 Bug Fixes    ] [ ] Not started
+[Phase 10 Design Sys  ] [ ] Not started
+[Phase 11 Screens     ] [ ] Not started
+[Phase 12 App Store   ] [ ] Not started
+```
 
 ## Performance Metrics
 
-**Velocity:**
+**Velocity (v1.1):**
 
-- Total plans completed: 17
+- Total plans completed: 0
 - Average duration: —
 - Total execution time: 0 hours
 
-**By Phase:**
+**v1.0 Reference:**
 
-| Phase | Plans | Total | Avg/Plan |
-|-------|-------|-------|----------|
-| 01 | 3 | - | - |
-| 04 | 5 | - | - |
-| 05 | 5 | - | - |
-| 06 | 4 | - | - |
+- 40 plans across 8 phases
+- Avg ~25 min/plan
 
 **Recent Trend:**
 
-- Last 5 plans: —
-- Trend: —
+- Last 5 plans (v1.0): Phase 08-adaptive-ai P02–P05 ranged 18–40 min
+- Trend: on pace
 
 *Updated after each plan completion*
-| Phase 04 P04 | 16m | 2 tasks | 3 files |
-| Phase 06 P02 | 23m | 2 tasks | 9 files |
-| Phase 08-adaptive-ai P02 | 18min | 2 tasks | 5 files |
-| Phase 08-adaptive-ai P03 | 25min | 2 tasks | 1 files |
-| Phase 08-adaptive-ai P04 | 23min | 2 tasks | 7 files |
-| Phase 08-adaptive-ai P05 | 40min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -67,28 +64,27 @@ Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
 - Stack: SwiftUI + Swift 6, CoreData (not SwiftData), Supabase, OpenAI GPT-4o/mini, Mux HLS, RevenueCat SDK 5.x
-- Phase 1 must include video content licensing as a parallel track — it gates Phase 2 and everything downstream
 - All OpenAI calls must proxy through Supabase Edge Functions — never from iOS client directly
-- AI safety guardrails (system prompt rules) must be established in Phase 1 before any user-facing AI is live
-- SessionSummaryView uses onDone closure (dismiss()) rather than NavigationStack pop — avoids coupling summary to nav stack depth
-- TrainView fetches CDWorkoutPlan.supabaseId in same loadActivePlan task as WorkoutPlan decode — single async operation consistent with HomeView pattern
-- WorkoutProgressView named to avoid SwiftUI.ProgressView collision — tab struct uses WorkoutProgressView, all existing ProgressView() spinner usages unaffected
-- DifficultyRating.swift added to Xcode project pbxproj (was created in plan 01 but not registered)
+- SessionSummaryView uses onDone closure (dismiss()) rather than NavigationStack pop
+- TrainView fetches CDWorkoutPlan.supabaseId in same loadActivePlan task as WorkoutPlan decode
+- WorkoutProgressView named to avoid SwiftUI.ProgressView collision
 - Done button uses .disabled + .opacity(0.5) pattern rather than hiding to preserve layout stability
 - regenerate-plan uses planSchema for OpenAI Structured Outputs; weekly_days inner structure validated separately via AdaptedPlanSchema
 - historySummary compresses 4-week session data into ~100 tokens for regenerate-plan prompt efficiency
-- AdaptationService fetches own access token via supabase.auth.session — not passed from AppState — consistent with PlanSSEClient and CoachSSEClient (SDK issue #634)
-- ISO week key uses Calendar(identifier: .iso8601) with yearForWeekOfYear for correct YYYY-Www computation across year boundaries
-- Post-session adaptation is fire-and-forget: Task fires after saveDifficultyRating, dismiss runs synchronously without blocking on network
-- Re-engagement notifications trigger after missedDays.count >= 2, scheduled for 10am next day via UNCalendarNotificationTrigger with reengagement- prefix for pending count filtering
+- AdaptationService fetches own access token via supabase.auth.session — not passed from AppState
+- ISO week key uses Calendar(identifier: .iso8601) with yearForWeekOfYear for correct YYYY-Www computation
+- Post-session adaptation is fire-and-forget: Task fires after saveDifficultyRating, dismiss runs synchronously
+- Re-engagement notifications trigger after missedDays.count >= 2, scheduled for 10am next day via UNCalendarNotificationTrigger
+- v1.1 UI direction: dark mode only, amber (#f59e0b) primary accent, coach named "Hone" with warm gradient avatar
+- v1.1 bug scope: FIX-01 CoreData write after adaptation, FIX-02 ISO date strings, FIX-03 notification reschedule, FIX-04 dynamic planned days, FIX-05 remove dead isOnboarded
 
 ### Pending Todos
 
-None yet.
+None.
 
 ### Blockers/Concerns
 
-- Subscription pricing not yet set — unit economics model (Apple 30% cut + AI cost + margin) must be run before Phase 7 planning
+- App Store Connect product IDs for StoreKit not yet registered (carried from v1.0 Phase 7 — required before Phase 12)
 
 ### Quick Tasks Completed
 
@@ -104,8 +100,8 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-25T15:26:29.161Z
-Stopped at: Completed 08-05-PLAN.md — re-engagement notifications: guilt blocklist, frequency cap, AdaptationService integration
+Last session: 2026-04-26
+Stopped at: v1.1 roadmap defined — 4 phases (9-12), 18 requirements mapped
 Resume file: None
 
-**Planned Phase:** 8 (Adaptive AI) — 6 plans — 2026-04-25T13:14:01.102Z
+**Next action:** `/gsd-plan-phase 9`
