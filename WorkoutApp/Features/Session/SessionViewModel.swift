@@ -39,7 +39,7 @@ final class SessionViewModel {
     private var sessionLog: CDSessionLog?
     private let planId: String
     private let userId: String
-    private let notificationScheduler = NotificationScheduler()
+    private let notificationScheduler = NotificationScheduler.shared
 
     // MARK: - Init
 
