@@ -38,6 +38,9 @@ final class AdaptationService {
     // ISO week key to prevent duplicate Monday regeneration calls (T-08-12).
     // Format: "YYYY-Www" e.g. "2026-W17" — unique per user session since service is @MainActor.
     private var lastWeeklyCheckKey: String = ""
+    // In-progress guard — prevents a second Task created from rapid scenePhase .active transitions
+    // from issuing a second weekly regen call even if lastWeeklyCheckKey is set before the first await.
+    private var isWeeklyCheckInProgress: Bool = false
 
     // MARK: - Init
 
@@ -145,10 +148,14 @@ final class AdaptationService {
         let weekday = calendar.component(.weekday, from: today)
         let isoWeekKey = isoWeekString(for: today)
 
-        // Weekly regeneration — Monday (weekday 2) only, once per ISO week
-        if weekday == 2 && isoWeekKey != lastWeeklyCheckKey {
+        // Weekly regeneration — Monday (weekday 2) only, once per ISO week.
+        // isWeeklyCheckInProgress provides an extra guard against reentrant calls from rapid
+        // scenePhase .active transitions (two Tasks on @MainActor can interleave across await).
+        if weekday == 2 && isoWeekKey != lastWeeklyCheckKey && !isWeeklyCheckInProgress {
+            isWeeklyCheckInProgress = true
             lastWeeklyCheckKey = isoWeekKey
             await requestWeeklyRegeneration()
+            isWeeklyCheckInProgress = false
         }
 
         // Missed session detection — pure local compute, then network call only if needed
