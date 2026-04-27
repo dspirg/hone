@@ -22,6 +22,7 @@ struct RestTimerOverlay: View {
     let onExpired: () -> Void
 
     @State private var expired = false
+    @State private var timerStartDate: Date = Date()
 
     var body: some View {
         ZStack {
@@ -37,8 +38,9 @@ struct RestTimerOverlay: View {
                     .accessibilityHidden(true)
 
                 // Date-anchored circular countdown ring — RESEARCH.md Pattern 1
+                // timerStartDate captured once in @State so re-renders don't reset the ring fill.
                 // ProgressView(timerInterval:) owns the countdown display; no manual date math
-                ProgressView(timerInterval: Date()...endDate, countsDown: true) {
+                ProgressView(timerInterval: timerStartDate...endDate, countsDown: true) {
                     EmptyView()
                 } currentValueLabel: {
                     Text(endDate, style: .timer)
