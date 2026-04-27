@@ -9,7 +9,20 @@ struct VideoOverlayView: View {
     var body: some View {
         ZStack(alignment: .topLeading) {
             Color.black.ignoresSafeArea()
-            VideoPlayerView(muxPlaybackId: muxPlaybackId, localAssetURL: nil)
+            if !muxPlaybackId.isEmpty {
+                VideoPlayerView(muxPlaybackId: muxPlaybackId, localAssetURL: nil)
+            }
+            // Dismiss button so user can close the overlay from within the view
+            Button {
+                dismiss()
+            } label: {
+                Image(systemName: "xmark.circle.fill")
+                    .font(.title2)
+                    .foregroundStyle(.white)
+                    .padding(16)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+            .accessibilityLabel("Close video")
         }
         .ignoresSafeArea()
     }
