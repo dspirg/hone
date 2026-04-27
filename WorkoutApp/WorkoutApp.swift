@@ -14,6 +14,7 @@ struct WorkoutApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .preferredColorScheme(.dark)
                 .environment(appState)
                 .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
                 .fullScreenCover(isPresented: Binding(
