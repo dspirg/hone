@@ -38,8 +38,16 @@ final class SessionViewModel {
     private let repository: SessionRepository
     private var sessionLog: CDSessionLog?
     private let planId: String
-    private let userId: String
+    // Phase 11: made internal (not private) so ExerciseCardView.loadContextData can read it
+    // for scoped fetchPreviousReps/fetchBestReps queries (D-07, T-11-05).
+    let userId: String
     private let notificationScheduler = NotificationScheduler.shared
+
+    // MARK: - Phase 11: Context Card Access (D-07)
+
+    /// Exposes the current session log's UUID for fetchPreviousReps exclusion.
+    /// Returns nil if session has not yet started (startSession not yet awaited).
+    var sessionLogId: UUID? { sessionLog?.id }
 
     // MARK: - Init
 
