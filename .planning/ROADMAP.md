@@ -58,7 +58,10 @@ Plans:
   4. The coach chat interface displays the name "Hone", a warm gradient avatar, and personality-driven copy consistent with the Sketch 003-C design
 **Plans:** 4 plans
 Plans:
+**Wave 1**
 - [ ] 10-01-PLAN.md — Design system foundation: Theme.swift, asset catalog colors, dark mode forcing, HoneAvatarView, VideoOverlayView
+
+**Wave 2** *(blocked on Wave 1 completion)*
 - [ ] 10-02-PLAN.md — Color sweep: migrate all 35 non-Coach view files to Theme.* tokens
 - [ ] 10-03-PLAN.md — Hone identity: coach branding, chat restyling, notification copy, tab label
 - [ ] 10-04-PLAN.md — Thumbnails + fullscreen: tap-to-play video from library, detail, and plan preview
