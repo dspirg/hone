@@ -55,27 +55,42 @@ Exceptions:
 
 ## Typography
 
-SwiftUI semantic type styles mapped to exact sizes (SF Pro, device default):
+SwiftUI semantic type styles mapped to exact sizes (SF Pro, device default).
 
-| Role | SwiftUI Style | Approx pt | Weight | Line Height | Usage |
-|------|--------------|-----------|--------|-------------|-------|
-| Display | .largeTitle (.system(size: 30)) | 30pt | Bold (700) | 1.2 | Greeting "Hey Dan", stat ring values |
-| Heading | .title2.weight(.semibold) | 22pt | Semibold (600) | 1.2 | Exercise name in session, card headings, "Great work." |
-| Body | .body (.system(size: 17)) | 17pt | Regular (400) | 1.5 | Subheadline copy, secondary descriptors |
-| Label | .caption / .caption2 | 11–12pt | Regular (400) / Semibold (600) | 1.3 | Stat labels, section labels (uppercase 0.08em tracking), streak day letters |
+**Exactly 4 tiers, exactly 2 weights.**
 
-Exact size notes:
-- Greeting sub-label ("Good evening"): .subheadline, 15pt, regular, secondary color
-- Greeting main ("Hey Dan"): .largeTitle, 34pt system, bold — accent color on name
-- Exercise name in session card: .title2.weight(.semibold), 22pt
-- Stat pill value: .title2.weight(.bold), 22pt, accent color for primary stat
-- Stat pill label: .caption, 11pt, secondary color
-- Section label: .caption.weight(.semibold), 11pt, uppercase, letter-spacing 0.08em, muted color
-- Session timer: .subheadline.weight(.semibold), 15pt, tabular-nums, accent color
-- Context cards (Previous/Best) value: .title3.weight(.bold), 20pt
-- Context cards label: .caption, 11pt, muted color
+| Tier | SwiftUI Style | Exact pt | Weight | Line Height | Usage |
+|------|--------------|----------|--------|-------------|-------|
+| Display | .largeTitle (.system(size: 34)) | 34pt | Bold (700) | 1.2 | Greeting "Hey Dan" — name span in accent color; stat ring values |
+| Heading | .title2.weight(.semibold) or .title2.weight(.bold) | 22pt | Semibold/Bold (600–700) | 1.2 | Exercise name in session, card headings, "Great work.", plan name, stat pill values, context card values |
+| Body | .body (.system(size: 17)) | 17pt | Regular (400) | 1.5 | Greeting sub-label, exercise count/duration row, streak label, secondary descriptors, session timer |
+| Label | .caption (.system(size: 11)) | 11pt | Regular (400) or Semibold (600) | 1.3 | Stat pill labels, section labels (uppercase 0.08em tracking), streak day letters, context card labels, muted secondary captions |
 
-Maximum font size tiers used: 4 (Display 34pt / Heading 22pt / Body 17pt / Label 11–12pt). Exactly 2 weights: Regular (400) and Semibold/Bold (600–700).
+Per-element assignments:
+
+| Element | Tier | SwiftUI call | Notes |
+|---------|------|-------------|-------|
+| Greeting sub-label ("Good evening") | Body | `.body` | Regular 400, secondary color — collapsed from .subheadline 15pt |
+| Greeting main ("Hey Dan") | Display | `.largeTitle.bold` | 34pt bold; name span in accent color |
+| Exercise name in session | Heading | `.title2.weight(.semibold)` | 22pt semibold |
+| Plan name in Home workout card | Heading | `.title2.weight(.bold)` | 22pt bold, left-aligned |
+| Stat pill value | Heading | `.title2.weight(.bold)` | 22pt bold; accent color for primary stat |
+| Context card (Previous/Best) value | Heading | `.title2.weight(.bold)` | 22pt bold — was .title3 20pt; consolidated to Heading tier |
+| "Great work." completion heading | Heading | `.title2.weight(.semibold)` | 22pt semibold |
+| Day label sub-copy "{DayLabel} complete" | Body | `.body` | Regular 400, secondary color |
+| Stat pill label | Label | `.caption` | 11pt regular, secondary color |
+| Section label ("TODAY'S WORKOUT" etc.) | Label | `.caption.weight(.semibold)` | 11pt semibold, uppercase, 0.08em tracking, muted color |
+| Session set counter ("Set N of N") | Body | `.body` | Regular 400, secondary color — collapsed from .subheadline 15pt |
+| Session elapsed timer | Body | `.body.weight(.semibold)` | 17pt semibold, tabular-nums, accent color — collapsed from .subheadline 15pt |
+| Context card label ("Previous" / "Best") | Label | `.caption` | 11pt regular, muted color |
+| Streak day letter | Label | `.caption` | 11pt regular |
+| Exercise count · duration descriptor | Body | `.body` | Regular 400, secondary color |
+
+Eliminated tiers (checker fix):
+- `.subheadline` (15pt) — fully collapsed into Body (17pt) at .body weight. Affected elements: greeting sub-label, session set counter, session elapsed timer, exercise count row.
+- `.title3` (20pt) — eliminated. Context card values promoted to Heading tier using `.title2.weight(.bold)` at 22pt.
+
+Maximum font size tiers: **4** (Display 34pt / Heading 22pt / Body 17pt / Label 11pt). Maximum weights: **2** (Regular 400, Semibold/Bold 600–700).
 
 ---
 
@@ -150,20 +165,20 @@ Layout (top to bottom, ScrollView):
 NavigationStack (no title — inline greeting replaces nav title)
   ScrollView
     Greeting section         [padding: top 16pt, horizontal 20pt]
-      Text: greeting-sub     [.subheadline, secondary, "Good evening"]
+      Text: greeting-sub     [.body, secondary, "Good evening"]
       Text: greeting-main    [.largeTitle.bold, "Hey {Name}" — name in accent]
     AdaptationBannerView     [conditional — only when recent adaptation]
       horizontal 20pt        [success-green tinted bg, 1pt border rgba(52,211,153,0.15)]
     Section label: "TODAY'S WORKOUT"  [uppercase caption, muted, margin-top 24pt]
     WorkoutCard              [Theme.surface, radius 16pt, padding 20pt, border borderSubtle]
       Row: plan name + day number   [.title2.bold left + day# accent right]
-      Row: exercise count · duration [.subheadline secondary]
+      Row: exercise count · duration [.body secondary]
       ExerciseRowView × N    [divider between rows, not after last]
       "Start Workout" button [full-width, 52pt height, gradient fill, .body.bold, black text]
     Section label: "THIS WEEK"
     StreakCard               [Theme.surface, radius 16pt, padding 20pt]
       WeekStreakBar           [36x36pt tiles]
-      Streak count text       [.subheadline secondary, centered, margin-top 8pt]
+      Streak count text       [.body secondary, centered, margin-top 8pt]
     Section label: "QUICK STATS"
     StatPillRow              [HStack 3 pills, horizontal 20pt]
       StatPillView: Sessions  [accent value]
@@ -174,10 +189,16 @@ NavigationStack (no title — inline greeting replaces nav title)
 
 Empty state (no active plan after load):
 - SF Symbol: figure.run, 48pt, secondary color
-- Text: "No workout scheduled" (.title3, primary)
-- Subtext: "Your plan will appear here after onboarding." (.subheadline, secondary)
+- Heading: "No workout scheduled" (.title2.weight(.semibold), primary)
+- Subtext: "Your plan will appear here after onboarding." (.body, secondary)
 
 Loading state: ProgressView() centered, padding-top 48pt (preserve existing pattern).
+
+Error state (network/fetch failure loading Home data):
+- SF Symbol: wifi.slash, 48pt, secondary color
+- Heading: "Couldn't load your workout" (.title2.weight(.semibold), primary)
+- Subtext: "Check your connection and pull down to retry." (.body, secondary)
+- Pull-to-refresh triggers re-fetch (SwiftUI `.refreshable` on ScrollView)
 
 Navigation: "Start Workout" button triggers `.fullScreenCover` presenting SessionView. No intermediate TrainView step (D-13).
 
@@ -192,8 +213,8 @@ Layout change — video area:
 
 Exercise info row (below video, 12pt top padding):
 - Exercise name: `.title2.weight(.semibold)`, left-aligned
-- "Set X of N" counter: `.subheadline`, secondary, right-aligned (same row, HStack spaceBetween)
-- Muscle + equipment: `.subheadline`, accent color, below name
+- "Set X of N" counter: `.body`, secondary, right-aligned (same row, HStack spaceBetween)
+- Muscle + equipment: `.body`, accent color, below name
 
 Set rows: unchanged from existing SetLogRow pattern.
 
@@ -223,7 +244,7 @@ VStack(spacing: 0)              [fills screen, no scroll]
     .foregroundStyle(Theme.accent)
   VStack(spacing: 4)            [margin-top: 12pt]
     Text("Great work.")         [.title2.weight(.semibold)]
-    Text("{DayLabel} complete") [.subheadline secondary]
+    Text("{DayLabel} complete") [.body secondary]
   Spacer().frame(height: 20)
   HStack(spacing: 24)           [4 stats merged, D-10]
     StatPillView("Exercises", value)
@@ -288,6 +309,8 @@ Done button guard: unchanged — `.disabled(selectedRating == nil)` + `.opacity(
 | Home empty state heading | "No workout scheduled" | Home |
 | Home empty state body | "Your plan will appear here after onboarding." | Home |
 | Home loading — no copy (spinner only) | — | Home |
+| Home error state heading | "Couldn't load your workout" | Home |
+| Home error state body | "Check your connection and pull down to retry." | Home |
 | Adaptation banner prefix | "Hone adjusted your plan —" + rationale text | Home |
 | Streak label | "🔥 {N} day streak" | Home streak card |
 | Section labels | "TODAY'S WORKOUT" / "THIS WEEK" / "QUICK STATS" | Home (uppercase) |
@@ -340,4 +363,5 @@ Not applicable — SwiftUI native project. No shadcn, no third-party component r
 | WorkoutApp/Features/Session/Components/SessionSummaryView.swift | Existing structure, StatCell pattern, emoji picker sizing |
 | WorkoutApp/Features/Session/Components/ExerciseCardView.swift | Existing video+scroll layout, SetLogRow pattern |
 | WorkoutApp/Features/Main/Tabs/HomeView.swift | Current empty state copy, loading pattern |
+| Checker revision (2026-04-27) | Typography consolidated to 4 tiers (eliminated .subheadline 15pt and .title3 20pt); Home error state copy added |
 | User input (this session) | 0 — all fields pre-populated from upstream artifacts |
