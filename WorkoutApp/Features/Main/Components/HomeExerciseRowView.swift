@@ -15,29 +15,16 @@ struct HomeExerciseRowView: View {
     var body: some View {
         HStack(spacing: 12) {
             // MARK: - Thumbnail
-            AsyncImage(url: nil) { phase in
-                // PlannedExercise does not carry a thumbnailURL;
-                // thumbnails are looked up via ExerciseRepository in the full HomeView rebuild.
-                // For now, always render the dumbbell fallback (D-04 SF Symbol spec).
-                switch phase {
-                case .success(let image):
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 40, height: 40)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                default:
-                    Theme.surface
-                        .frame(width: 40, height: 40)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                        .overlay {
-                            Image(systemName: "dumbbell")
-                                .font(.body)
-                                .foregroundStyle(Color(UIColor.tertiaryLabel))
-                        }
+            // TODO: Replace with real thumbnailURL from ExerciseRepository once wired up (D-04 full rebuild)
+            // PlannedExercise does not carry a thumbnailURL; always render dumbbell placeholder for now.
+            Theme.surface
+                .frame(width: 40, height: 40)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .overlay {
+                    Image(systemName: "dumbbell")
+                        .font(.body)
+                        .foregroundStyle(Color(UIColor.tertiaryLabel))
                 }
-            }
-            .frame(width: 40, height: 40)
 
             // MARK: - Exercise Info
             VStack(alignment: .leading, spacing: 2) {
