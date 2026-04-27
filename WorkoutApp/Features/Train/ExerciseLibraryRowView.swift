@@ -17,6 +17,8 @@ import SwiftUI
 struct ExerciseLibraryRowView: View {
     let exercise: ExerciseModel
 
+    @State private var showVideo = false
+
     var body: some View {
         HStack(spacing: 12) {
             // MARK: Thumbnail
@@ -41,6 +43,19 @@ struct ExerciseLibraryRowView: View {
                 }
             }
             .frame(width: 52, height: 52)
+            .onTapGesture {
+                guard exercise.muxPlaybackId != nil else { return }
+                showVideo = true
+            }
+            .accessibilityLabel(exercise.muxPlaybackId != nil
+                ? "\(exercise.name) \u{2014} tap to play video"
+                : exercise.name)
+            .fullScreenCover(isPresented: $showVideo) {
+                VideoOverlayView(
+                    muxPlaybackId: exercise.muxPlaybackId ?? "",
+                    exerciseName: exercise.name
+                )
+            }
 
             // MARK: Exercise Info
             VStack(alignment: .leading, spacing: 2) {

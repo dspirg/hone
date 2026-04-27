@@ -8,6 +8,8 @@ import SwiftUI
 struct ExerciseDetailView: View {
     let exercise: ExerciseModel
 
+    @State private var showFullscreen = false
+
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
@@ -18,6 +20,25 @@ struct ExerciseDetailView: View {
                         localAssetURL: exercise.localAssetURL.flatMap { URL(string: $0) }
                     )
                     .aspectRatio(16 / 9, contentMode: .fit)
+                    .overlay(alignment: .bottomTrailing) {
+                        Button {
+                            showFullscreen = true
+                        } label: {
+                            Image(systemName: "arrow.up.left.and.arrow.down.right")
+                                .font(.caption)
+                                .foregroundStyle(.white)
+                                .padding(8)
+                                .background(.ultraThinMaterial)
+                                .clipShape(Circle())
+                        }
+                        .padding(8)
+                    }
+                    .fullScreenCover(isPresented: $showFullscreen) {
+                        VideoOverlayView(
+                            muxPlaybackId: playbackId,
+                            exerciseName: exercise.name
+                        )
+                    }
                 } else if let videoUrl = exercise.videoUrl, let url = URL(string: videoUrl) {
                     VideoPlayerView(
                         muxPlaybackId: "",
