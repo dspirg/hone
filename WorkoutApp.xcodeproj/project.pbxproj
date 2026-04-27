@@ -131,6 +131,9 @@
 		B009000100000001 /* AdaptedPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = B009000000000001 /* AdaptedPlan.swift */; };
 		B009000100000002 /* MissedSessionDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = B009000000000002 /* MissedSessionDetector.swift */; };
 		B009000100000003 /* AdaptationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B009000000000003 /* AdaptationService.swift */; };
+		B010000100000001 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B010000000000001 /* Theme.swift */; };
+		B010000100000002 /* HoneAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B010000000000002 /* HoneAvatarView.swift */; };
+		B010000100000003 /* VideoOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B010000000000003 /* VideoOverlayView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -278,6 +281,9 @@
 		B009000000000001 /* AdaptedPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptedPlan.swift; sourceTree = "<group>"; };
 		B009000000000002 /* MissedSessionDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissedSessionDetector.swift; sourceTree = "<group>"; };
 		B009000000000003 /* AdaptationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptationService.swift; sourceTree = "<group>"; };
+		B010000000000001 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		B010000000000002 /* HoneAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoneAvatarView.swift; sourceTree = "<group>"; };
+		B010000000000003 /* VideoOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoOverlayView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -350,6 +356,7 @@
 				B001000000000002 /* AppState.swift */,
 				B001000000000003 /* SupabaseClient.swift */,
 				B007000000000003 /* RevenueCatService.swift */,
+				B010000000000001 /* Theme.swift */,
 				B002000030000002 /* Data */,
 				B002004030000001 /* Cache */,
 				B003000030000002 /* Components */,
@@ -600,6 +607,7 @@
 				B002003000000001 /* VideoPlayerView.swift */,
 				B002003000000002 /* ExercisePlaceholderView.swift */,
 				B002003000000003 /* ExerciseDetailView.swift */,
+				B010000000000003 /* VideoOverlayView.swift */,
 			);
 			path = Train;
 			sourceTree = "<group>";
@@ -751,6 +759,7 @@
 				B005004000000005 /* OfflineBannerView.swift */,
 				B005004000000006 /* ChatDateHeader.swift */,
 				B005004000000007 /* PlanModificationCard.swift */,
+				B010000000000002 /* HoneAvatarView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -988,6 +997,9 @@
 				B009000100000001 /* AdaptedPlan.swift in Sources */,
 				B009000100000002 /* MissedSessionDetector.swift in Sources */,
 				B009000100000003 /* AdaptationService.swift in Sources */,
+				B010000100000001 /* Theme.swift in Sources */,
+				B010000100000002 /* HoneAvatarView.swift in Sources */,
+				B010000100000003 /* VideoOverlayView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
