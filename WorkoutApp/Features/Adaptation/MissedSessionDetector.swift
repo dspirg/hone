@@ -62,4 +62,33 @@ struct MissedSessionDetector {
             return plannedWeekday < todayWeekday
         }
     }
+
+    /// Converts a day-label string ("Monday") to the most recent past ISO date (per D-04).
+    /// Returns nil for unknown day labels.
+    ///
+    /// - Parameters:
+    ///   - dayLabel: A day-of-week string (e.g. "Monday", "Friday")
+    ///   - today: Reference date (default: Date() — injectable for testing)
+    ///   - calendar: Calendar instance (default: .current — injectable for testing)
+    /// - Returns: ISO date string for the most recent past occurrence of that weekday, or nil.
+    static func isoDateString(
+        for dayLabel: String,
+        relativeTo today: Date = Date(),
+        calendar: Calendar = Calendar.current
+    ) -> String? {
+        let dayOfWeekMap: [String: Int] = [
+            "Sunday": 1, "Monday": 2, "Tuesday": 3,
+            "Wednesday": 4, "Thursday": 5, "Friday": 6, "Saturday": 7
+        ]
+        guard let targetWeekday = dayOfWeekMap[dayLabel] else { return nil }
+        let todayWeekday = calendar.component(.weekday, from: today)
+        var daysBack = todayWeekday - targetWeekday
+        if daysBack <= 0 { daysBack += 7 }  // missed sessions are in the past — wrap to previous week
+        guard let targetDate = calendar.date(byAdding: .day, value: -daysBack, to: today)
+        else { return nil }
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withFullDate]
+        formatter.timeZone = calendar.timeZone  // respect device timezone, not UTC
+        return formatter.string(from: targetDate)
+    }
 }
