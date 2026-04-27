@@ -52,7 +52,7 @@ struct PauseOptionsView: View {
                                 .foregroundStyle(isSelected ? .white : Color.primary)
                                 .padding(.horizontal, 16)
                                 .frame(minHeight: 44)
-                                .background(isSelected ? Color("AccentColor") : Color("CardBackground"))
+                                .background(isSelected ? Theme.accent : Theme.surface)
                                 .clipShape(Capsule())
                         }
                         .accessibilityLabel("\(duration.label) pause")
@@ -91,7 +91,7 @@ struct PauseOptionsView: View {
                     }
                     .frame(maxWidth: .infinity)
                     .frame(height: 56)
-                    .background(Color("AccentColor").opacity(vm.selectedDuration == nil ? 0.5 : 1))
+                    .background(Theme.accent.opacity(vm.selectedDuration == nil ? 0.5 : 1))
                     .clipShape(RoundedRectangle(cornerRadius: 14))
                 }
                 .disabled(vm.selectedDuration == nil || vm.isPausing)

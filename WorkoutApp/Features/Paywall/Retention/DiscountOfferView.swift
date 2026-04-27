@@ -42,14 +42,14 @@ struct DiscountOfferView: View {
                 VStack(spacing: 4) {
                     Text("50% off")
                         .font(.title.weight(.semibold))
-                        .foregroundStyle(Color("AccentColor"))
+                        .foregroundStyle(Theme.accent)
                     Text("$6.49/month for 3 months, then $12.99/month")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
                 .frame(maxWidth: .infinity)
                 .padding(16)
-                .background(Color("CardBackground"))
+                .background(Theme.surface)
                 .clipShape(RoundedRectangle(cornerRadius: 16))
                 .padding(.horizontal, 32)
                 .padding(.top, 24)
@@ -68,7 +68,7 @@ struct DiscountOfferView: View {
                             }
                         }
                         .font(.subheadline)
-                        .foregroundStyle(Color("AccentColor"))
+                        .foregroundStyle(Theme.accent)
                     }
                     .padding(.horizontal, 32)
                     .padding(.top, 48)
@@ -91,7 +91,7 @@ struct DiscountOfferView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .frame(height: 56)
-                        .background(Color("AccentColor"))
+                        .background(Theme.accent)
                         .clipShape(RoundedRectangle(cornerRadius: 14))
                     }
                     .disabled(vm.isLoading)

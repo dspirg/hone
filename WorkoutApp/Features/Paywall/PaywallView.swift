@@ -112,11 +112,11 @@ struct PaywallView: View {
             // Loading skeleton (UI-SPEC: redacted placeholders)
             VStack(spacing: 8) {
                 RoundedRectangle(cornerRadius: 16)
-                    .fill(Color("CardBackground"))
+                    .fill(Theme.surface)
                     .frame(height: 88)
                     .redacted(reason: .placeholder)
                 RoundedRectangle(cornerRadius: 16)
-                    .fill(Color("CardBackground"))
+                    .fill(Theme.surface)
                     .frame(height: 88)
                     .redacted(reason: .placeholder)
             }
@@ -133,7 +133,7 @@ struct PaywallView: View {
                     Task { await viewModel.loadOfferings() }
                 }
                 .font(.subheadline)
-                .foregroundStyle(Color("AccentColor"))
+                .foregroundStyle(Theme.accent)
                 .buttonStyle(.plain)
             }
             .frame(maxWidth: .infinity)
@@ -187,8 +187,8 @@ struct PaywallView: View {
             RoundedRectangle(cornerRadius: 14)
                 .fill(
                     viewModel.isLoading || viewModel.isPurchasing || viewModel.selectedPackage == nil
-                    ? Color("AccentColor").opacity(0.5)
-                    : Color("AccentColor")
+                    ? Theme.accent.opacity(0.5)
+                    : Theme.accent
                 )
         )
         .disabled(viewModel.isLoading || viewModel.isPurchasing || viewModel.selectedPackage == nil)
@@ -203,7 +203,7 @@ struct PaywallView: View {
 
             Image(systemName: "checkmark.circle.fill")
                 .font(.system(size: 60))
-                .foregroundStyle(Color("AccentColor"))
+                .foregroundStyle(Theme.accent)
 
             Text("You're all set")
                 .font(.title)
@@ -236,13 +236,13 @@ struct PaywallView: View {
             }
             .background(
                 RoundedRectangle(cornerRadius: 14)
-                    .fill(Color("AccentColor"))
+                    .fill(Theme.accent)
             )
             .padding(.horizontal, 32)
             .padding(.bottom, 48)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color("AppBackground").ignoresSafeArea())
+        .background(Theme.background.ignoresSafeArea())
     }
 }
 

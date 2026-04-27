@@ -75,12 +75,12 @@ struct PricingCardView: View {
         .frame(minHeight: 88)
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(isSelected ? Color("AccentColor").opacity(0.10) : Color("CardBackground"))
+                .fill(isSelected ? Theme.accent.opacity(0.10) : Theme.surface)
         )
         .overlay(
             RoundedRectangle(cornerRadius: 16)
                 .stroke(
-                    isSelected ? Color("AccentColor") : Color(UIColor.tertiaryLabel),
+                    isSelected ? Theme.accent : Color(UIColor.tertiaryLabel),
                     lineWidth: isSelected ? 2 : 1
                 )
         )
@@ -95,7 +95,7 @@ struct PricingCardView: View {
             .frame(height: 24)
             .background(
                 Capsule()
-                    .fill(Color("AccentColor"))
+                    .fill(Theme.accent)
             )
             .accessibilityLabel("Most Popular")
     }

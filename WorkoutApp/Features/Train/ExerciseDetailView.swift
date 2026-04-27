@@ -104,7 +104,7 @@ private struct TagPill: View {
             .font(.subheadline)
             .padding(.horizontal, 10)
             .padding(.vertical, 4)
-            .background(isAccent ? Color("AccentColor") : Color("CardBackground"))
+            .background(isAccent ? Theme.accent : Theme.surface)
             .foregroundStyle(isAccent ? .white : .primary)
             .clipShape(Capsule())
     }

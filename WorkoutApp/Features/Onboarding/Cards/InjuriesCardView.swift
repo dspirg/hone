@@ -18,7 +18,7 @@ struct InjuriesCardView: View {
                 }) {
                     Text("Skip")
                         .font(.subheadline)
-                        .foregroundStyle(Color("AccentColor"))
+                        .foregroundStyle(Theme.accent)
                 }
                 .accessibilityLabel("Skip — no injuries to add")
             }
@@ -53,7 +53,7 @@ struct InjuriesCardView: View {
             .lineLimit(3, reservesSpace: true)
             .font(.body)
             .padding(16) // md internal padding
-            .background(Color("CardBackground"))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
@@ -71,7 +71,7 @@ struct InjuriesCardView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .frame(height: 52)
-                    .background(Color("AccentColor"))
+                    .background(Theme.accent)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
             .padding(.horizontal, 16)

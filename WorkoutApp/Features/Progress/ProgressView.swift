@@ -16,7 +16,7 @@ struct WorkoutProgressView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color("AppBackground").ignoresSafeArea()
+                Theme.background.ignoresSafeArea()
 
                 if viewModel.isLoading {
                     SwiftUI.ProgressView()
@@ -73,7 +73,7 @@ struct WorkoutProgressView: View {
             )
         }
         .padding(16)
-        .background(Color("CardBackground"))
+        .background(Theme.surface)
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 

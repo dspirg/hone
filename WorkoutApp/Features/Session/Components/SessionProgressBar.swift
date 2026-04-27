@@ -38,8 +38,8 @@ struct SessionProgressBar: View {
                     ForEach(0..<max(total, 1), id: \.self) { index in
                         Capsule()
                             .fill(index < current
-                                  ? Color("AccentColor")     // Completed segments: AccentColor fill
-                                  : Color("CardBackground")) // Incomplete: CardBackground
+                                  ? Theme.accent     // Completed segments: AccentColor fill
+                                  : Theme.surface) // Incomplete: CardBackground
                             .overlay(
                                 Capsule()
                                     .stroke(
@@ -72,6 +72,6 @@ struct SessionProgressBar: View {
         SessionProgressBar(current: 5, total: 5)
     }
     .padding()
-    .background(Color("AppBackground"))
+    .background(Theme.background)
 }
 #endif

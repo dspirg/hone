@@ -30,7 +30,7 @@ struct SessionSummaryView: View {
                 // Completion icon
                 Image(systemName: "checkmark.circle.fill")
                     .font(.system(size: 56))
-                    .foregroundStyle(Color("AccentColor"))
+                    .foregroundStyle(Theme.accent)
                     .accessibilityLabel("Session complete")
 
                 // Headings
@@ -107,7 +107,7 @@ struct SessionSummaryView: View {
             .padding(.horizontal, 16)
         }
         .navigationBarBackButtonHidden(true)
-        .background(Color("AppBackground").ignoresSafeArea())
+        .background(Theme.background.ignoresSafeArea())
     }
 
     // MARK: - Duration Formatting

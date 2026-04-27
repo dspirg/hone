@@ -65,7 +65,7 @@ struct EquipmentCardView: View {
                     .frame(height: 52)
                     .background(
                         viewModel.canAdvanceEquipment
-                            ? Color("AccentColor")
+                            ? Theme.accent
                             : Color(.quaternaryLabel)
                     )
                     .clipShape(RoundedRectangle(cornerRadius: 12))

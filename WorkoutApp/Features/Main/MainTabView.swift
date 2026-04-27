@@ -3,7 +3,7 @@ import CoreData
 
 // MARK: - MainTabView
 // D-04: 5-tab shell — Home, Train, Coach, Progress, Profile
-// Active tab accent tint via .tint(Color("AccentColor")) (UI-SPEC)
+// Active tab accent tint via .tint(Theme.accent) (UI-SPEC)
 //
 // Phase 8: AdaptationService injected here (same pattern as SessionSyncService in SessionView).
 // scenePhase observer triggers checkOnForeground on every app foreground:
@@ -47,7 +47,7 @@ struct MainTabView: View {
                 }
         }
         // Active tab icon + label tint (UI-SPEC Color Token: Accent)
-        .tint(Color("AccentColor"))
+        .tint(Theme.accent)
         // Inject AdaptationService for SessionView post-session trigger (ADPT-01)
         .environment(adaptationService)
         // Foreground check: weekly regen + missed session detection (ADPT-02, ADPT-03)

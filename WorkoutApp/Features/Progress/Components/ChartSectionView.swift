@@ -26,7 +26,7 @@ struct ChartSectionView<Content: View>: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(16)
-        .background(Color("CardBackground"))
+        .background(Theme.surface)
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 }
@@ -98,7 +98,7 @@ struct VolumeTrendChart: View {
                     x: .value("Week", bucket.weekLabel),
                     y: .value("Volume", bucket.volume)
                 )
-                .foregroundStyle(Color("AccentColor").opacity(0.7))
+                .foregroundStyle(Theme.accent.opacity(0.7))
                 .interpolationMethod(.catmullRom)
 
                 AreaMark(
@@ -108,8 +108,8 @@ struct VolumeTrendChart: View {
                 .foregroundStyle(
                     LinearGradient(
                         colors: [
-                            Color("AccentColor").opacity(0.2),
-                            Color("AccentColor").opacity(0.02)
+                            Theme.accent.opacity(0.2),
+                            Theme.accent.opacity(0.02)
                         ],
                         startPoint: .top,
                         endPoint: .bottom

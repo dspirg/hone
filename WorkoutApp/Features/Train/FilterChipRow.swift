@@ -18,7 +18,7 @@ struct FilterChip: View {
                 .font(.subheadline)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
-                .background(isSelected ? Color("AccentColor") : Color("CardBackground"))
+                .background(isSelected ? Theme.accent : Theme.surface)
                 .foregroundStyle(isSelected ? Color.white : Color.primary)
                 .clipShape(Capsule())
                 .overlay(
@@ -106,6 +106,6 @@ struct FilterChipRow: View {
     @Previewable @State var muscle: String? = "Chest"
     @Previewable @State var equipment: String? = nil
     FilterChipRow(activeMuscleGroup: $muscle, activeEquipment: $equipment)
-        .background(Color("AppBackground"))
+        .background(Theme.background)
 }
 #endif

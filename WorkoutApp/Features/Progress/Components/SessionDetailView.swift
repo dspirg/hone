@@ -37,7 +37,7 @@ struct SessionDetailView: View {
         }
         .navigationTitle(navigationTitle)
         .navigationBarTitleDisplayMode(.inline)
-        .background(Color("AppBackground").ignoresSafeArea())
+        .background(Theme.background.ignoresSafeArea())
     }
 
     // MARK: - Navigation Title
@@ -64,7 +64,7 @@ struct SessionDetailView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(16)
-        .background(Color("CardBackground"))
+        .background(Theme.surface)
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(session.totalExercises) exercises, \(session.totalSets) sets, \(session.totalReps) reps")
@@ -125,7 +125,7 @@ struct SessionDetailView: View {
             }
         }
         .padding(16)
-        .background(Color("CardBackground"))
+        .background(Theme.surface)
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 }

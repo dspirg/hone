@@ -31,7 +31,7 @@ struct PlanGenerationLoadingView: View {
 
     var body: some View {
         ZStack {
-            Color("AppBackground").ignoresSafeArea()
+            Theme.background.ignoresSafeArea()
 
             if let error = errorMessage {
                 errorOverlay(message: error)
@@ -58,7 +58,7 @@ struct PlanGenerationLoadingView: View {
             if reduceMotion {
                 ProgressView()
                     .scaleEffect(1.5)
-                    .tint(Color("AccentColor"))
+                    .tint(Theme.accent)
                     .accessibilityHidden(false)
                     .accessibilityLabel("Loading your plan")
             } else {
@@ -89,19 +89,19 @@ struct PlanGenerationLoadingView: View {
         ZStack {
             // Outer ring: 80pt diameter, 3pt stroke, 100% opacity, clockwise
             Circle()
-                .stroke(Color("AccentColor").opacity(1.0), lineWidth: 3)
+                .stroke(Theme.accent.opacity(1.0), lineWidth: 3)
                 .frame(width: 80, height: 80)
                 .rotationEffect(.degrees(outerRotation))
 
             // Middle ring: 56pt, 2pt stroke, 60% opacity, counter-clockwise
             Circle()
-                .stroke(Color("AccentColor").opacity(0.6), lineWidth: 2)
+                .stroke(Theme.accent.opacity(0.6), lineWidth: 2)
                 .frame(width: 56, height: 56)
                 .rotationEffect(.degrees(-middleRotation))
 
             // Inner ring: 32pt, 2pt stroke, 30% opacity, same direction as outer
             Circle()
-                .stroke(Color("AccentColor").opacity(0.3), lineWidth: 2)
+                .stroke(Theme.accent.opacity(0.3), lineWidth: 2)
                 .frame(width: 32, height: 32)
                 .rotationEffect(.degrees(outerRotation))
         }
@@ -150,7 +150,7 @@ struct PlanGenerationLoadingView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .frame(height: 52)
-                    .background(Color("AccentColor"))
+                    .background(Theme.accent)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
             .padding(.horizontal, 16)

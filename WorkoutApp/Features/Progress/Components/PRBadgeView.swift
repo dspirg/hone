@@ -18,7 +18,7 @@ struct PRBadgeView: View {
             ForEach(prs) { pr in
                 HStack(spacing: 8) {
                     Image(systemName: "trophy.fill")
-                        .foregroundStyle(Color("AccentColor"))
+                        .foregroundStyle(Theme.accent)
                     VStack(alignment: .leading, spacing: 2) {
                         Text(pr.exerciseName)
                             .font(.body.weight(.semibold))
@@ -34,7 +34,7 @@ struct PRBadgeView: View {
                 }
                 .padding(.vertical, 8)
                 .padding(.horizontal, 16)
-                .background(Color("AccentColor").opacity(0.1))
+                .background(Theme.accent.opacity(0.1))
                 .clipShape(RoundedRectangle(cornerRadius: 12))
             }
         }
@@ -61,6 +61,6 @@ struct PRBadgeView: View {
         ])
         .padding()
     }
-    .background(Color("AppBackground").ignoresSafeArea())
+    .background(Theme.background.ignoresSafeArea())
 }
 #endif

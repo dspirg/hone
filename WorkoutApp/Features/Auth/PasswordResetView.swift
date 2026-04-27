@@ -46,7 +46,7 @@ struct PasswordResetView: View {
                     .keyboardType(.emailAddress)
                     .autocapitalization(.none)
                     .padding(16)
-                    .background(Color("CardBackground"))
+                    .background(Theme.surface)
                     .cornerRadius(12)
                     .padding(.horizontal, 16)
 
@@ -78,7 +78,7 @@ struct PasswordResetView: View {
                 .frame(maxWidth: .infinity)
                 .frame(height: 52)
                 .buttonStyle(.borderedProminent)
-                .tint(Color("AccentColor"))
+                .tint(Theme.accent)
                 .cornerRadius(12)
                 .disabled(viewModel.isLoading)
                 .padding(.horizontal, 16)

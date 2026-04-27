@@ -46,7 +46,7 @@ struct RestTimerOverlay: View {
                         .monospacedDigit()
                 }
                 .progressViewStyle(.circular)
-                .tint(Color("AccentColor"))
+                .tint(Theme.accent)
                 .frame(width: 200, height: 200)
                 .accessibilityLabel("Rest timer")
 

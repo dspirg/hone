@@ -55,6 +55,6 @@ struct ExerciseRowView: View {
         restSeconds: 120,
         rationale: "Primary lower body compound movement targeting quads, glutes, and hamstrings"
     ))
-    .background(Color("CardBackground"))
+    .background(Theme.surface)
 }
 #endif

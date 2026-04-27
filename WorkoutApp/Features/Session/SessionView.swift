@@ -92,7 +92,7 @@ struct SessionView: View {
 
             ZStack(alignment: .bottom) {
                 // App background
-                Color("AppBackground").ignoresSafeArea()
+                Theme.background.ignoresSafeArea()
 
                 VStack(spacing: 0) {
                     // Progress bar — "Exercise N of M" + segmented capsules
@@ -202,7 +202,7 @@ private struct SyncFailureBanner: View {
         }
         .padding(.vertical, 8)
         .padding(.horizontal, 16)
-        .background(Color("CardBackground"))
+        .background(Theme.surface)
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .overlay(
             RoundedRectangle(cornerRadius: 8)

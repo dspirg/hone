@@ -53,7 +53,7 @@ struct AuthView: View {
                 if authMode == .signUp {
                     TextField("Display Name", text: $viewModel.displayName)
                         .padding(16)
-                        .background(Color("CardBackground"))
+                        .background(Theme.surface)
                         .cornerRadius(12)
                         .padding(.horizontal, 16)
                         .padding(.bottom, 12)
@@ -64,7 +64,7 @@ struct AuthView: View {
                     .keyboardType(.emailAddress)
                     .autocapitalization(.none)
                     .padding(16)
-                    .background(Color("CardBackground"))
+                    .background(Theme.surface)
                     .cornerRadius(12)
                     .padding(.horizontal, 16)
                     .padding(.bottom, 12)
@@ -72,7 +72,7 @@ struct AuthView: View {
                 // Password field — masked (T-03-03: SecureField prevents shoulder surfing)
                 SecureField("Password", text: $viewModel.password)
                     .padding(16)
-                    .background(Color("CardBackground"))
+                    .background(Theme.surface)
                     .cornerRadius(12)
                     .padding(.horizontal, 16)
 
@@ -91,7 +91,7 @@ struct AuthView: View {
                     NavigationLink(destination: PasswordResetView()) {
                         Text("Forgot password?")
                             .font(.subheadline)
-                            .foregroundStyle(Color("AccentColor"))
+                            .foregroundStyle(Theme.accent)
                     }
                     .frame(maxWidth: .infinity, alignment: .trailing)
                     .padding(.horizontal, 16)
@@ -112,7 +112,7 @@ struct AuthView: View {
                 .frame(maxWidth: .infinity)
                 .frame(height: 52)
                 .buttonStyle(.borderedProminent)
-                .tint(Color("AccentColor"))
+                .tint(Theme.accent)
                 .cornerRadius(12)
                 .disabled(viewModel.isLoading)
                 .padding(.horizontal, 16)

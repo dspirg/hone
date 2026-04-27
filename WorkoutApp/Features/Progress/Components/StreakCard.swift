@@ -21,7 +21,7 @@ struct StreakCard: View {
             } else {
                 Text("\(currentStreak)")
                     .font(.largeTitle.weight(.semibold))
-                    .foregroundStyle(Color("AccentColor"))
+                    .foregroundStyle(Theme.accent)
 
                 Text(currentStreak == 1 ? "day streak" : "days streak")
                     .font(.caption)
@@ -51,12 +51,12 @@ struct StreakCard: View {
     VStack(spacing: 24) {
         StreakCard(currentStreak: 7, longestStreak: 14)
             .padding(16)
-            .background(Color("CardBackground"))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 16))
 
         StreakCard(currentStreak: 0, longestStreak: 5)
             .padding(16)
-            .background(Color("CardBackground"))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 16))
     }
     .padding()

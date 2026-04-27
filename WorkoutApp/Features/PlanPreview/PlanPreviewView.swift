@@ -19,7 +19,7 @@ struct PlanPreviewView: View {
 
     var body: some View {
         ZStack {
-            Color("AppBackground").ignoresSafeArea()
+            Theme.background.ignoresSafeArea()
 
             if let plan = viewModel.plan {
                 // Plan loaded — show plan content
@@ -122,17 +122,17 @@ struct PlanPreviewView: View {
                     }
                     .padding(.horizontal, 8)
                     .frame(height: 32)  // 32pt height per UI-SPEC
-                    .foregroundStyle(viewModel.canRegenerate ? Color("AccentColor") : Color(.tertiaryLabel))
+                    .foregroundStyle(viewModel.canRegenerate ? Theme.accent : Color(.tertiaryLabel))
                     .background(
                         viewModel.canRegenerate
-                            ? Color("CardBackground")
+                            ? Theme.surface
                             : Color(.quaternaryLabel)
                     )
                     .clipShape(Capsule())
                     .overlay(
                         Group {
                             if viewModel.canRegenerate {
-                                Capsule().stroke(Color("AccentColor"), lineWidth: 1)
+                                Capsule().stroke(Theme.accent, lineWidth: 1)
                             }
                         }
                     )
@@ -165,7 +165,7 @@ struct PlanPreviewView: View {
                     .frame(height: 52)  // 52pt per UI-SPEC
                     .background(
                         viewModel.canStartTraining
-                            ? Color("AccentColor")
+                            ? Theme.accent
                             : Color(.quaternaryLabel)
                     )
                     .clipShape(RoundedRectangle(cornerRadius: 12))  // 12pt corner radius
@@ -180,7 +180,7 @@ struct PlanPreviewView: View {
             )
         }
         .padding(.bottom, 8)  // sm above safe area bottom
-        .background(Color("AppBackground"))  // opaque background so scroll content doesn't bleed through
+        .background(Theme.background)  // opaque background so scroll content doesn't bleed through
     }
 }
 

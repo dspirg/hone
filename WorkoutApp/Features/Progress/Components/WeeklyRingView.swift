@@ -29,7 +29,7 @@ struct WeeklyRingView: View {
             // Progress fill ring
             Circle()
                 .trim(from: 0, to: progress)
-                .stroke(Color("AccentColor"), style: StrokeStyle(lineWidth: 10, lineCap: .round))
+                .stroke(Theme.accent, style: StrokeStyle(lineWidth: 10, lineCap: .round))
                 .frame(width: 120, height: 120)
                 .rotationEffect(.degrees(-90))
                 .animation(.easeInOut(duration: 0.5), value: progress)

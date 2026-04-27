@@ -30,7 +30,7 @@ struct SetLogRow: View {
             // Completed indicator: 3pt accent bar on leading edge (UI-SPEC color contract)
             if isCompleted {
                 Rectangle()
-                    .fill(Color("AccentColor"))
+                    .fill(Theme.accent)
                     .frame(width: 3)
             }
 
@@ -98,7 +98,7 @@ struct SetLogRow: View {
                 } label: {
                     Image(systemName: isCompleted ? "checkmark.circle.fill" : "checkmark.circle")
                         .font(.system(size: 28))
-                        .foregroundStyle(isCompleted ? Color("AccentColor") : .secondary)
+                        .foregroundStyle(isCompleted ? Theme.accent : .secondary)
                 }
                 .disabled(isCompleted)
                 .contentShape(Rectangle())
@@ -109,7 +109,7 @@ struct SetLogRow: View {
             .padding(.horizontal, 16)
         }
         .frame(minHeight: 52)
-        .background(Color("CardBackground"))
+        .background(Theme.surface)
         // T-04-09: number pad sheet validates 0–999 before committing
         .sheet(isPresented: $showNumberPad) {
             NumberPadSheet(reps: $repsLogged)

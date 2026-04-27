@@ -16,7 +16,7 @@ struct ChipView: View {
                 .foregroundStyle(isSelected ? .white : .primary)
                 .frame(maxWidth: .infinity)
                 .frame(height: 52) // UI-SPEC: 52pt chip height
-                .background(isSelected ? Color("AccentColor") : Color("CardBackground"))
+                .background(isSelected ? Theme.accent : Theme.surface)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)

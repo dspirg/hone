@@ -39,7 +39,7 @@ struct DisclaimerView: View {
                     .frame(height: 52)
             }
             .buttonStyle(.borderedProminent)
-            .tint(Color("AccentColor"))
+            .tint(Theme.accent)
             .cornerRadius(12)
             .padding(.horizontal, 16)
             .padding(.bottom, 32)

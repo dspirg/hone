@@ -30,7 +30,7 @@ struct ExerciseLibraryRowView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                 default:
                     // Placeholder: CardBackground with dumbbell SF Symbol (RESEARCH.md Pattern 8)
-                    Color("CardBackground")
+                    Theme.surface
                         .frame(width: 52, height: 52)
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                         .overlay {
@@ -86,6 +86,6 @@ private extension ExerciseModel {
 #Preview {
     ExerciseLibraryRowView(exercise: .preview)
         .padding()
-        .background(Color("CardBackground"))
+        .background(Theme.surface)
 }
 #endif

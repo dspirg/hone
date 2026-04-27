@@ -17,7 +17,7 @@ struct OnboardingProgressView: View {
                 .foregroundStyle(.primary)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 4) // xs
-                .background(Color("CardBackground"))
+                .background(Theme.surface)
                 .clipShape(Capsule())
 
             // 3pt animated progress bar
@@ -29,7 +29,7 @@ struct OnboardingProgressView: View {
                         .frame(height: 3)
                     // Fill
                     Capsule()
-                        .fill(Color("AccentColor"))
+                        .fill(Theme.accent)
                         .frame(width: geometry.size.width * progress, height: 3)
                         .animation(.spring(duration: 0.4), value: progress)
                 }

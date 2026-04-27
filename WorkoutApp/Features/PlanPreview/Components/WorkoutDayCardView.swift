@@ -43,7 +43,7 @@ struct WorkoutDayCardView: View {
 
             Spacer().frame(height: 8)  // sm bottom padding
         }
-        .background(Color("CardBackground"))
+        .background(Theme.surface)
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .padding(.horizontal, 16)  // md outer margin from scroll view edges
     }
@@ -73,6 +73,6 @@ struct WorkoutDayCardView: View {
             )
         ]
     ))
-    .background(Color("AppBackground"))
+    .background(Theme.background)
 }
 #endif

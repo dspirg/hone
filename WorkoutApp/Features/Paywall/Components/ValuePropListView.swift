@@ -18,7 +18,7 @@ struct ValuePropListView: View {
                 HStack(spacing: 4) {
                     Image(systemName: "checkmark")
                         .font(.body)
-                        .foregroundStyle(Color("AccentColor"))
+                        .foregroundStyle(Theme.accent)
                     Text(prop)
                         .font(.body)
                         .foregroundStyle(Color.primary)
