@@ -42,7 +42,10 @@
   3. Workout reminder notifications are rescheduled automatically after every plan generation and plan adaptation
   4. The weekly progress ring shows the user's actual planned days per week from their workout plan, not a hardcoded value
   5. The dead `AppState.isOnboarded` property is removed and no call sites reference it
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 09-01-PLAN.md — Wire AdaptationService to persist plans, convert ISO dates, and schedule notifications (FIX-01, FIX-02, FIX-03)
+- [ ] 09-02-PLAN.md — Dynamic weekly ring + dead property removal (FIX-04, FIX-05)
 
 ### Phase 10: Design System and Visual Identity
 **Goal**: The app uses a consistent dark mode + amber design language throughout, exercise videos are surfaced as thumbnails, and the AI coach presents as "Hone" with a distinct branded identity
@@ -91,7 +94,7 @@
 | 6. Progress Tracking | v1.0 | 4/4 | Complete | 2026-04-21 |
 | 7. Subscriptions and Paywall | v1.0 | 8/8 | Complete | 2026-04-24 |
 | 8. Adaptive AI | v1.0 | 6/6 | Complete | 2026-04-25 |
-| 9. Bug Fixes | v1.1 | 0/TBD | Not started | - |
+| 9. Bug Fixes | v1.1 | 0/2 | Planning complete | - |
 | 10. Design System and Visual Identity | v1.1 | 0/TBD | Not started | - |
 | 11. Screen Redesigns | v1.1 | 0/TBD | Not started | - |
 | 12. App Store Submission | v1.1 | 0/TBD | Not started | - |
