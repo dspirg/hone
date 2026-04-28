@@ -2,18 +2,19 @@
 phase: 12-app-store-submission
 reviewed: 2026-04-28T00:00:00Z
 depth: standard
-files_reviewed: 5
+files_reviewed: 6
 files_reviewed_list:
   - Config/Prod.xcconfig
+  - docs/privacy-policy.html
+  - scripts/generate-app-icon.swift
   - WorkoutApp.xcodeproj/project.pbxproj
   - WorkoutApp/Assets.xcassets/AppIcon.appiconset/Contents.json
   - WorkoutApp/PrivacyInfo.xcprivacy
-  - docs/privacy-policy.html
 findings:
-  critical: 4
-  warning: 2
+  critical: 3
+  warning: 4
   info: 3
-  total: 9
+  total: 10
 status: issues_found
 ---
 
@@ -21,56 +22,75 @@ status: issues_found
 
 **Reviewed:** 2026-04-28
 **Depth:** standard
-**Files Reviewed:** 5
+**Files Reviewed:** 6
 **Status:** issues_found
 
 ## Summary
 
-Reviewed five files scoped to App Store submission readiness: the production xcconfig, Xcode project file, app icon asset catalog, privacy manifest, and privacy policy HTML. The files span configuration, build settings, and submission metadata.
+Six files covering App Store submission readiness were reviewed: the production xcconfig, privacy policy HTML, app icon generation script, Xcode project file, AppIcon asset catalog descriptor, and the PrivacyInfo.xcprivacy privacy manifest.
 
-Four critical issues were found: the app icon PNG is missing entirely (archive will fail), the production RevenueCat API key is an unfilled placeholder (runtime crash on launch), a live Supabase JWT is committed to version control in both xcconfig files, and the `PrivacyInfo.xcprivacy` privacy manifest omits fitness/health data types that the app clearly collects. Two warnings cover a duplicate Core Data model file in the project (potential runtime data corruption) and a dangling `StoreKitConfigTests.swift` reference with mismatched object IDs. Three informational items round out the review.
+Three critical issues require resolution before archiving: a live Supabase JWT is committed to the git-tracked `Prod.xcconfig` (and Dev and Prod both point to the same production project), the RevenueCat production API key is an unfilled placeholder that will break the paywall at launch, and the `PrivacyInfo.xcprivacy` manifest omits fitness and health data types that the app explicitly collects — risking App Store rejection under guideline 5.1.1. Four warnings cover a missing app icon PNG (the archive will fail without it), a duplicate Core Data model file reference that risks a launch crash, a dangling `StoreKitConfigTests.swift` project reference with no backing file reference, and a script working-directory assumption in the icon generator that will produce a wrong-path failure if run from any directory other than the repo root. Three info items round out the review.
 
 ---
 
 ## Critical Issues
 
-### CR-01: App Icon PNG File Missing — Archive Will Fail
+### CR-01: Live Supabase JWT committed to git-tracked xcconfig — both configs point to production
 
-**File:** `WorkoutApp/Assets.xcassets/AppIcon.appiconset/Contents.json:4`
-**Issue:** `Contents.json` declares `"filename": "AppIcon-1024.png"` but the file does not exist in the `AppIcon.appiconset/` directory. Running an archive build will fail with an asset catalog compile error: "The app icon set … does not have a 1024x1024 app icon." App Store Connect upload requires a 1024×1024 PNG with no alpha channel, no rounded corners.
-**Fix:** Add a 1024×1024 PNG named `AppIcon-1024.png` to `WorkoutApp/Assets.xcassets/AppIcon.appiconset/`. Requirements: PNG format, no alpha channel (flatten if needed), no rounded corners (Apple applies them), sRGB or Display P3 color space.
+**File:** `Config/Prod.xcconfig:4-5`
+**Issue:** `Config/Prod.xcconfig` is tracked by git (`git ls-files` confirms it) and contains the full production Supabase project URL and JWT anon key. The Dev config (not in this review's file list but referenced in the project) also points to the same production Supabase URL and key. This means every Debug build runs against the production database, and the credential is permanently in git history. The anon key is semi-public by design (RLS is the protection layer), but committing it means anyone with repo access has a stable copy and rotating it requires either a history rewrite or accepting that the old key remains accessible via `git log`.
 
-### CR-02: Production RevenueCat API Key Is an Unfilled Placeholder
+**Fix (two parts):**
 
-**File:** `Config/Prod.xcconfig:6`
-**Issue:** `REVENUECAT_API_KEY = appl_REPLACE_WITH_PROD_RC_KEY` is the literal placeholder string. The Release build configuration uses `Prod.xcconfig` as its base. When `RevenueCat.configure(withAPIKey:)` is called with this placeholder string, RevenueCat will reject it and the subscription system will not function — users will be unable to purchase or restore subscriptions. The app will likely fail App Store review in the subscription flow.
-**Fix:** Replace with the real production iOS API key from RevenueCat Dashboard > Project > Apps > iOS > Public API Key (format: `appl_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`). This key should not be treated as a secret (it is public), so it is safe to commit once obtained.
-
-### CR-03: Live Supabase JWT Committed to Version Control in Both xcconfig Files
-
-**File:** `Config/Prod.xcconfig:5` and `Config/Dev.xcconfig:5`
-**Issue:** The `SUPABASE_ANON_KEY` value is a full JWT (`eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9…`) committed in both xcconfig files, and both files point to the same production Supabase project (`seuzjlqfetbefzdplulz.supabase.co`). The Dev config comment claims it contains "local dev keys (standard Supabase local dev defaults)" but it contains the same production project URL and key as Prod. The anon key itself is a semi-public credential by design (Row Level Security is the protection layer), but committing it means anyone with repo access has a permanent copy, and rotating it requires a repo history rewrite. More critically, Dev and Prod point to the same Supabase project — development work runs against production data.
-**Fix (two-part):**
-1. Add a root `.gitignore` to the repository and add `Config/Prod.xcconfig` to it (or move secrets to environment variables / CI secrets). At minimum add a root-level `.gitignore`:
+1. Add a `.gitignore` at the repo root and exclude the production config:
 ```
-# Secrets
+# .gitignore
 Config/Prod.xcconfig
 SubscriptionKey_3QM8JG26CT.p8
+.DS_Store
 ```
-2. Provision a separate Supabase project for development, or use `supabase start` with the Supabase CLI to run a local instance, and update `Dev.xcconfig` to point to `http://127.0.0.1:54321` (local) or a staging project.
+Replace the committed file with a checked-in `.example` placeholder:
+```
+# Config/Prod.xcconfig.example  (commit this)
+SUPABASE_URL = https://REPLACE_WITH_PROD_URL.supabase.co
+SUPABASE_ANON_KEY = REPLACE_WITH_PROD_KEY
+REVENUECAT_API_KEY = REPLACE_WITH_PROD_RC_KEY
+```
 
-### CR-04: Privacy Manifest Missing Fitness and Health Data Types
+2. Provision a separate Supabase project for development (or use `supabase start` locally), and point `Dev.xcconfig` at it so Debug builds never touch production data.
+
+---
+
+### CR-02: RevenueCat production API key is an unfilled placeholder — paywall will fail at launch
+
+**File:** `Config/Prod.xcconfig:6`
+**Issue:** `REVENUECAT_API_KEY = appl_REPLACE_WITH_PROD_RC_KEY` is the literal placeholder string. The Release build configuration uses `Prod.xcconfig` as its base. When `Purchases.configure(withAPIKey:)` is called with this value, RevenueCat will reject it and the subscription system will not initialise — users cannot purchase or restore. The app will fail App Store review in the subscription flow.
+
+**Fix:** Replace with the real production iOS API key from the RevenueCat Dashboard (Project > Apps > iOS > Public API Key). The key format is `appl_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`. This key is safe to commit (it is a public API key, not a secret). If the xcconfig is moved behind `.gitignore` per CR-01, supply it via a CI environment variable instead.
+
+Add a build phase guard script to catch a stale placeholder at archive time:
+```bash
+# Run Script phase, run for Release configuration only
+if [ "$CONFIGURATION" = "Release" ]; then
+  if [[ "${REVENUECAT_API_KEY}" == *"REPLACE"* ]]; then
+    echo "error: REVENUECAT_API_KEY is still a placeholder. Set the real key before archiving."
+    exit 1
+  fi
+fi
+```
+
+---
+
+### CR-03: PrivacyInfo.xcprivacy omits fitness and health data types that the app collects
 
 **File:** `WorkoutApp/PrivacyInfo.xcprivacy:9-35`
-**Issue:** `NSPrivacyCollectedDataTypes` only declares `NSPrivacyCollectedDataTypePurchaseHistory` and `NSPrivacyCollectedDataTypeEmailAddress`. The privacy policy (`docs/privacy-policy.html`) explicitly states the app collects: workout history, fitness preferences (fitness level, training goals, equipment, injury notes), and exercise performance data. Apple's App Store privacy nutrition label requires all collected data types to be declared. The missing declarations will likely trigger App Store review rejection under guideline 5.1.1 (Data Collection and Storage). Missing types include at minimum:
-- `NSPrivacyCollectedDataTypeHealth` (workout history, exercise performance, difficulty ratings)
-- `NSPrivacyCollectedDataTypeOtherUserContent` or `NSPrivacyCollectedDataTypePerformance` (fitness preferences, injury notes)
+**Issue:** The manifest declares only `NSPrivacyCollectedDataTypePurchaseHistory` and `NSPrivacyCollectedDataTypeEmailAddress`. The privacy policy (Section 1 of `docs/privacy-policy.html`) explicitly states the app collects: workout history, session logs, sets/reps completed, fitness preferences (level, goals, equipment, injury notes), exercise performance data, and progress over time. Apple requires all collected data types to appear in the privacy manifest and the App Store privacy nutrition label. Omitting them risks rejection under App Store Review Guideline 5.1.1.
 
-**Fix:** Add the missing data type entries to `PrivacyInfo.xcprivacy`. Example for workout/health data:
+**Fix:** Add the missing data type entries. At minimum, add a fitness/exercise entry:
 ```xml
 <dict>
     <key>NSPrivacyCollectedDataType</key>
-    <string>NSPrivacyCollectedDataTypeHealth</string>
+    <string>NSPrivacyCollectedDataTypeFitnessAndExercise</string>
     <key>NSPrivacyCollectedDataTypeLinked</key>
     <true/>
     <key>NSPrivacyCollectedDataTypeTracking</key>
@@ -81,53 +101,103 @@ SubscriptionKey_3QM8JG26CT.p8
     </array>
 </dict>
 ```
-Also add `NSPrivacyCollectedDataTypeFitnessData` if Apple's current taxonomy includes it (verify against the current App Store privacy types list at developer.apple.com/app-store/app-privacy-details/).
+Cross-reference Apple's full list at developer.apple.com/app-store/app-privacy-details/ to confirm the correct type strings for the current SDK. Also confirm whether `NSPrivacyCollectedDataTypeHealth` or `NSPrivacyCollectedDataTypeOtherUserContent` apply to injury notes and performance tracking.
 
 ---
 
 ## Warnings
 
-### WR-01: Duplicate Core Data Model File References in Project
+### WR-01: App icon PNG is missing — archive will fail
 
-**File:** `WorkoutApp.xcodeproj/project.pbxproj:37,63` and `198,224`
-**Issue:** Two separate `PBXFileReference` entries exist for `WorkoutApp.xcdatamodeld`:
-- `B003A00000000005` at path `WorkoutApp.xcdatamodeld` (line 198)
-- `B002000030000003` at path `WorkoutApp.xcdatamodeld` (line 224)
+**File:** `WorkoutApp/Assets.xcassets/AppIcon.appiconset/Contents.json:4`
+**Issue:** `Contents.json` declares `"filename": "AppIcon-1024.png"` but the file does not exist in the `AppIcon.appiconset/` directory. The `generate-app-icon.swift` script was created to produce this file but must be run manually first. Building an archive without the PNG will fail with an asset catalog compile error: "The app icon set … does not have a 1024×1024 app icon."
 
-Both are added to the Sources build phase:
-- `B003A00100000005` (line 37) referencing `B003A00000000005`
-- `B002000100000004` (line 63) referencing `B002000030000003`
+**Fix:** Run the generation script from the repo root before archiving:
+```bash
+swift scripts/generate-app-icon.swift
+```
+Verify the file is written to `WorkoutApp/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png` and has a non-zero file size. The PNG must have no alpha channel (the script uses `CGImageAlphaInfo.noneSkipLast` — this is correct) and must be 1024×1024 pixels (the script uses `size = 1024` — this is correct).
 
-Compiling the same `.xcdatamodeld` twice causes a warning at best and can cause the Core Data model version hash to be computed incorrectly, leading to a migration failure crash at launch (`NSPersistentStore: could not initialize`). The `PersistenceController` will attempt to load a model that may not resolve deterministically.
-**Fix:** Open Xcode and delete the duplicate `.xcdatamodeld` reference from the project navigator (keep only one). Verify in the `.pbxproj` that only a single `PBXFileReference` and single `PBXBuildFile` entry reference `WorkoutApp.xcdatamodeld`. After cleanup, do a clean build and verify Core Data loads correctly.
+---
 
-### WR-02: StoreKitConfigTests.swift Has Mismatched Object IDs — File May Not Compile
+### WR-02: Duplicate Core Data model file references — potential launch crash
 
-**File:** `WorkoutApp.xcodeproj/project.pbxproj:434,1067`
-**Issue:** `StoreKitConfigTests.swift` appears in the PBXGroup with ID `E7F1A2B3C4D5E6F708192021` (line 434) and in PBXSourcesBuildPhase with ID `E7F1A2B3C4D5E6F708192022` (line 1067). These are different object IDs. Additionally, no `PBXFileReference` entry exists for either ID in the file reference section (lines 164–303). The file references a nonexistent file reference object, which means Xcode will show a broken red reference in the navigator and the file will not be compiled into the test target.
-**Fix:** Remove the orphaned entries from both the PBXGroup and PBXSourcesBuildPhase sections, then re-add the file through Xcode's "Add Files" dialog to generate a consistent set of object IDs. Alternatively, if the file does not exist on disk yet, remove both references until the file is created.
+**File:** `WorkoutApp.xcodeproj/project.pbxproj:37,63` and `:198,224`
+**Issue:** Two distinct `PBXFileReference` entries for `WorkoutApp.xcdatamodeld` exist in the project:
+- `B003A00000000005` (line 198)
+- `B002000030000003` (line 224)
+
+Both are included in the Sources build phase (lines 37 and 63 respectively). Compiling the same `.xcdatamodeld` twice causes Xcode to link two copies of the managed object model. The `NSManagedObjectModel` will be the last one loaded, which may differ from the one `PersistenceController` was authored against. At runtime this can produce an `NSPersistentStore` initialization failure and a crash on first launch.
+
+**Fix:** Open the project in Xcode, locate the duplicate in the Project Navigator, and delete the unwanted reference (keep the one in the `Core/Data` group — `B003A00000000005`). Verify in `.pbxproj` afterward that only one `PBXFileReference` and one `PBXBuildFile` reference the file. Clean build and confirm Core Data loads without migration warnings.
+
+---
+
+### WR-03: StoreKitConfigTests.swift has no PBXFileReference — will not compile
+
+**File:** `WorkoutApp.xcodeproj/project.pbxproj:434`
+**Issue:** `StoreKitConfigTests.swift` appears in the PBXGroup list (line 434) with object ID `E7F1A2B3C4D5E6F708192021`, but no matching `PBXFileReference` entry exists in the file reference section. The object ID pattern also differs from the rest of the project (hex sequence vs. project's `B0xxxxxxxx` pattern), suggesting this entry was hand-edited or merged incorrectly. Xcode will display a broken red reference in the navigator, the file cannot be found, and the test target will fail to compile.
+
+**Fix:** Remove the orphaned group entry and any matching Sources build phase entry. If the test file exists on disk, re-add it through Xcode's "Add Files to WorkoutApp" dialog to generate correct, consistent object IDs.
+
+---
+
+### WR-04: Icon generation script resolves output path from working directory — silent wrong-path failure
+
+**File:** `scripts/generate-app-icon.swift:7,17`
+**Issue:** Line 17 sets `outputPath` as a bare relative path:
+```swift
+let outputPath = "WorkoutApp/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png"
+```
+This path is resolved relative to the shell's working directory at the time the script runs, not relative to the script file's location. If the script is invoked from any directory other than the repo root (e.g., `swift ./scripts/generate-app-icon.swift` from within `scripts/`), the PNG will be written to a different location or the `CGImageDestinationCreateWithURL` call will fail. The error message will name the wrong absolute path, making the failure hard to diagnose. Additionally, the header comment on line 7 uses a capital `S` in `Scripts/` which does not match the actual lowercase `scripts/` directory name.
+
+**Fix:** Derive the output path from `#file` so the script is location-independent:
+```swift
+let scriptDir  = URL(fileURLWithPath: #file).deletingLastPathComponent()
+let repoRoot   = scriptDir.deletingLastPathComponent()
+let outputPath = repoRoot
+    .appendingPathComponent("WorkoutApp/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png")
+    .path
+```
+Fix the comment on line 7:
+```swift
+//   swift scripts/generate-app-icon.swift
+```
 
 ---
 
 ## Info
 
-### IN-01: SwiftUI Previews Enabled in Release Build Configuration
+### IN-01: .p8 private key file is untracked but sitting in the repo root with no .gitignore protection
 
-**File:** `WorkoutApp.xcodeproj/project.pbxproj:1265`
-**Issue:** `ENABLE_PREVIEWS = YES` is present in the Release target build configuration (`B001000050000040`). SwiftUI preview infrastructure adds overhead and should be disabled for production archive builds.
-**Fix:** Set `ENABLE_PREVIEWS = NO` in the Release target build configuration in Xcode (Target > Build Settings > Enable Previews > Release = No).
+**File:** `SubscriptionKey_3QM8JG26CT.p8` (repo root, untracked)
+**Issue:** A `.p8` private key (App Store Connect subscription status URL notification key) is present in the working directory but is not tracked by git and there is no root `.gitignore` to prevent accidental staging. A future `git add .` would commit the key. The key cannot be revoked easily once in git history.
 
-### IN-02: Privacy Policy Effective Date Lacks a Specific Day
+**Fix:** Add a root-level `.gitignore` (see CR-01 fix) that includes `*.p8`. Move the `.p8` file outside the repository root or store it in a secrets manager for CI use only.
+
+---
+
+### IN-02: Privacy policy effective date lacks a specific day
 
 **File:** `docs/privacy-policy.html:145,267`
-**Issue:** The effective date is stated as "April 2026" with no specific calendar day. App Store Connect's privacy policy URL field does not validate date format, but legal best practice and some data protection regulations (GDPR) require a specific date for the policy version. The footer also repeats "Effective April 2026".
-**Fix:** Update to a specific date, e.g., `April 28, 2026` in both the `<p class="effective-date">` tag (line 145) and the footer `<p>` (line 267).
+**Issue:** The effective date reads "April 2026" with no specific calendar day in both the header (`<p class="effective-date">`) and the footer `<p>`. Legal best practice and GDPR require a specific date for a policy version.
 
-### IN-03: Dev and Prod xcconfig Files Are Identical in Substance
+**Fix:** Update to a specific date in both locations, e.g.:
+```html
+<p class="effective-date">Effective Date: April 28, 2026</p>
+```
+```html
+<p>Hone - AI Workout Coach &bull; Privacy Policy &bull; Effective April 28, 2026</p>
+```
 
-**File:** `Config/Dev.xcconfig:1-8` and `Config/Prod.xcconfig:1-6`
-**Issue:** Both files point to the same Supabase URL and use the same anon key. The only difference is the RevenueCat key (Dev has a sandbox key, Prod has a placeholder). This means Debug builds run against the production Supabase database, which risks polluting production data during development and testing.
-**Fix:** Addressed by CR-03 fix item 2 above (provision a separate Supabase project or use a local instance for Dev). This is listed as Info because it is a consequence of the Critical issue rather than an independent problem.
+---
+
+### IN-03: ENABLE_PREVIEWS = YES left on in Release build configuration
+
+**File:** `WorkoutApp.xcodeproj/project.pbxproj:1265`
+**Issue:** `ENABLE_PREVIEWS = YES` is present in the Release target build configuration (`B001000050000040`). SwiftUI preview infrastructure is excluded from the final binary by the compiler when `SWIFT_OPTIMIZATION_LEVEL = -O`, so this does not affect the shipped binary's correctness. It does add slight overhead to Release build times.
+
+**Fix:** Set `ENABLE_PREVIEWS = NO` in the Release target build configuration (Target > Build Settings > Enable Previews > Release row).
 
 ---
 
