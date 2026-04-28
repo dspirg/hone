@@ -96,7 +96,7 @@ Plans:
   3. StoreKit product IDs registered in App Store Connect match the RevenueCat configuration exactly
   4. An archive build succeeds with the distribution signing configuration and can be uploaded to App Store Connect
   5. App Store screenshots exist for 6.7" and 6.1" display sizes and the App Store listing is complete with title, subtitle, description, keywords, category, and privacy policy URL
-**Plans:** 2/3 plans executed
+**Plans:** 4 plans
 Plans:
 **Wave 1**
 - [x] 12-01-PLAN.md — Privacy manifest, Prod.xcconfig, AppIcon catalog entry, privacy policy HTML (SHIP-01, SHIP-02, SHIP-04, SHIP-06)
@@ -106,6 +106,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 - [ ] 12-03-PLAN.md — App Store Connect setup, subscription products, screenshots, listing metadata, submission (SHIP-03, SHIP-05, SHIP-06)
+- [ ] 12-04-PLAN.md — [GAP CLOSURE] Generate AppIcon-1024.png programmatically (SHIP-01)
 
 ## Progress
 
@@ -122,4 +123,4 @@ Plans:
 | 9. Bug Fixes | v1.1 | 0/2 | Planning complete | - |
 | 10. Design System and Visual Identity | v1.1 | 4/4 | Complete    | 2026-04-27 |
 | 11. Screen Redesigns | v1.1 | 4/4 | Complete    | 2026-04-27 |
-| 12. App Store Submission | v1.1 | 2/3 | In Progress|  |
+| 12. App Store Submission | v1.1 | 2/4 | In Progress|  |
