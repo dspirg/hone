@@ -153,8 +153,12 @@ struct HomeView: View {
                     .font(.title2.weight(.bold))
                 Spacer()
                 Text(day.dayLabel)
-                    .font(.body)
-                    .foregroundStyle(Theme.accent)
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.black)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 2)
+                    .background(Theme.accent)
+                    .clipShape(Capsule())
             }
 
             // Exercise count
@@ -187,13 +191,24 @@ struct HomeView: View {
                         )
                     )
                     .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .shadow(color: Theme.accent.opacity(0.3), radius: 10, y: 4)
             }
             .padding(.top, Theme.Spacing.sm)
         }
         .padding(20)
         .background(Theme.surface)
         .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(RoundedRectangle(cornerRadius: 16).stroke(Theme.borderSubtle, lineWidth: 1))
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(
+                    LinearGradient(
+                        colors: [Theme.accent.opacity(0.3), Theme.accent.opacity(0.05)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    lineWidth: 1
+                )
+        )
         .padding(.horizontal, 20)
         .padding(.top, Theme.Spacing.sm)
     }
