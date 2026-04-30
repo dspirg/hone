@@ -120,10 +120,8 @@ struct HomeView: View {
                 .font(.body)
                 .foregroundStyle(.secondary)
             if let name = appState.currentUser?.email?.components(separatedBy: "@").first, !name.isEmpty {
-                // Per UI-SPEC: display available name identifier with amber accent
-                Text("Hey \(name)")
+                (Text("Hey ") + Text(name.capitalized).foregroundColor(Theme.accent))
                     .font(.largeTitle.bold())
-                    .foregroundStyle(.primary)
             } else {
                 Text("Hey there")
                     .font(.largeTitle.bold())
