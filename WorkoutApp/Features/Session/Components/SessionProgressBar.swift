@@ -50,6 +50,7 @@ struct SessionProgressBar: View {
                                     )
                             )
                             .frame(width: segmentWidth, height: 4)
+                            .shadow(color: index < current ? Theme.accent.opacity(0.4) : .clear, radius: 3)
                     }
                 }
             }

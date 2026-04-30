@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 // MARK: - SetLogRow
 // Per-set stepper row with checkmark completion for ExerciseCardView.
@@ -20,6 +21,7 @@ struct SetLogRow: View {
     let setNumber: Int        // 1-indexed
     let targetReps: String    // e.g., "8-12" — displayed as hint
     let isCompleted: Bool
+    var isActive: Bool = false
     @Binding var repsLogged: Int
     let onComplete: () -> Void
 
@@ -27,7 +29,6 @@ struct SetLogRow: View {
 
     var body: some View {
         HStack(spacing: 0) {
-            // Completed indicator: 3pt accent bar on leading edge (UI-SPEC color contract)
             if isCompleted {
                 Rectangle()
                     .fill(Theme.accent)
@@ -35,16 +36,28 @@ struct SetLogRow: View {
             }
 
             HStack(spacing: 16) {
-                // "Set N" label — 48pt wide, subheadline, primary color
-                Text("Set \(setNumber)")
-                    .font(.subheadline)
-                    .frame(width: 48, alignment: .leading)
+                Text("\(setNumber)")
+                    .font(.subheadline.weight(.semibold))
+                    .frame(width: 36, height: 36)
+                    .background(
+                        isCompleted ? Theme.accent :
+                        isActive ? Theme.accent.opacity(0.15) :
+                        Theme.surfaceElevated
+                    )
+                    .foregroundStyle(
+                        isCompleted ? .black :
+                        isActive ? Theme.accent :
+                        .primary
+                    )
+                    .clipShape(Circle())
+                    .overlay(
+                        Circle().stroke(isActive && !isCompleted ? Theme.accent : .clear, lineWidth: 2)
+                    )
+                    .shadow(color: isCompleted ? Theme.accent.opacity(0.4) : .clear, radius: 6)
 
                 Spacer()
 
-                // Stepper: minus | rep count (tappable) | plus
                 HStack(spacing: 12) {
-                    // Minus button
                     Button {
                         repsLogged = max(0, repsLogged - 1)
                     } label: {
@@ -55,9 +68,7 @@ struct SetLogRow: View {
                     .contentShape(Rectangle())
                     .frame(minWidth: 44, minHeight: 44)
                     .accessibilityLabel("Decrease reps")
-                    .accessibilityHint("Current: \(repsLogged) reps")
 
-                    // Rep count — tappable to open number pad
                     Button {
                         showNumberPad = true
                     } label: {
@@ -72,7 +83,6 @@ struct SetLogRow: View {
                     .frame(minHeight: 44)
                     .accessibilityLabel("\(repsLogged) reps, tap to edit")
 
-                    // Plus button
                     Button {
                         repsLogged = min(999, repsLogged + 1)
                     } label: {
@@ -83,34 +93,39 @@ struct SetLogRow: View {
                     .contentShape(Rectangle())
                     .frame(minWidth: 44, minHeight: 44)
                     .accessibilityLabel("Increase reps")
-                    .accessibilityHint("Current: \(repsLogged) reps")
                 }
 
-                // Target reps hint — subheadline, secondary, right-aligned
-                Text("Target: \(targetReps)")
+                Text(isCompleted ? "Done" : "Target: \(targetReps)")
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(isCompleted ? Theme.successGreen : .secondary)
                     .frame(minWidth: 70, alignment: .trailing)
 
-                // Checkmark button
                 Button {
+                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                     onComplete()
                 } label: {
                     Image(systemName: isCompleted ? "checkmark.circle.fill" : "checkmark.circle")
                         .font(.system(size: 28))
-                        .foregroundStyle(isCompleted ? Theme.accent : .secondary)
+                        .foregroundStyle(isCompleted ? Theme.accent : isActive ? Theme.accent : .secondary)
+                        .shadow(color: isCompleted ? Theme.accent.opacity(0.3) : .clear, radius: 8)
                 }
                 .disabled(isCompleted)
                 .contentShape(Rectangle())
                 .frame(width: 44, height: 44)
                 .accessibilityLabel(isCompleted ? "Set \(setNumber) complete" : "Mark set \(setNumber) complete")
-                .accessibilityAddTraits(isCompleted ? .isSelected : [])
             }
             .padding(.horizontal, 16)
         }
         .frame(minHeight: 52)
-        .background(Theme.surface)
-        // T-04-09: number pad sheet validates 0–999 before committing
+        .background(
+            isActive && !isCompleted
+                ? Theme.accent.opacity(0.03)
+                : Theme.surface
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: isActive && !isCompleted ? 12 : 0)
+                .stroke(isActive && !isCompleted ? Theme.accent.opacity(0.3) : .clear, lineWidth: 1)
+        )
         .sheet(isPresented: $showNumberPad) {
             NumberPadSheet(reps: $repsLogged)
                 .presentationDetents([.height(300)])

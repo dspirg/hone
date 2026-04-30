@@ -129,6 +129,7 @@ struct ExerciseCardView: View {
                             setNumber: setIndex + 1,
                             targetReps: exercise.reps,
                             isCompleted: isCompleted,
+                            isActive: setIndex == completedSetCount && !isCompleted,
                             repsLogged: $repCounts[setIndex],
                             onComplete: {
                                 viewModel.completeSet(
