@@ -65,7 +65,8 @@ struct ExerciseCardView: View {
                 if let pid = muxPlaybackId, !pid.isEmpty {
                     VideoPlayerView(muxPlaybackId: pid, localAssetURL: localAssetURL)
                         .aspectRatio(2 / 1, contentMode: .fit)
-                } else if let urlStr = videoUrl, let url = URL(string: urlStr) {
+                } else if let urlStr = videoUrl,
+                          let url = URL(string: urlStr.replacingOccurrences(of: " ", with: "%20")) {
                     VideoPlayerView(muxPlaybackId: "", localAssetURL: url)
                         .aspectRatio(2 / 1, contentMode: .fit)
                 } else {

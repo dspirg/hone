@@ -12,7 +12,7 @@ struct VideoOverlayView: View {
             Color.black.ignoresSafeArea()
             if !muxPlaybackId.isEmpty {
                 VideoPlayerView(muxPlaybackId: muxPlaybackId, localAssetURL: nil)
-            } else if let urlStr = videoUrl, let url = URL(string: urlStr) {
+            } else if let urlStr = videoUrl, let url = URL(string: urlStr.replacingOccurrences(of: " ", with: "%20")) {
                 VideoPlayerView(muxPlaybackId: "", localAssetURL: url)
             }
             // Dismiss button so user can close the overlay from within the view

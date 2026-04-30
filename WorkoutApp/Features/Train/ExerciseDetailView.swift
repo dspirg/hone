@@ -39,7 +39,7 @@ struct ExerciseDetailView: View {
                             exerciseName: exercise.name
                         )
                     }
-                } else if let videoUrl = exercise.videoUrl, let url = URL(string: videoUrl) {
+                } else if let videoUrl = exercise.videoUrl, let url = URL(string: videoUrl.replacingOccurrences(of: " ", with: "%20")) {
                     VideoPlayerView(
                         muxPlaybackId: "",
                         localAssetURL: url
