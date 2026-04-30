@@ -25,103 +25,170 @@ struct SessionSummaryView: View {
     let onDone: (DifficultyRating) -> Void  // Dismisses SessionView with rating
 
     @State private var selectedRating: DifficultyRating? = nil
+    @State private var animatedExercises: Int = 0
+    @State private var animatedSets: Int = 0
+    @State private var animatedReps: Int = 0
+    @State private var appeared = false
+
+    private var celebrationHeading: String {
+        ["Crushed it!", "Beast mode!", "Nailed it!", "Strong session!", "Great work!"].randomElement()!
+    }
 
     var body: some View {
-        VStack(spacing: 0) {
-            Spacer().frame(height: 16)
+        ZStack {
+            VStack(spacing: 0) {
+                Spacer().frame(height: 16)
 
-            // Completion icon -- shrunk from 56pt to 36pt (D-10)
-            Image(systemName: "checkmark.circle.fill")
-                .font(.system(size: 36))
-                .foregroundStyle(Theme.accent)
-                .accessibilityLabel("Session complete")
+                // Glowing checkmark
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.system(size: 56))
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [Theme.accent, Color(red: 249/255, green: 115/255, blue: 22/255)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .shadow(color: Theme.accent.opacity(0.4), radius: 15)
+                    .accessibilityLabel("Session complete")
 
-            // Headings
-            VStack(spacing: 4) {
-                Text("Great work.")
-                    .font(.title2.weight(.semibold))  // was .title -- consolidated to Heading tier
+                VStack(spacing: 4) {
+                    Text(celebrationHeading)
+                        .font(.title2.weight(.bold))
 
-                Text("\(workoutDayLabel) complete")
-                    .font(.body)  // was .subheadline -- consolidated to Body tier
-                    .foregroundStyle(.secondary)
-            }
-            .padding(.top, 12)
-
-            Spacer().frame(height: 20)
-
-            // 4-stat row -- Duration merged into row (D-10)
-            HStack(spacing: 16) {
-                StatPillView(label: "Exercises", value: "\(totalExercises)")
-                StatPillView(label: "Sets", value: "\(totalSets)")
-                StatPillView(label: "Reps", value: "\(totalReps)")
-                StatPillView(label: "Duration", value: formattedDuration)
-            }
-            .padding(.horizontal, 16)
-
-            Spacer().frame(height: 16)
-
-            // PR badges -- capped height with internal scroll (D-12)
-            if !prs.isEmpty {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("New Record")
-                        .font(.title2.weight(.semibold))
-                        .padding(.horizontal, 16)
-                    ScrollView {
-                        PRBadgeView(prs: prs)
-                            .padding(.horizontal, 16)
-                    }
-                    .frame(maxHeight: 80)
+                    Text("\(workoutDayLabel) complete")
+                        .font(.body)
+                        .foregroundStyle(.secondary)
                 }
-            }
+                .padding(.top, 12)
 
-            Spacer(minLength: 12)
+                Spacer().frame(height: 20)
 
-            // Difficulty rating -- UNCHANGED per D-11 (44pt emoji, labels, spring animation)
-            VStack(spacing: 12) {
-                Text("How was that?")
-                    .font(.headline)
+                // Animated stat cards
+                HStack(spacing: 8) {
+                    statCard(label: "Exercises", value: "\(animatedExercises)")
+                    statCard(label: "Sets", value: "\(animatedSets)")
+                    statCard(label: "Reps", value: "\(animatedReps)")
+                    statCard(label: "Duration", value: formattedDuration)
+                }
+                .padding(.horizontal, 16)
 
-                HStack(spacing: 24) {
-                    ForEach(DifficultyRating.allCases, id: \.self) { rating in
-                        Button {
-                            selectedRating = rating
-                        } label: {
-                            VStack(spacing: 4) {
-                                Text(rating.emoji)
-                                    .font(.system(size: 44))
-                                    .opacity(selectedRating == nil || selectedRating == rating ? 1.0 : 0.3)
-                                    .scaleEffect(selectedRating == rating ? 1.15 : 1.0)
-                                    .animation(.spring(response: 0.3, dampingFraction: 0.7), value: selectedRating)
-                                Text(rating.label)
-                                    .font(.caption2)
-                                    .foregroundStyle(selectedRating == rating ? .primary : .secondary)
-                            }
+                Spacer().frame(height: 16)
+
+                // PR section with trophy styling
+                if !prs.isEmpty {
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack(spacing: 8) {
+                            Text("\u{1F3C6}")
+                                .font(.title3)
+                            Text("New Records")
+                                .font(.title3.weight(.semibold))
+                                .foregroundStyle(Theme.accent)
                         }
-                        .accessibilityLabel(rating.label)
+                        .padding(.horizontal, 16)
+
+                        ScrollView {
+                            PRBadgeView(prs: prs)
+                                .padding(.horizontal, 16)
+                        }
+                        .frame(maxHeight: 80)
+                    }
+                    .padding(16)
+                    .background(
+                        LinearGradient(
+                            colors: [Theme.accent.opacity(0.1), Theme.accent.opacity(0.03)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(Theme.accent.opacity(0.2), lineWidth: 1)
+                    )
+                    .padding(.horizontal, 16)
+                }
+
+                Spacer(minLength: 12)
+
+                // Difficulty rating — unchanged logic
+                VStack(spacing: 12) {
+                    Text("How was that?")
+                        .font(.headline)
+
+                    HStack(spacing: 24) {
+                        ForEach(DifficultyRating.allCases, id: \.self) { rating in
+                            Button {
+                                selectedRating = rating
+                            } label: {
+                                VStack(spacing: 4) {
+                                    Text(rating.emoji)
+                                        .font(.system(size: 44))
+                                        .opacity(selectedRating == nil || selectedRating == rating ? 1.0 : 0.3)
+                                        .scaleEffect(selectedRating == rating ? 1.15 : 1.0)
+                                        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: selectedRating)
+                                    Text(rating.label)
+                                        .font(.caption2)
+                                        .foregroundStyle(selectedRating == rating ? Theme.accent : .secondary)
+                                }
+                            }
+                            .accessibilityLabel(rating.label)
+                        }
                     }
                 }
-            }
 
-            Spacer(minLength: 16)
+                Spacer(minLength: 16)
 
-            // Done button -- unchanged behavior
-            Button("Done") {
-                if let rating = selectedRating {
-                    onDone(rating)
+                // Done button with gradient
+                Button {
+                    if let rating = selectedRating {
+                        onDone(rating)
+                    }
+                } label: {
+                    Text("Done")
+                        .font(.body.weight(.bold))
+                        .foregroundStyle(.black)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 52)
+                        .background(
+                            LinearGradient(
+                                colors: [Theme.accent, Color(red: 249/255, green: 115/255, blue: 22/255)],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .shadow(color: Theme.accent.opacity(0.3), radius: 10, y: 4)
                 }
-            }
-            .buttonStyle(.borderedProminent)
-            .frame(maxWidth: .infinity)
-            .frame(height: 52)
-            .padding(.horizontal, 16)
-            .disabled(selectedRating == nil)
-            .opacity(selectedRating == nil ? 0.5 : 1.0)
+                .disabled(selectedRating == nil)
+                .opacity(selectedRating == nil ? 0.5 : 1.0)
+                .padding(.horizontal, 16)
 
-            Spacer().frame(height: 32)
+                Spacer().frame(height: 32)
+            }
+
+            // Confetti overlay (PRs only)
+            if !prs.isEmpty && appeared {
+                ConfettiView()
+                    .ignoresSafeArea()
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .navigationBarBackButtonHidden(true)
         .background(Theme.background.ignoresSafeArea())
+        .onAppear {
+            appeared = true
+            UINotificationFeedbackGenerator().notificationOccurred(.success)
+            withAnimation(.easeOut(duration: 0.8)) {
+                animatedExercises = totalExercises
+            }
+            withAnimation(.easeOut(duration: 0.8).delay(0.1)) {
+                animatedSets = totalSets
+            }
+            withAnimation(.easeOut(duration: 0.8).delay(0.2)) {
+                animatedReps = totalReps
+            }
+        }
     }
 
     // MARK: - Duration Formatting
@@ -132,6 +199,23 @@ struct SessionSummaryView: View {
         let minutes = total / 60
         let seconds = total % 60
         return "\(minutes)m \(String(format: "%02d", seconds))s"
+    }
+
+    private func statCard(label: String, value: String) -> some View {
+        VStack(spacing: 4) {
+            Text(value)
+                .font(.title2.weight(.bold))
+                .foregroundStyle(label == "Exercises" ? Theme.accent : .primary)
+                .monospacedDigit()
+            Text(label.uppercased())
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+                .tracking(0.5)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 16)
+        .background(Theme.surface)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 }
 
