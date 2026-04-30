@@ -39,6 +39,7 @@
         <attribute name="formTips" optional="YES" attributeType="String"/>
         <attribute name="muxPlaybackId" optional="YES" attributeType="String"/>
         <attribute name="thumbnailURL" optional="YES" attributeType="String"/>
+        <attribute name="videoUrl" optional="YES" attributeType="String"/>
         <attribute name="localAssetURL" optional="YES" attributeType="String"/>
         <attribute name="lastViewedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="syncedAt" attributeType="Date" usesScalarValueType="NO"/>

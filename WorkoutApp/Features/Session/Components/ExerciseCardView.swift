@@ -27,6 +27,7 @@ struct ExerciseCardView: View {
     // Video metadata resolved by name lookup against CoreData exercise cache
     @State private var muxPlaybackId: String? = nil
     @State private var localAssetURL: URL? = nil
+    @State private var videoUrl: String? = nil
 
     // D-06: Tap-to-expand video overlay
     @State private var showVideoOverlay = false
@@ -63,6 +64,9 @@ struct ExerciseCardView: View {
             Group {
                 if let pid = muxPlaybackId, !pid.isEmpty {
                     VideoPlayerView(muxPlaybackId: pid, localAssetURL: localAssetURL)
+                        .aspectRatio(2 / 1, contentMode: .fit)
+                } else if let urlStr = videoUrl, let url = URL(string: urlStr) {
+                    VideoPlayerView(muxPlaybackId: "", localAssetURL: url)
                         .aspectRatio(2 / 1, contentMode: .fit)
                 } else {
                     ExercisePlaceholderView(exerciseName: exercise.exerciseName)
@@ -171,6 +175,7 @@ struct ExerciseCardView: View {
         let repo = ExerciseRepository.shared
         guard let entity = try? repo.fetchByName(exercise.exerciseName) else { return }
         muxPlaybackId = entity.value(forKey: "muxPlaybackId") as? String
+        videoUrl = entity.value(forKey: "videoUrl") as? String
         if let urlStr = entity.value(forKey: "localAssetURL") as? String {
             localAssetURL = URL(string: urlStr)
         }

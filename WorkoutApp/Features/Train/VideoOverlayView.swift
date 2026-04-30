@@ -4,6 +4,7 @@ import AVKit
 struct VideoOverlayView: View {
     let muxPlaybackId: String
     let exerciseName: String
+    var videoUrl: String? = nil
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -11,6 +12,8 @@ struct VideoOverlayView: View {
             Color.black.ignoresSafeArea()
             if !muxPlaybackId.isEmpty {
                 VideoPlayerView(muxPlaybackId: muxPlaybackId, localAssetURL: nil)
+            } else if let urlStr = videoUrl, let url = URL(string: urlStr) {
+                VideoPlayerView(muxPlaybackId: "", localAssetURL: url)
             }
             // Dismiss button so user can close the overlay from within the view
             Button {

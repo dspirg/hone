@@ -44,16 +44,17 @@ struct ExerciseLibraryRowView: View {
             }
             .frame(width: 52, height: 52)
             .onTapGesture {
-                guard exercise.muxPlaybackId != nil else { return }
+                guard exercise.hasVideo else { return }
                 showVideo = true
             }
-            .accessibilityLabel(exercise.muxPlaybackId != nil
+            .accessibilityLabel(exercise.hasVideo
                 ? "\(exercise.name) \u{2014} tap to play video"
                 : exercise.name)
             .fullScreenCover(isPresented: $showVideo) {
                 VideoOverlayView(
                     muxPlaybackId: exercise.muxPlaybackId ?? "",
-                    exerciseName: exercise.name
+                    exerciseName: exercise.name,
+                    videoUrl: exercise.videoUrl
                 )
             }
 

@@ -114,6 +114,7 @@ final class ExerciseRepository {
         entity.setValue(dto.formTips, forKey: "formTips")
         entity.setValue(dto.muxPlaybackId, forKey: "muxPlaybackId")
         entity.setValue(dto.thumbnailUrl, forKey: "thumbnailURL")
+        entity.setValue(dto.videoUrl, forKey: "videoUrl")
         entity.setValue(Date(), forKey: "syncedAt")
         // Preserve localAssetURL and lastViewedAt — do NOT overwrite with nil from server
     }
