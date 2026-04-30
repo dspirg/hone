@@ -1,3 +1,4 @@
+import CoreData
 import SwiftUI
 
 // MARK: - HomeExerciseRowView
@@ -12,19 +13,32 @@ import SwiftUI
 struct HomeExerciseRowView: View {
     let exercise: PlannedExercise
 
+    @State private var thumbnailURL: URL?
+
+    private var initialPlaceholder: some View {
+        Theme.surface
+            .overlay {
+                Text(String(exercise.exerciseName.prefix(1)).uppercased())
+                    .font(.body.weight(.semibold))
+                    .foregroundStyle(Color(UIColor.tertiaryLabel))
+            }
+    }
+
     var body: some View {
         HStack(spacing: 12) {
             // MARK: - Thumbnail
-            // TODO: Replace with real thumbnailURL from ExerciseRepository once wired up (D-04 full rebuild)
-            // PlannedExercise does not carry a thumbnailURL; always render dumbbell placeholder for now.
-            Theme.surface
-                .frame(width: 40, height: 40)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-                .overlay {
-                    Image(systemName: "dumbbell")
-                        .font(.body)
-                        .foregroundStyle(Color(UIColor.tertiaryLabel))
+            AsyncImage(url: thumbnailURL) { phase in
+                switch phase {
+                case .success(let image):
+                    image.resizable().aspectRatio(contentMode: .fill)
+                case .failure:
+                    initialPlaceholder
+                default:
+                    initialPlaceholder
                 }
+            }
+            .frame(width: 40, height: 40)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
 
             // MARK: - Exercise Info
             VStack(alignment: .leading, spacing: 2) {
@@ -38,6 +52,14 @@ struct HomeExerciseRowView: View {
             }
 
             Spacer()
+        }
+        .task {
+            let repo = ExerciseRepository.shared
+            if let entity = try? repo.fetchByName(exercise.exerciseName) ?? repo.fetchByNameContains(exercise.exerciseName),
+               let urlStr = entity.value(forKey: "thumbnailURL") as? String,
+               let url = URL(string: urlStr.replacingOccurrences(of: " ", with: "%20")) {
+                thumbnailURL = url
+            }
         }
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(exercise.exerciseName), \(setsLabel)")
