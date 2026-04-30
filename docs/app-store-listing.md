@@ -12,9 +12,7 @@ Reference document for App Store Connect. Copy-paste each field into the corresp
 
 **Primary Category:** Health & Fitness
 
-**Privacy Policy URL:** `https://<your-github-username>.github.io/workout/docs/privacy-policy.html`
-
-> Replace `<your-github-username>` with your actual GitHub username after enabling GitHub Pages on the repository (Settings > Pages > Source: main branch, /docs folder).
+**Privacy Policy URL:** `https://dspirg.github.io/hone/privacy-policy.html`
 
 ---
 
@@ -93,10 +91,10 @@ Your next workout is ready. Let's go.
 
 ## Submission Checklist
 
-- [ ] RevenueCat production key filled in Config/Prod.xcconfig
+- [x] RevenueCat production key filled in Config/Prod.xcconfig
 - [ ] Archive build succeeds with icon present
 - [ ] Build uploaded via Xcode Organizer
-- [ ] Privacy policy hosted on GitHub Pages
+- [x] Privacy policy hosted on GitHub Pages
 - [ ] 8 screenshots captured and uploaded (4 per size)
 - [ ] All listing fields filled in App Store Connect
 - [ ] Both subscription products attached to review submission
