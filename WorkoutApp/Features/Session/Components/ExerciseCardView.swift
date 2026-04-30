@@ -1,5 +1,13 @@
 import SwiftUI
 import CoreData
+import Supabase
+
+private struct VideoLookupResult: Decodable {
+    let videoUrl: String?
+    enum CodingKeys: String, CodingKey {
+        case videoUrl = "video_url"
+    }
+}
 
 // MARK: - ExerciseCardView
 // Full-screen exercise card: compact 2:1 video player (top) + scrollable metadata + set rows.
@@ -86,7 +94,8 @@ struct ExerciseCardView: View {
             .fullScreenCover(isPresented: $showVideoOverlay) {
                 VideoOverlayView(
                     muxPlaybackId: muxPlaybackId ?? "",
-                    exerciseName: exercise.exerciseName
+                    exerciseName: exercise.exerciseName,
+                    videoUrl: videoUrl
                 )
             }
 
@@ -174,20 +183,40 @@ struct ExerciseCardView: View {
     /// Silently no-ops on miss (ExercisePlaceholderView is the fallback).
     private func lookupVideo() async {
         let repo = ExerciseRepository.shared
-        let entity: NSManagedObject?
 
-        // Try exact match first, then fuzzy contains match
-        if let exact = try? repo.fetchByName(exercise.exerciseName) {
-            entity = exact
-        } else {
-            entity = try? repo.fetchByNameContains(exercise.exerciseName)
+        // Try exact match first, then fuzzy contains match from CoreData
+        if let entity = try? repo.fetchByName(exercise.exerciseName) {
+            muxPlaybackId = entity.value(forKey: "muxPlaybackId") as? String
+            videoUrl = entity.value(forKey: "videoUrl") as? String
+            if let urlStr = entity.value(forKey: "localAssetURL") as? String {
+                localAssetURL = URL(string: urlStr)
+            }
+            return
         }
 
-        guard let entity else { return }
-        muxPlaybackId = entity.value(forKey: "muxPlaybackId") as? String
-        videoUrl = entity.value(forKey: "videoUrl") as? String
-        if let urlStr = entity.value(forKey: "localAssetURL") as? String {
-            localAssetURL = URL(string: urlStr)
+        if let entity = try? repo.fetchByNameContains(exercise.exerciseName) {
+            muxPlaybackId = entity.value(forKey: "muxPlaybackId") as? String
+            videoUrl = entity.value(forKey: "videoUrl") as? String
+            if let urlStr = entity.value(forKey: "localAssetURL") as? String {
+                localAssetURL = URL(string: urlStr)
+            }
+            return
+        }
+
+        // Last resort: query Supabase directly for a video URL
+        do {
+            let results: [VideoLookupResult] = try await supabase
+                .from("exercises")
+                .select("video_url")
+                .ilike("name", pattern: "%\(exercise.exerciseName)%")
+                .limit(1)
+                .execute()
+                .value
+            if let url = results.first?.videoUrl {
+                videoUrl = url
+            }
+        } catch {
+            // Silent failure — placeholder is the fallback
         }
     }
 
