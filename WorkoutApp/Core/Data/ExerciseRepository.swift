@@ -89,6 +89,16 @@ final class ExerciseRepository {
         return try context.fetch(request).first
     }
 
+    /// Fuzzy lookup: finds the first exercise whose name contains the search term (case-insensitive).
+    /// Used as fallback when AI-generated plan names don't exactly match the video library.
+    func fetchByNameContains(_ name: String) throws -> NSManagedObject? {
+        let request = NSFetchRequest<NSManagedObject>(entityName: "Exercise")
+        request.predicate = NSPredicate(format: "name CONTAINS[cd] %@", name)
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        request.fetchLimit = 1
+        return try context.fetch(request).first
+    }
+
     // MARK: - Private Helpers
 
     /// Upserts a DTO into the CoreData Exercise entity.

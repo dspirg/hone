@@ -174,7 +174,16 @@ struct ExerciseCardView: View {
     /// Silently no-ops on miss (ExercisePlaceholderView is the fallback).
     private func lookupVideo() async {
         let repo = ExerciseRepository.shared
-        guard let entity = try? repo.fetchByName(exercise.exerciseName) else { return }
+        let entity: NSManagedObject?
+
+        // Try exact match first, then fuzzy contains match
+        if let exact = try? repo.fetchByName(exercise.exerciseName) {
+            entity = exact
+        } else {
+            entity = try? repo.fetchByNameContains(exercise.exerciseName)
+        }
+
+        guard let entity else { return }
         muxPlaybackId = entity.value(forKey: "muxPlaybackId") as? String
         videoUrl = entity.value(forKey: "videoUrl") as? String
         if let urlStr = entity.value(forKey: "localAssetURL") as? String {
