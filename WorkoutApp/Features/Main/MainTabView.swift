@@ -1,5 +1,6 @@
 import SwiftUI
 import CoreData
+import UIKit
 
 // MARK: - MainTabView
 // D-04: 5-tab shell — Home, Train, Coach, Progress, Profile
@@ -18,6 +19,26 @@ struct MainTabView: View {
     @Environment(\.managedObjectContext) var context
 
     @State private var adaptationService = AdaptationService()
+
+    init() {
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = UIColor(white: 0.086, alpha: 0.85)
+
+        let activeAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.systemFont(ofSize: 10, weight: .semibold)
+        ]
+        appearance.stackedLayoutAppearance.selected.titleTextAttributes = activeAttributes
+
+        let inactiveAttributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: UIColor(white: 0.4, alpha: 1.0)
+        ]
+        appearance.stackedLayoutAppearance.normal.iconColor = UIColor(white: 0.4, alpha: 1.0)
+        appearance.stackedLayoutAppearance.normal.titleTextAttributes = inactiveAttributes
+
+        UITabBar.appearance().standardAppearance = appearance
+        UITabBar.appearance().scrollEdgeAppearance = appearance
+    }
 
     var body: some View {
         // D-14: selectedTab binding enables programmatic tab switching
