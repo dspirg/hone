@@ -13,7 +13,9 @@ struct EquipmentCardView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Spacer()
+            OnboardingHeroIcon(symbol: "🏋️")
+
+            Spacer().frame(height: 20)
 
             Text("What equipment do you have access to?")
                 .font(.title)
@@ -23,13 +25,9 @@ struct EquipmentCardView: View {
                 .lineLimit(2)
                 .padding(.horizontal, 16)
 
-            Spacer().frame(height: 8) // sm gap
-
-            Text("Select all that apply.")
-                .font(.subheadline)
+            Text("Select all that apply")
+                .font(.body)
                 .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 16)
 
             Spacer().frame(height: 24) // lg gap
 

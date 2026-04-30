@@ -10,7 +10,9 @@ struct FitnessLevelCardView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Spacer()
+            OnboardingHeroIcon(symbol: "💪")
+
+            Spacer().frame(height: 20)
 
             Text("What's your fitness level?")
                 .font(.title)
@@ -19,6 +21,10 @@ struct FitnessLevelCardView: View {
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
                 .padding(.horizontal, 16)
+
+            Text("We'll match your starting point")
+                .font(.body)
+                .foregroundStyle(.secondary)
 
             Spacer().frame(height: 24) // lg gap
 

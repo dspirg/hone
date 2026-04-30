@@ -26,6 +26,7 @@
 		B003000100000008 /* DaysPerWeekCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003000000000008 /* DaysPerWeekCardView.swift */; };
 		B003000100000009 /* EquipmentCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003000000000009 /* EquipmentCardView.swift */; };
 		B00300010000000A /* InjuriesCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00300000000000A /* InjuriesCardView.swift */; };
+		B00300010000000B /* OnboardingHeroIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00300000000000B /* OnboardingHeroIcon.swift */; };
 		B003001100000001 /* OnboardingViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003001000000001 /* OnboardingViewModelTests.swift */; };
 		B003A00100000001 /* WorkoutPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003A00000000001 /* WorkoutPlan.swift */; };
 		B003A00100000002 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003A00000000002 /* UserProfile.swift */; };
@@ -188,6 +189,7 @@
 		B003000000000008 /* DaysPerWeekCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysPerWeekCardView.swift; sourceTree = "<group>"; };
 		B003000000000009 /* EquipmentCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EquipmentCardView.swift; sourceTree = "<group>"; };
 		B00300000000000A /* InjuriesCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjuriesCardView.swift; sourceTree = "<group>"; };
+		B00300000000000B /* OnboardingHeroIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHeroIcon.swift; sourceTree = "<group>"; };
 		B003001000000001 /* OnboardingViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModelTests.swift; sourceTree = "<group>"; };
 		B003A00000000001 /* WorkoutPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutPlan.swift; sourceTree = "<group>"; };
 		B003A00000000002 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
@@ -459,6 +461,7 @@
 				B003000000000001 /* OnboardingViewModel.swift */,
 				B003000000000005 /* OnboardingView.swift */,
 				B003000030000003 /* Cards */,
+				B003000030000004 /* Components */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -469,6 +472,14 @@
 				B003000000000002 /* ChipView.swift */,
 				B003000000000003 /* ChipGridView.swift */,
 				B003000000000004 /* OnboardingProgressView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		B003000030000004 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				B00300000000000B /* OnboardingHeroIcon.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -959,6 +970,7 @@
 				B003000100000002 /* ChipView.swift in Sources */,
 				B003000100000003 /* ChipGridView.swift in Sources */,
 				B003000100000004 /* OnboardingProgressView.swift in Sources */,
+				B00300010000000B /* OnboardingHeroIcon.swift in Sources */,
 				B003000100000005 /* OnboardingView.swift in Sources */,
 				B003000100000006 /* GoalCardView.swift in Sources */,
 				B003000100000007 /* FitnessLevelCardView.swift in Sources */,

@@ -24,7 +24,9 @@ struct InjuriesCardView: View {
             }
             .padding(.trailing, 16)
 
-            Spacer()
+            OnboardingHeroIcon(symbol: "🩹")
+
+            Spacer().frame(height: 20)
 
             Text("Any areas to avoid?")
                 .font(.title)
@@ -33,6 +35,10 @@ struct InjuriesCardView: View {
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
                 .padding(.horizontal, 16)
+
+            Text("We'll work around them")
+                .font(.body)
+                .foregroundStyle(.secondary)
 
             Spacer().frame(height: 8) // sm gap
 

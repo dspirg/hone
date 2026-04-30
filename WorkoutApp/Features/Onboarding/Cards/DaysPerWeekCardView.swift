@@ -10,7 +10,9 @@ struct DaysPerWeekCardView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Spacer()
+            OnboardingHeroIcon(symbol: "📅")
+
+            Spacer().frame(height: 20)
 
             Text("How many days per week can you train?")
                 .font(.title)
@@ -19,6 +21,10 @@ struct DaysPerWeekCardView: View {
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
                 .padding(.horizontal, 16)
+
+            Text("Pick what fits your schedule")
+                .font(.body)
+                .foregroundStyle(.secondary)
 
             Spacer().frame(height: 24) // lg gap
 

@@ -10,9 +10,11 @@ struct GoalCardView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Spacer()
+            OnboardingHeroIcon(symbol: "🎯")
 
-            Text("What's your main goal?")
+            Spacer().frame(height: 20)
+
+            Text("What's your goal?")
                 .font(.title)
                 .fontWeight(.semibold)
                 .foregroundStyle(.primary)
@@ -20,7 +22,11 @@ struct GoalCardView: View {
                 .lineLimit(2)
                 .padding(.horizontal, 16)
 
-            Spacer().frame(height: 24) // lg gap
+            Text("This shapes your entire program")
+                .font(.body)
+                .foregroundStyle(.secondary)
+
+            Spacer().frame(height: 24)
 
             ChipGridView(
                 options: options,
