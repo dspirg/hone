@@ -233,6 +233,14 @@ final class SessionViewModel {
 
     /// Advances to the next exercise; clears timer state.
     /// No-op if already on the last exercise.
+    func goToExercise(_ index: Int) {
+        guard index >= 0, index < exercises.count else { return }
+        isRestTimerActive = false
+        timerEndDate = nil
+        cancelRestNotification()
+        currentExerciseIndex = index
+    }
+
     func advanceExercise() {
         guard currentExerciseIndex < exercises.count - 1 else { return }
         isRestTimerActive = false

@@ -112,11 +112,34 @@ struct SessionView: View {
                 Theme.background.ignoresSafeArea()
 
                 VStack(spacing: 0) {
-                    // Progress bar — "Exercise N of M" + segmented capsules
-                    SessionProgressBar(
-                        current: vm.currentExerciseIndex + 1,
-                        total: vm.exercises.count
-                    )
+                    // Exercise navigation + progress bar
+                    HStack(spacing: 12) {
+                        Button {
+                            vm.goToExercise(vm.currentExerciseIndex - 1)
+                        } label: {
+                            Image(systemName: "chevron.left")
+                                .font(.body.weight(.semibold))
+                                .foregroundStyle(vm.currentExerciseIndex > 0 ? .primary : .quaternary)
+                                .frame(width: 36, height: 36)
+                        }
+                        .disabled(vm.currentExerciseIndex == 0)
+
+                        SessionProgressBar(
+                            current: vm.currentExerciseIndex + 1,
+                            total: vm.exercises.count
+                        )
+
+                        Button {
+                            vm.goToExercise(vm.currentExerciseIndex + 1)
+                        } label: {
+                            Image(systemName: "chevron.right")
+                                .font(.body.weight(.semibold))
+                                .foregroundStyle(vm.currentExerciseIndex < vm.exercises.count - 1 ? .primary : .quaternary)
+                                .frame(width: 36, height: 36)
+                        }
+                        .disabled(vm.currentExerciseIndex >= vm.exercises.count - 1)
+                    }
+                    .padding(.horizontal, 4)
                     .padding(.top, 8)
                     .padding(.bottom, 8)
 
