@@ -58,6 +58,7 @@
 		B00F000100000008 /* TrainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00F000000000008 /* TrainView.swift */; };
 		B00F000100000009 /* CoachView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00F000000000009 /* CoachView.swift */; };
 		B00F00010000000A /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00F00000000000A /* ProfileView.swift */; };
+		B00F00010000000B /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00F00000000000B /* EditProfileView.swift */; };
 		B002000100000001 /* ExerciseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B002000000000001 /* ExerciseDTO.swift */; };
 		B002000100000002 /* ExerciseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B002000000000002 /* ExerciseModel.swift */; };
 		B002000100000003 /* ExerciseRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B002000000000003 /* ExerciseRepository.swift */; };
@@ -221,6 +222,7 @@
 		B00F000000000008 /* TrainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainView.swift; sourceTree = "<group>"; };
 		B00F000000000009 /* CoachView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachView.swift; sourceTree = "<group>"; };
 		B00F00000000000A /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		B00F00000000000B /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		B002000000000001 /* ExerciseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDTO.swift; sourceTree = "<group>"; };
 		B002000000000002 /* ExerciseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseModel.swift; sourceTree = "<group>"; };
 		B002000000000003 /* ExerciseRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseRepository.swift; sourceTree = "<group>"; };
@@ -608,6 +610,7 @@
 				B005000030000001 /* Coach */,
 				B00600A030000001 /* Progress */,
 				B009000030000001 /* Adaptation */,
+				B00F000030000006 /* Profile */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -620,6 +623,14 @@
 				B009000030000002 /* Models */,
 			);
 			path = Adaptation;
+			sourceTree = "<group>";
+		};
+		B00F000030000006 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				B00F00000000000B /* EditProfileView.swift */,
+			);
+			path = Profile;
 			sourceTree = "<group>";
 		};
 		B009000030000002 /* Models */ = {
@@ -966,6 +977,7 @@
 				B00F000100000008 /* TrainView.swift in Sources */,
 				B00F000100000009 /* CoachView.swift in Sources */,
 				B00F00010000000A /* ProfileView.swift in Sources */,
+				B00F00010000000B /* EditProfileView.swift in Sources */,
 				B003000100000001 /* OnboardingViewModel.swift in Sources */,
 				B003000100000002 /* ChipView.swift in Sources */,
 				B003000100000003 /* ChipGridView.swift in Sources */,

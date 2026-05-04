@@ -1,4 +1,5 @@
 import SwiftUI
+import Supabase
 import RevenueCatUI
 
 // MARK: - ProfileView
@@ -17,6 +18,8 @@ import RevenueCatUI
 struct ProfileView: View {
     @Environment(AppState.self) var appState
     @State private var showCustomerCenter = false
+    @State private var currentProfile = UserProfile(goal: "", fitnessLevel: "", daysPerWeek: 3, equipment: [], injuries: "")
+    @State private var showRegenConfirm = false
 
     var body: some View {
         NavigationStack {
@@ -29,6 +32,30 @@ struct ProfileView: View {
                             Spacer()
                             Text(email)
                                 .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+
+                // Section: Fitness Profile
+                Section("Fitness Profile") {
+                    NavigationLink {
+                        EditProfileView(profile: currentProfile)
+                    } label: {
+                        HStack {
+                            Text("Edit Profile")
+                            Spacer()
+                            Text(currentProfile.goal.isEmpty ? "Not set" : currentProfile.goal)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+
+                    Button {
+                        showRegenConfirm = true
+                    } label: {
+                        HStack {
+                            Image(systemName: "sparkles")
+                                .foregroundStyle(Theme.accent)
+                            Text("Regenerate Plan")
                         }
                     }
                 }
@@ -73,6 +100,52 @@ struct ProfileView: View {
                 // This supplements the custom retention flow (D-09 through D-12)
                 CustomerCenterView()
             }
+            .task {
+                if let profile = try? await loadProfile() {
+                    currentProfile = profile
+                }
+            }
+            .alert("Regenerate your workout plan?", isPresented: $showRegenConfirm) {
+                Button("Regenerate") {
+                    let service = PlanGenerationService()
+                    service.generatePlan(profile: currentProfile)
+                }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("Hone will create a new plan based on your current profile.")
+            }
         }
+    }
+
+    private func loadProfile() async throws -> UserProfile {
+        let userId = try await supabase.auth.session.user.id
+        struct ProfileRow: Decodable {
+            let goal: String?
+            let fitnessLevel: String?
+            let daysPerWeek: Int?
+            let equipment: [String]?
+            let injuries: String?
+            enum CodingKeys: String, CodingKey {
+                case goal
+                case fitnessLevel = "fitness_level"
+                case daysPerWeek = "days_per_week"
+                case equipment, injuries
+            }
+        }
+        let rows: [ProfileRow] = try await supabase
+            .from("profiles")
+            .select("goal, fitness_level, days_per_week, equipment, injuries")
+            .eq("id", value: userId.uuidString)
+            .limit(1)
+            .execute()
+            .value
+        let row = rows.first
+        return UserProfile(
+            goal: row?.goal ?? "",
+            fitnessLevel: row?.fitnessLevel ?? "",
+            daysPerWeek: row?.daysPerWeek ?? 3,
+            equipment: row?.equipment ?? [],
+            injuries: row?.injuries ?? ""
+        )
     }
 }
