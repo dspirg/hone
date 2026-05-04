@@ -33,6 +33,16 @@ final class AppState {
     // Dependency-injected RevenueCat service. Replaced with MockRevenueCatService in tests.
     var revenueCatService: RevenueCatServiceProtocol = RevenueCatService()
 
+    // MARK: - Session State (shared across Home + Train tabs)
+    /// Active session ViewModel — survives tab switching and session minimize/resume
+    var activeSessionVM: SessionViewModel? = nil
+    /// Workout day for the active/pending session
+    var activeSessionDay: WorkoutDay? = nil
+    /// Plan ID for the active/pending session
+    var activeSessionPlanId: String = ""
+    /// Controls fullScreenCover presentation of SessionView
+    var showSession: Bool = false
+
     // MARK: - Auth State Listener
     // Subscribes to Supabase authStateChanges AsyncStream
     // Drives root navigation: auth screen vs. main tab bar

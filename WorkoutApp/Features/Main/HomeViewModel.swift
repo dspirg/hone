@@ -31,9 +31,7 @@ final class HomeViewModel {
     var adaptationBanner: String? = nil
     var isLoading: Bool = true
     var loadError: String? = nil
-    var showSession: Bool = false
-    /// Persists across session minimize/resume so progress isn't lost
-    var activeSessionVM: SessionViewModel? = nil
+    // Session state moved to AppState for cross-tab access
 
     // MARK: - Load
 

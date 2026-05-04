@@ -44,9 +44,9 @@ struct HomeView: View {
                     }
 
                     // RESUME WORKOUT banner (visible when session was minimized)
-                    if viewModel.activeSessionVM != nil && !viewModel.showSession {
+                    if appState.activeSessionVM != nil && !appState.showSession {
                         Button {
-                            viewModel.showSession = true
+                            appState.showSession = true
                         } label: {
                             HStack(spacing: 12) {
                                 Image(systemName: "flame.fill")
@@ -127,7 +127,7 @@ struct HomeView: View {
                 await viewModel.load(appState: appState, adaptationService: adaptationService, context: context)
             }
             // D-14: Reload stats after session dismiss
-            .onChange(of: viewModel.showSession) { _, isShowing in
+            .onChange(of: appState.showSession) { _, isShowing in
                 if !isShowing {
                     Task {
                         await viewModel.load(appState: appState, adaptationService: adaptationService, context: context)
@@ -137,18 +137,19 @@ struct HomeView: View {
             .fullScreenCover(isPresented: $showPaywall) {
                 PaywallView()
             }
-            // D-13, D-16: Session launch via fullScreenCover
-            .fullScreenCover(isPresented: $viewModel.showSession) {
-                if let day = viewModel.todayWorkoutDay {
+            // Session launch via fullScreenCover (shared via AppState)
+            .fullScreenCover(isPresented: Bindable(appState).showSession) {
+                if let day = appState.activeSessionDay {
                     SessionView(
                         workoutDay: day,
-                        planId: viewModel.activePlanId,
-                        existingViewModel: viewModel.activeSessionVM,
+                        planId: appState.activeSessionPlanId,
+                        existingViewModel: appState.activeSessionVM,
                         onEndSession: {
-                            viewModel.activeSessionVM = nil
+                            appState.activeSessionVM = nil
+                            appState.activeSessionDay = nil
                         },
                         onSessionCreated: { vm in
-                            viewModel.activeSessionVM = vm
+                            appState.activeSessionVM = vm
                         }
                     )
                     .environment(\.managedObjectContext, context)
@@ -224,7 +225,9 @@ struct HomeView: View {
 
             // Start Workout CTA (D-13)
             Button {
-                viewModel.showSession = true
+                appState.activeSessionDay = day
+                appState.activeSessionPlanId = viewModel.activePlanId
+                appState.showSession = true
             } label: {
                 Text("Start Workout")
                     .font(.body.weight(.bold))

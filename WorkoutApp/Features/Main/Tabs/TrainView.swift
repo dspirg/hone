@@ -27,8 +27,44 @@ struct TrainView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 16) {
+                    // Resume banner (shared with HomeView via AppState)
+                    if appState.activeSessionVM != nil && !appState.showSession {
+                        Button {
+                            appState.showSession = true
+                        } label: {
+                            HStack(spacing: 12) {
+                                Image(systemName: "flame.fill")
+                                    .foregroundStyle(Theme.accent)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("Workout in progress")
+                                        .font(.body.weight(.semibold))
+                                        .foregroundStyle(.primary)
+                                    Text("Tap to resume")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .foregroundStyle(.secondary)
+                            }
+                            .padding(16)
+                            .background(
+                                LinearGradient(
+                                    colors: [Theme.accent.opacity(0.15), Theme.accent.opacity(0.05)],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            )
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(Theme.accent.opacity(0.3), lineWidth: 1)
+                            )
+                        }
+                        .padding(.horizontal, 16)
+                    }
+
                     // D-05: Show adjustment summary when plan was recently adapted.
-                    // Fades in after adaptation — builds trust by explaining changes.
                     if let summary = adaptationService.lastAdjustmentSummary {
                         AdaptationSummaryBanner(summary: summary)
                             .padding(.horizontal, 16)
@@ -105,6 +141,25 @@ struct TrainView: View {
             .task {
                 await loadActivePlan()
             }
+            .fullScreenCover(isPresented: Bindable(appState).showSession) {
+                if let day = appState.activeSessionDay {
+                    SessionView(
+                        workoutDay: day,
+                        planId: appState.activeSessionPlanId,
+                        existingViewModel: appState.activeSessionVM,
+                        onEndSession: {
+                            appState.activeSessionVM = nil
+                            appState.activeSessionDay = nil
+                        },
+                        onSessionCreated: { vm in
+                            appState.activeSessionVM = vm
+                        }
+                    )
+                    .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
+                    .environment(adaptationService)
+                    .environment(appState)
+                }
+            }
         }
     }
 
@@ -143,6 +198,7 @@ struct TrainView: View {
 private struct WorkoutDayCard: View {
     let day: WorkoutDay
     let planId: String
+    @Environment(AppState.self) var appState
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -157,8 +213,10 @@ private struct WorkoutDayCard: View {
                     .foregroundStyle(.secondary)
             }
 
-            NavigationLink {
-                SessionView(workoutDay: day, planId: planId)
+            Button {
+                appState.activeSessionDay = day
+                appState.activeSessionPlanId = planId
+                appState.showSession = true
             } label: {
                 Text("Start Workout")
                     .font(.subheadline.weight(.semibold))
