@@ -61,14 +61,16 @@ final class SessionViewModel {
         repository: SessionRepository = SessionRepository()
     ) {
         self.workoutDay = workoutDay
+        self.exercises = workoutDay.exercises
         self.planId = planId
         self.userId = userId
         self.repository = repository
     }
 
-    // MARK: - Computed
+    // MARK: - Mutable exercise list (supports substitution)
+    private(set) var exercises: [PlannedExercise]
 
-    var exercises: [PlannedExercise] { workoutDay.exercises }
+    // MARK: - Computed
 
     var currentExercise: PlannedExercise? {
         guard currentExerciseIndex < exercises.count else { return nil }
@@ -233,6 +235,14 @@ final class SessionViewModel {
 
     /// Advances to the next exercise; clears timer state.
     /// No-op if already on the last exercise.
+    /// Substitutes the exercise at the given index with a new one
+    func substituteExercise(at index: Int, with newExercise: PlannedExercise) {
+        guard index >= 0, index < exercises.count else { return }
+        exercises[index] = newExercise
+        // Clear any completed sets for this exercise since it changed
+        completedSets[index] = nil
+    }
+
     func goToExercise(_ index: Int) {
         guard index >= 0, index < exercises.count else { return }
         isRestTimerActive = false

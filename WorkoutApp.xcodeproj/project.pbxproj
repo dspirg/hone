@@ -145,6 +145,7 @@
 		B011000100000005 /* AdaptationBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B011000000000005 /* AdaptationBannerView.swift */; };
 		B011000100000006 /* ContextCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B011000000000006 /* ContextCardView.swift */; };
 		B011001100000001 /* HomeViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B011001000000001 /* HomeViewModelTests.swift */; };
+		B0SWAP00002 /* ExerciseSwapSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0SWAP00001 /* ExerciseSwapSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -306,6 +307,7 @@
 		B011000000000005 /* AdaptationBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptationBannerView.swift; sourceTree = "<group>"; };
 		B011000000000006 /* ContextCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCardView.swift; sourceTree = "<group>"; };
 		B011001000000001 /* HomeViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModelTests.swift; sourceTree = "<group>"; };
+		B0SWAP00001 /* ExerciseSwapSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseSwapSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -534,6 +536,7 @@
 				B004003000000002 /* SessionProgressBar.swift */,
 				B004003000000003 /* SetLogRow.swift */,
 				B004003000000004 /* ExerciseCardView.swift */,
+				B0SWAP00001 /* ExerciseSwapSheet.swift */,
 				B004003000000006 /* SessionSummaryView.swift */,
 				B004003000000007 /* ConfettiView.swift */,
 				B011000000000006 /* ContextCardView.swift */,
@@ -1020,6 +1023,7 @@
 				B004003100000002 /* SessionProgressBar.swift in Sources */,
 				B004003100000003 /* SetLogRow.swift in Sources */,
 				B004003100000004 /* ExerciseCardView.swift in Sources */,
+				B0SWAP00002 /* ExerciseSwapSheet.swift in Sources */,
 				B004003100000006 /* SessionSummaryView.swift in Sources */,
 				B004003100000007 /* ConfettiView.swift in Sources */,
 				B004003100000005 /* SessionView.swift in Sources */,

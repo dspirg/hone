@@ -39,6 +39,7 @@ struct ExerciseCardView: View {
 
     // D-06: Tap-to-expand video overlay
     @State private var showVideoOverlay = false
+    @State private var showSwapSheet = false
 
     // D-07: Previous/Best context cards
     @State private var previousReps: Int? = nil
@@ -102,8 +103,7 @@ struct ExerciseCardView: View {
             // Scrollable area: metadata + set rows + context cards
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
-                    // Exercise info row (D-06 updated layout)
-                    // Note: PlannedExercise has no muscleGroup/equipment fields — show sets×reps as subtitle
+                    // Exercise info row
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(exercise.exerciseName)
@@ -113,9 +113,28 @@ struct ExerciseCardView: View {
                                 .foregroundStyle(Theme.accent)
                         }
                         Spacer()
-                        Text("Set \(completedSetCount + 1) of \(exercise.sets)")
-                            .font(.body)
-                            .foregroundStyle(.secondary)
+                        VStack(alignment: .trailing, spacing: 6) {
+                            Text("Set \(completedSetCount + 1) of \(exercise.sets)")
+                                .font(.body)
+                                .foregroundStyle(.secondary)
+
+                            // Swap button
+                            Button {
+                                showSwapSheet = true
+                            } label: {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "arrow.triangle.swap")
+                                        .font(.caption2)
+                                    Text("Swap")
+                                        .font(.caption.weight(.medium))
+                                }
+                                .foregroundStyle(Theme.accent)
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 4)
+                                .background(Theme.accent.opacity(0.1))
+                                .clipShape(Capsule())
+                            }
+                        }
                     }
                     .padding(.horizontal, 16)
                     .padding(.top, 12)
@@ -168,6 +187,14 @@ struct ExerciseCardView: View {
         .task(id: exerciseIndex) {
             await lookupVideo()
             await loadContextData()
+        }
+        .sheet(isPresented: $showSwapSheet) {
+            ExerciseSwapSheet(currentExercise: exercise) { replacement in
+                viewModel.substituteExercise(at: exerciseIndex, with: replacement)
+                // Re-trigger video lookup for the new exercise
+                Task { await lookupVideo() }
+            }
+            .presentationDetents([.large])
         }
     }
 
