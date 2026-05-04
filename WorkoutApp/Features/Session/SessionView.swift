@@ -40,27 +40,32 @@ struct SessionView: View {
     @State private var showAbandonAlert = false
 
     var body: some View {
-        Group {
+        ZStack(alignment: .topLeading) {
             if let vm = viewModel {
                 sessionContent(vm: vm)
             } else {
+                Theme.background.ignoresSafeArea()
                 ProgressView()
                     .task { await setupSession() }
             }
-        }
-        // Back button hidden — abandonment requires confirmation alert (T-04-11)
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
+
+            // X button overlay — always visible during active session
+            if viewModel != nil && !(viewModel?.isSessionComplete ?? true) {
                 Button {
                     showAbandonAlert = true
                 } label: {
                     Image(systemName: "xmark")
-                        .accessibilityLabel("End session")
+                        .font(.body.weight(.semibold))
+                        .foregroundStyle(.white)
+                        .frame(width: 36, height: 36)
+                        .background(Theme.surfaceElevated)
+                        .clipShape(Circle())
                 }
+                .padding(.leading, 16)
+                .padding(.top, 8)
+                .accessibilityLabel("Session options")
             }
         }
-        // T-04-11: confirmation required before dismiss
         .alert("What would you like to do?", isPresented: $showAbandonAlert) {
             Button("Minimize") { dismiss() }
             Button("End Session", role: .destructive) {
