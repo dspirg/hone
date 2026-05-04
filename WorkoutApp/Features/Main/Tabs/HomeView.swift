@@ -106,6 +106,30 @@ struct HomeView: View {
                         .padding(.top, Theme.Spacing.lg)
                     quickStatsRow
 
+                    // BROWSE EXERCISES shortcut
+                    NavigationLink(destination: ExerciseLibraryView()) {
+                        HStack(spacing: 12) {
+                            Image(systemName: "figure.strengthtraining.traditional")
+                                .foregroundStyle(Theme.accent)
+                            Text("Browse Exercises")
+                                .font(.body.weight(.medium))
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        .padding(16)
+                        .background(Theme.surface)
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(Theme.borderSubtle, lineWidth: 1)
+                        )
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.top, Theme.Spacing.lg)
+
                     Spacer().frame(height: Theme.Spacing.xl)  // 32pt bottom padding
                 }
             }
