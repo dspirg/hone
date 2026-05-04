@@ -103,6 +103,7 @@ function buildAdaptationSystemPrompt(
   performanceTrends: PerformanceTrend[],
   missedSessions: string[],
   weeksOnPlan: number,
+  exerciseNameList?: string,
 ): string {
   const compactPlan = stripRationale(currentPlan);
 
@@ -155,7 +156,11 @@ ADAPTATION RULES:
 
 In adjustment_summary: write 1-2 sentences in coach voice (second person, no jargon) explaining what changed and why. This text is shown directly to the user. Example: "Pulled back the pressing volume slightly — you rated the last two sessions as too hard. Everything else stays the same."
 
-SAFETY: You are not a medical professional. Do not prescribe exercises that could aggravate reported injuries or limitations. Do not frame this as medical advice.`;
+SAFETY: You are not a medical professional. Do not prescribe exercises that could aggravate reported injuries or limitations. Do not frame this as medical advice.` + (exerciseNameList ? `
+
+IMPORTANT: When swapping exercises, you MUST only use exercise names from this list. Use the exact name as written.
+
+Available exercises: ${exerciseNameList}` : "");
 }
 
 // ─── OpenAI call helper (supports retry) ─────────────────────────────────────
@@ -385,6 +390,21 @@ serve(async (req: Request): Promise<Response> => {
   // Estimate weeks on current plan (approximate from session_log history)
   const weeksOnPlan = Math.max(1, Math.ceil(sessionLogs.length / 3));
 
+  // Fetch exercise names so AI only uses exercises with videos
+  let exerciseNameList: string | undefined;
+  try {
+    const { data: exercises } = await supabase
+      .from("exercises")
+      .select("name")
+      .not("video_url", "is", null)
+      .order("name");
+    if (exercises && exercises.length > 0) {
+      exerciseNameList = exercises.map((e: { name: string }) => e.name).join(", ");
+    }
+  } catch {
+    // Continue without constraint
+  }
+
   // ── Build system prompt ──────────────────────────────────────────────────────
   const systemPrompt = buildAdaptationSystemPrompt(
     profile,
@@ -393,6 +413,7 @@ serve(async (req: Request): Promise<Response> => {
     performanceTrends,
     missedSessions,
     weeksOnPlan,
+    exerciseNameList,
   );
 
   // AI-SPEC Section 4: token budget check

@@ -354,6 +354,21 @@ serve(async (req: Request): Promise<Response> => {
   // Weeks on current plan (approximate from session history)
   const weeksOnPlan = Math.max(1, Math.ceil(sessionLogs.length / 3));
 
+  // Fetch exercise names so AI only uses exercises with videos
+  let exerciseNameList = "";
+  try {
+    const { data: exercises } = await supabase
+      .from("exercises")
+      .select("name")
+      .not("video_url", "is", null)
+      .order("name");
+    if (exercises && exercises.length > 0) {
+      exerciseNameList = exercises.map((e: { name: string }) => e.name).join(", ");
+    }
+  } catch {
+    // Continue without constraint
+  }
+
   // ── Build system prompt ───────────────────────────────────────────────────
   const compactPlan = stripRationale(currentPlan);
   const injuriesLine = profile.injuries ? `\n- Limitations: ${profile.injuries}` : "";
@@ -383,7 +398,11 @@ ADAPTATION RULES:
 
 REGENERATION CONTEXT: This is a weekly plan refresh. Maintain exercise continuity — keep core compound movements (squat, deadlift, bench, row patterns) from the current plan. Rotate accessory exercises only if the user has been on this plan 4+ weeks. Progressive overload: increase volume by no more than 10% week-over-week when ratings indicate 'just right' or 'too easy'.
 
-SAFETY: You are not a medical professional. Do not prescribe exercises that could aggravate reported injuries or limitations. Do not frame this as medical advice.`;
+SAFETY: You are not a medical professional. Do not prescribe exercises that could aggravate reported injuries or limitations. Do not frame this as medical advice.` + (exerciseNameList ? `
+
+IMPORTANT: You MUST only use exercise names from this list. Use the exact name as written — do not rename, abbreviate, or invent exercises.
+
+Available exercises: ${exerciseNameList}` : "");
 
   // AI-SPEC Section 4: token budget check
   assertPromptBudget(systemPrompt, 1800, "regenerate-plan");

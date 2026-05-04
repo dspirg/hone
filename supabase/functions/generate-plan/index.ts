@@ -9,6 +9,7 @@
 // Supabase Swift SDK invokeWithStreamedResponse does not forward the JWT (bug #634).
 
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { planSchema } from "../_shared/planSchema.ts";
 
 serve(async (req: Request): Promise<Response> => {
@@ -106,6 +107,24 @@ serve(async (req: Request): Promise<Response> => {
     ? profile.injuries.slice(0, MAX_INJURIES_LEN)
     : "";
 
+  // Fetch exercise names from database so the AI only uses exercises that have videos
+  const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
+  const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+  let exerciseNameList = "";
+  try {
+    const db = createClient(supabaseUrl, supabaseServiceKey);
+    const { data: exercises } = await db
+      .from("exercises")
+      .select("name")
+      .not("video_url", "is", null)
+      .order("name");
+    if (exercises && exercises.length > 0) {
+      exerciseNameList = exercises.map((e: { name: string }) => e.name).join(", ");
+    }
+  } catch {
+    // If fetch fails, continue without constraint — AI will use generic names
+  }
+
   // Build system prompt injecting all user profile fields (AIPL-04, D-12)
   // T-03-02: injuries goes into a structured slot within the system prompt —
   // OpenAI safety layer and Structured Outputs schema provide secondary defense.
@@ -130,7 +149,18 @@ User profile:
 
 For each exercise, provide a rationale explaining why it was chosen for this user's specific goal and available equipment. This rationale will be displayed to the user as a coach note.
 
-Generate exactly ${profile.days_per_week} training days.
+Generate exactly ${profile.days_per_week} training days.`;
+
+  // Constrain exercise names to database entries (ensures videos/thumbnails exist)
+  if (exerciseNameList) {
+    systemPrompt += `
+
+IMPORTANT: You MUST only use exercise names from this list. Use the exact name as written — do not rename, abbreviate, or invent exercises. Pick the most appropriate exercises from this list for the user's goal and equipment.
+
+Available exercises: ${exerciseNameList}`;
+  }
+
+  systemPrompt += `
 
 SAFETY: You are not a medical professional. Do not diagnose conditions, prescribe treatments, or provide medical advice. If the user mentions pain, injury, or health concerns, recommend they consult a physician before training.`;
 
