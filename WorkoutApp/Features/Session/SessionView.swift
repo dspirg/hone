@@ -40,30 +40,13 @@ struct SessionView: View {
     @State private var showAbandonAlert = false
 
     var body: some View {
-        ZStack(alignment: .topTrailing) {
+        Group {
             if let vm = viewModel {
                 sessionContent(vm: vm)
             } else {
                 Theme.background.ignoresSafeArea()
                 ProgressView()
                     .task { await setupSession() }
-            }
-
-            // X button overlay — top right, always visible during active session
-            if viewModel != nil && !(viewModel?.isSessionComplete ?? true) {
-                Button {
-                    showAbandonAlert = true
-                } label: {
-                    Image(systemName: "xmark")
-                        .font(.body.weight(.semibold))
-                        .foregroundStyle(.white)
-                        .frame(width: 36, height: 36)
-                        .background(Theme.surfaceElevated)
-                        .clipShape(Circle())
-                }
-                .padding(.trailing, 16)
-                .padding(.top, 8)
-                .accessibilityLabel("Session options")
             }
         }
         .alert("What would you like to do?", isPresented: $showAbandonAlert) {
@@ -112,8 +95,8 @@ struct SessionView: View {
                 Theme.background.ignoresSafeArea()
 
                 VStack(spacing: 0) {
-                    // Exercise navigation + progress bar
-                    HStack(spacing: 12) {
+                    // Exercise navigation bar: prev | progress | next | X
+                    HStack(spacing: 8) {
                         Button {
                             vm.goToExercise(vm.currentExerciseIndex - 1)
                         } label: {
@@ -138,8 +121,20 @@ struct SessionView: View {
                                 .frame(width: 36, height: 36)
                         }
                         .disabled(vm.currentExerciseIndex >= vm.exercises.count - 1)
+
+                        Button {
+                            showAbandonAlert = true
+                        } label: {
+                            Image(systemName: "xmark")
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(.white)
+                                .frame(width: 32, height: 32)
+                                .background(Theme.surfaceElevated)
+                                .clipShape(Circle())
+                        }
+                        .accessibilityLabel("Session options")
                     }
-                    .padding(.horizontal, 4)
+                    .padding(.horizontal, 8)
                     .padding(.top, 8)
                     .padding(.bottom, 8)
 
