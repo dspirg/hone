@@ -400,9 +400,11 @@ REGENERATION CONTEXT: This is a weekly plan refresh. Maintain exercise continuit
 
 SAFETY: You are not a medical professional. Do not prescribe exercises that could aggravate reported injuries or limitations. Do not frame this as medical advice.` + (exerciseNameList ? `
 
-IMPORTANT: You MUST only use exercise names from this list. Use the exact name as written — do not rename, abbreviate, or invent exercises.
+CRITICAL RULE — EXERCISE NAMES:
+You MUST copy exercise names EXACTLY from the list below. Do not paraphrase, abbreviate, combine words, or invent exercise names. Every exercise_name in your response must be a verbatim copy-paste from this list. If you cannot find an exact match, pick the closest alternative from the list.
 
-Available exercises: ${exerciseNameList}` : "");
+Available exercises:
+${exerciseNameList}` : "");
 
   // AI-SPEC Section 4: token budget check
   assertPromptBudget(systemPrompt, 1800, "regenerate-plan");

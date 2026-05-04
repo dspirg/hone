@@ -155,9 +155,17 @@ Generate exactly ${profile.days_per_week} training days.`;
   if (exerciseNameList) {
     systemPrompt += `
 
-IMPORTANT: You MUST only use exercise names from this list. Use the exact name as written — do not rename, abbreviate, or invent exercises. Pick the most appropriate exercises from this list for the user's goal and equipment.
+CRITICAL RULE — EXERCISE NAMES:
+You MUST copy exercise names EXACTLY from the list below. Do not paraphrase, abbreviate, combine words, or invent exercise names. Every exercise_name in your response must be a verbatim copy-paste from this list. If you cannot find an exact match, pick the closest alternative from the list.
 
-Available exercises: ${exerciseNameList}`;
+For example:
+- WRONG: "Barbell Overhead Press" (not in list)
+- RIGHT: "Barbell seated overhead press" (exact match from list)
+- WRONG: "Cable Tricep Pressdown" (not in list)
+- RIGHT: "cable triceps push down straight bar" (exact match from list)
+
+Available exercises:
+${exerciseNameList}`;
   }
 
   systemPrompt += `

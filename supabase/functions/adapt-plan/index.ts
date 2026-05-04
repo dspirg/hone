@@ -158,9 +158,11 @@ In adjustment_summary: write 1-2 sentences in coach voice (second person, no jar
 
 SAFETY: You are not a medical professional. Do not prescribe exercises that could aggravate reported injuries or limitations. Do not frame this as medical advice.` + (exerciseNameList ? `
 
-IMPORTANT: When swapping exercises, you MUST only use exercise names from this list. Use the exact name as written.
+CRITICAL RULE — EXERCISE NAMES:
+When swapping exercises, you MUST copy exercise names EXACTLY from the list below. Do not paraphrase, abbreviate, or invent names. Every exercise_name must be a verbatim match from this list.
 
-Available exercises: ${exerciseNameList}` : "");
+Available exercises:
+${exerciseNameList}` : "");
 }
 
 // ─── OpenAI call helper (supports retry) ─────────────────────────────────────

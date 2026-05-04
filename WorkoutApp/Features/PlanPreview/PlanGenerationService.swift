@@ -102,7 +102,10 @@ final class PlanGenerationService {
                                 )
                             )
                         }
-                        let plan = try JSONDecoder().decode(WorkoutPlan.self, from: jsonData)
+                        let rawPlan = try JSONDecoder().decode(WorkoutPlan.self, from: jsonData)
+
+                        // Correct exercise names to match database exactly
+                        let plan = await Self.correctExerciseNames(in: rawPlan)
 
                         // PERSIST — strict sequential order per Pitfall 4.
                         // Step 1: Write plan to Supabase workout_plans table.
@@ -262,5 +265,66 @@ final class PlanGenerationService {
             .update(["onboarding_completed": AnyJSON.bool(true)])
             .eq("id", value: userId.uuidString)
             .execute()
+    }
+
+    // MARK: - Exercise Name Correction
+
+    /// Corrects AI-generated exercise names to match the database exactly.
+    /// Uses case-insensitive matching, then CONTAINS fallback.
+    /// Returns the plan with corrected names; unmatched names are kept as-is.
+    private static func correctExerciseNames(in plan: WorkoutPlan) async -> WorkoutPlan {
+        // Build a lookup set of all exercise names from CoreData
+        let repo = ExerciseRepository.shared
+        let allExercises = repo.loadFromCoreData()
+        let nameSet = Set(allExercises.map { $0.name })
+        let lowercaseMap = Dictionary(allExercises.map { ($0.name.lowercased(), $0.name) },
+                                      uniquingKeysWith: { first, _ in first })
+
+        let correctedDays = plan.weeklyDays.map { day in
+            let correctedExercises = day.exercises.map { exercise in
+                let name = exercise.exerciseName
+
+                // Exact match — no correction needed
+                if nameSet.contains(name) { return exercise }
+
+                // Case-insensitive match
+                if let match = lowercaseMap[name.lowercased()] {
+                    return PlannedExercise(
+                        exerciseName: match,
+                        sets: exercise.sets,
+                        reps: exercise.reps,
+                        restSeconds: exercise.restSeconds,
+                        rationale: exercise.rationale
+                    )
+                }
+
+                // CONTAINS fallback — find first exercise whose name contains or is contained by the AI name
+                if let match = allExercises.first(where: {
+                    $0.name.localizedCaseInsensitiveContains(name) ||
+                    name.localizedCaseInsensitiveContains($0.name)
+                }) {
+                    return PlannedExercise(
+                        exerciseName: match.name,
+                        sets: exercise.sets,
+                        reps: exercise.reps,
+                        restSeconds: exercise.restSeconds,
+                        rationale: exercise.rationale
+                    )
+                }
+
+                // No match found — keep original (will show placeholder)
+                return exercise
+            }
+            return WorkoutDay(
+                dayLabel: day.dayLabel,
+                sessionName: day.sessionName,
+                exercises: correctedExercises
+            )
+        }
+        return WorkoutPlan(
+            planName: plan.planName,
+            goalSummary: plan.goalSummary,
+            weeklyDays: correctedDays
+        )
     }
 }
