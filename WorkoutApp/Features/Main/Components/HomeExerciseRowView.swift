@@ -14,6 +14,13 @@ struct HomeExerciseRowView: View {
     let exercise: PlannedExercise
 
     @State private var thumbnailURL: URL?
+    @State private var videoUrl: String?
+    @State private var muxPlaybackId: String?
+    @State private var showVideo = false
+
+    private var hasVideo: Bool {
+        (muxPlaybackId != nil && !(muxPlaybackId?.isEmpty ?? true)) || videoUrl != nil
+    }
 
     private var initialPlaceholder: some View {
         Theme.surface
@@ -26,7 +33,7 @@ struct HomeExerciseRowView: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            // MARK: - Thumbnail
+            // MARK: - Thumbnail (tap to preview video)
             AsyncImage(url: thumbnailURL) { phase in
                 switch phase {
                 case .success(let image):
@@ -39,6 +46,17 @@ struct HomeExerciseRowView: View {
             }
             .frame(width: 40, height: 40)
             .clipShape(RoundedRectangle(cornerRadius: 8))
+            .overlay(alignment: .center) {
+                if hasVideo {
+                    Image(systemName: "play.fill")
+                        .font(.system(size: 10))
+                        .foregroundStyle(.white.opacity(0.8))
+                }
+            }
+            .onTapGesture {
+                guard hasVideo else { return }
+                showVideo = true
+            }
 
             // MARK: - Exercise Info
             VStack(alignment: .leading, spacing: 2) {
@@ -55,11 +73,21 @@ struct HomeExerciseRowView: View {
         }
         .task {
             let repo = ExerciseRepository.shared
-            if let entity = try? repo.fetchByName(exercise.exerciseName) ?? repo.fetchByNameContains(exercise.exerciseName),
-               let urlStr = entity.value(forKey: "thumbnailURL") as? String,
-               let url = URL(string: urlStr.replacingOccurrences(of: " ", with: "%20")) {
-                thumbnailURL = url
+            if let entity = try? repo.fetchByName(exercise.exerciseName) ?? repo.fetchByNameContains(exercise.exerciseName) {
+                if let urlStr = entity.value(forKey: "thumbnailURL") as? String,
+                   let url = URL(string: urlStr.replacingOccurrences(of: " ", with: "%20")) {
+                    thumbnailURL = url
+                }
+                muxPlaybackId = entity.value(forKey: "muxPlaybackId") as? String
+                videoUrl = entity.value(forKey: "videoUrl") as? String
             }
+        }
+        .fullScreenCover(isPresented: $showVideo) {
+            VideoOverlayView(
+                muxPlaybackId: muxPlaybackId ?? "",
+                exerciseName: exercise.exerciseName,
+                videoUrl: videoUrl
+            )
         }
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(exercise.exerciseName), \(setsLabel)")
