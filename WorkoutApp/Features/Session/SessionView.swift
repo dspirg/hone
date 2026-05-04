@@ -22,6 +22,12 @@ import SwiftUI
 struct SessionView: View {
     let workoutDay: WorkoutDay
     let planId: String
+    /// When provided, resumes an existing session instead of creating a new one
+    var existingViewModel: SessionViewModel? = nil
+    /// Called when user explicitly ends the session (not minimize)
+    var onEndSession: (() -> Void)? = nil
+    /// Called when a new session VM is created, so parent can hold a reference for resume
+    var onSessionCreated: ((SessionViewModel) -> Void)? = nil
 
     @Environment(AppState.self) var appState
     @Environment(AdaptationService.self) var adaptationService
@@ -54,10 +60,16 @@ struct SessionView: View {
                 }
             }
         }
-        // T-04-11: confirmation required before dismiss — prevents accidental session loss
-        .alert("End this session?", isPresented: $showAbandonAlert) {
-            Button("End Session", role: .destructive) { dismiss() }
+        // T-04-11: confirmation required before dismiss
+        .alert("What would you like to do?", isPresented: $showAbandonAlert) {
+            Button("Minimize") { dismiss() }
+            Button("End Session", role: .destructive) {
+                onEndSession?()
+                dismiss()
+            }
             Button("Keep Going", role: .cancel) {}
+        } message: {
+            Text("Minimize keeps your progress. End Session discards it.")
         }
     }
 
@@ -76,12 +88,11 @@ struct SessionView: View {
                 prs: vm.detectedPRs,
                 onDone: { rating in
                     vm.saveDifficultyRating(rating)
-                    // Phase 8 ADPT-01: trigger post-session adaptation with the captured rating.
-                    // Fire-and-forget — dismiss is not blocked on the network call.
                     Task {
                         await adaptationService.requestPostSessionAdaptation(rating: rating)
                     }
-                    appState.selectedTab = 0  // D-14: Switch to Home tab before dismiss
+                    onEndSession?()  // Clear activeSessionVM — session is fully complete
+                    appState.selectedTab = 0
                     dismiss()
                 }
             )
@@ -208,6 +219,17 @@ struct SessionView: View {
     /// Initializes SessionViewModel and SessionSyncService on first appearance.
     /// Non-blocking: ProgressView shown until this completes.
     private func setupSession() async {
+        // Resume existing session if provided (minimize/resume flow)
+        if let existing = existingViewModel {
+            viewModel = existing
+            let repo = SessionRepository(
+                context: context,
+                container: PersistenceController.shared.container
+            )
+            syncService = SessionSyncService(repository: repo)
+            return
+        }
+
         let userId = appState.currentUser?.id.uuidString ?? ""
         let repo = SessionRepository(
             context: context,
@@ -221,6 +243,7 @@ struct SessionView: View {
         )
         await vm.startSession()   // CR-02: await ensures sessionLog is set before view is shown
         viewModel = vm
+        onSessionCreated?(vm)
 
         let sync = SessionSyncService(repository: repo)
         syncService = sync

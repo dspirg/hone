@@ -43,6 +43,44 @@ struct HomeView: View {
                             .padding(.top, Theme.Spacing.md)
                     }
 
+                    // RESUME WORKOUT banner (visible when session was minimized)
+                    if viewModel.activeSessionVM != nil && !viewModel.showSession {
+                        Button {
+                            viewModel.showSession = true
+                        } label: {
+                            HStack(spacing: 12) {
+                                Image(systemName: "flame.fill")
+                                    .foregroundStyle(Theme.accent)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("Workout in progress")
+                                        .font(.body.weight(.semibold))
+                                        .foregroundStyle(.primary)
+                                    Text("Tap to resume")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .foregroundStyle(.secondary)
+                            }
+                            .padding(16)
+                            .background(
+                                LinearGradient(
+                                    colors: [Theme.accent.opacity(0.15), Theme.accent.opacity(0.05)],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            )
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(Theme.accent.opacity(0.3), lineWidth: 1)
+                            )
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.top, Theme.Spacing.md)
+                    }
+
                     // TODAY'S WORKOUT section (D-01, D-04)
                     if let plan = viewModel.activePlan, let day = viewModel.todayWorkoutDay {
                         sectionLabel("TODAY'S WORKOUT")
@@ -102,10 +140,20 @@ struct HomeView: View {
             // D-13, D-16: Session launch via fullScreenCover
             .fullScreenCover(isPresented: $viewModel.showSession) {
                 if let day = viewModel.todayWorkoutDay {
-                    SessionView(workoutDay: day, planId: viewModel.activePlanId)
-                        .environment(\.managedObjectContext, context)
-                        .environment(adaptationService)
-                        .environment(appState)
+                    SessionView(
+                        workoutDay: day,
+                        planId: viewModel.activePlanId,
+                        existingViewModel: viewModel.activeSessionVM,
+                        onEndSession: {
+                            viewModel.activeSessionVM = nil
+                        },
+                        onSessionCreated: { vm in
+                            viewModel.activeSessionVM = vm
+                        }
+                    )
+                    .environment(\.managedObjectContext, context)
+                    .environment(adaptationService)
+                    .environment(appState)
                 }
             }
         }

@@ -32,6 +32,8 @@ final class HomeViewModel {
     var isLoading: Bool = true
     var loadError: String? = nil
     var showSession: Bool = false
+    /// Persists across session minimize/resume so progress isn't lost
+    var activeSessionVM: SessionViewModel? = nil
 
     // MARK: - Load
 
