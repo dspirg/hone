@@ -1,5 +1,7 @@
-import SwiftUI
+import AVFoundation
 import CoreData
+import Supabase
+import SwiftUI
 
 // MARK: - ExerciseRowView
 // Renders a single planned exercise inside a WorkoutDayCardView.
@@ -16,25 +18,21 @@ import CoreData
 struct ExerciseRowView: View {
     let exercise: PlannedExercise
 
-    @State private var thumbnailURL: String?
+    @State private var thumbnailImage: UIImage?
+    @State private var videoUrl: String?
     @State private var muxPlaybackId: String?
     @State private var showVideo = false
 
     var body: some View {
         HStack(spacing: 12) {
-            // MARK: Thumbnail (52x52, matching ExerciseLibraryRowView)
-            AsyncImage(url: URL(string: thumbnailURL ?? "")) { phase in
-                switch phase {
-                case .success(let image):
-                    image
+            // MARK: Thumbnail (52x52, tap to preview video)
+            Group {
+                if let img = thumbnailImage {
+                    Image(uiImage: img)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                        .frame(width: 52, height: 52)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                default:
+                } else {
                     Theme.surface
-                        .frame(width: 52, height: 52)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
                         .overlay {
                             Image(systemName: "dumbbell")
                                 .font(.body)
@@ -43,14 +41,23 @@ struct ExerciseRowView: View {
                 }
             }
             .frame(width: 52, height: 52)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .overlay(alignment: .center) {
+                if videoUrl != nil || muxPlaybackId != nil {
+                    Image(systemName: "play.fill")
+                        .font(.system(size: 12))
+                        .foregroundStyle(.white.opacity(0.8))
+                }
+            }
             .onTapGesture {
-                guard muxPlaybackId != nil else { return }
+                guard videoUrl != nil || muxPlaybackId != nil else { return }
                 showVideo = true
             }
             .fullScreenCover(isPresented: $showVideo) {
                 VideoOverlayView(
                     muxPlaybackId: muxPlaybackId ?? "",
-                    exerciseName: exercise.exerciseName
+                    exerciseName: exercise.exerciseName,
+                    videoUrl: videoUrl
                 )
             }
 
@@ -90,14 +97,44 @@ struct ExerciseRowView: View {
 
     // MARK: - Thumbnail Resolution
 
-    /// Resolves muxPlaybackId and thumbnailURL from CoreData Exercise cache by exercise name.
-    /// Uses ExerciseRepository.fetchByName(_:) — case/diacritic insensitive match on "Exercise" entity.
-    /// Silently no-ops on miss — dumbbell placeholder is the correct fallback.
     @MainActor
     private func resolveThumbnail() async {
-        guard let entity = try? ExerciseRepository.shared.fetchByName(exercise.exerciseName) else { return }
-        muxPlaybackId = entity.value(forKey: "muxPlaybackId") as? String
-        thumbnailURL = entity.value(forKey: "thumbnailURL") as? String
+        let repo = ExerciseRepository.shared
+
+        if let entity = try? repo.fetchByName(exercise.exerciseName) ?? repo.fetchByNameContains(exercise.exerciseName) {
+            muxPlaybackId = entity.value(forKey: "muxPlaybackId") as? String
+            videoUrl = entity.value(forKey: "videoUrl") as? String
+        }
+
+        // Supabase fallback
+        if videoUrl == nil {
+            struct VideoResult: Decodable {
+                let videoUrl: String?
+                enum CodingKeys: String, CodingKey { case videoUrl = "video_url" }
+            }
+            if let results: [VideoResult] = try? await supabase
+                .from("exercises")
+                .select("video_url")
+                .ilike("name", pattern: "%\(exercise.exerciseName)%")
+                .limit(1)
+                .execute()
+                .value,
+               let url = results.first?.videoUrl {
+                videoUrl = url
+            }
+        }
+
+        // Generate thumbnail from video
+        if let urlStr = videoUrl,
+           let url = URL(string: urlStr.replacingOccurrences(of: " ", with: "%20")) {
+            let asset = AVURLAsset(url: url)
+            let generator = AVAssetImageGenerator(asset: asset)
+            generator.appliesPreferredTrackTransform = true
+            generator.maximumSize = CGSize(width: 160, height: 160)
+            if let (cgImage, _) = try? await generator.image(at: .zero) {
+                thumbnailImage = UIImage(cgImage: cgImage)
+            }
+        }
     }
 }
 

@@ -1,5 +1,6 @@
 import AVFoundation
 import CoreData
+import Supabase
 import SwiftUI
 
 // MARK: - HomeExerciseRowView
@@ -72,17 +73,7 @@ struct HomeExerciseRowView: View {
             Spacer()
         }
         .task {
-            let repo = ExerciseRepository.shared
-            if let entity = try? repo.fetchByName(exercise.exerciseName) ?? repo.fetchByNameContains(exercise.exerciseName) {
-                muxPlaybackId = entity.value(forKey: "muxPlaybackId") as? String
-                videoUrl = entity.value(forKey: "videoUrl") as? String
-
-                // Generate thumbnail from video URL
-                if let urlStr = videoUrl ?? (entity.value(forKey: "thumbnailURL") as? String),
-                   let url = URL(string: urlStr.replacingOccurrences(of: " ", with: "%20")) {
-                    await generateThumbnail(from: url)
-                }
-            }
+            await resolveVideo()
         }
         .fullScreenCover(isPresented: $showVideo) {
             VideoOverlayView(
@@ -101,7 +92,41 @@ struct HomeExerciseRowView: View {
         "\(exercise.sets) x \(exercise.reps)"
     }
 
-    /// Extracts the first frame from a video URL as a thumbnail
+    /// Resolves video URL and generates thumbnail from first frame
+    private func resolveVideo() async {
+        let repo = ExerciseRepository.shared
+
+        // Try CoreData first
+        if let entity = try? repo.fetchByName(exercise.exerciseName) ?? repo.fetchByNameContains(exercise.exerciseName) {
+            muxPlaybackId = entity.value(forKey: "muxPlaybackId") as? String
+            videoUrl = entity.value(forKey: "videoUrl") as? String
+        }
+
+        // Supabase fallback if CoreData had no video_url
+        if videoUrl == nil {
+            struct VideoResult: Decodable {
+                let videoUrl: String?
+                enum CodingKeys: String, CodingKey { case videoUrl = "video_url" }
+            }
+            if let results: [VideoResult] = try? await supabase
+                .from("exercises")
+                .select("video_url")
+                .ilike("name", pattern: "%\(exercise.exerciseName)%")
+                .limit(1)
+                .execute()
+                .value,
+               let url = results.first?.videoUrl {
+                videoUrl = url
+            }
+        }
+
+        // Generate thumbnail from video
+        if let urlStr = videoUrl,
+           let url = URL(string: urlStr.replacingOccurrences(of: " ", with: "%20")) {
+            await generateThumbnail(from: url)
+        }
+    }
+
     private func generateThumbnail(from url: URL) async {
         let asset = AVURLAsset(url: url)
         let generator = AVAssetImageGenerator(asset: asset)
