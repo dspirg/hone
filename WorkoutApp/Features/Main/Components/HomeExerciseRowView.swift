@@ -1,3 +1,4 @@
+import AVFoundation
 import CoreData
 import SwiftUI
 
@@ -13,7 +14,7 @@ import SwiftUI
 struct HomeExerciseRowView: View {
     let exercise: PlannedExercise
 
-    @State private var thumbnailURL: URL?
+    @State private var thumbnailImage: UIImage?
     @State private var videoUrl: String?
     @State private var muxPlaybackId: String?
     @State private var showVideo = false
@@ -34,13 +35,12 @@ struct HomeExerciseRowView: View {
     var body: some View {
         HStack(spacing: 12) {
             // MARK: - Thumbnail (tap to preview video)
-            AsyncImage(url: thumbnailURL) { phase in
-                switch phase {
-                case .success(let image):
-                    image.resizable().aspectRatio(contentMode: .fill)
-                case .failure:
-                    initialPlaceholder
-                default:
+            Group {
+                if let img = thumbnailImage {
+                    Image(uiImage: img)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                } else {
                     initialPlaceholder
                 }
             }
@@ -74,12 +74,14 @@ struct HomeExerciseRowView: View {
         .task {
             let repo = ExerciseRepository.shared
             if let entity = try? repo.fetchByName(exercise.exerciseName) ?? repo.fetchByNameContains(exercise.exerciseName) {
-                if let urlStr = entity.value(forKey: "thumbnailURL") as? String,
-                   let url = URL(string: urlStr.replacingOccurrences(of: " ", with: "%20")) {
-                    thumbnailURL = url
-                }
                 muxPlaybackId = entity.value(forKey: "muxPlaybackId") as? String
                 videoUrl = entity.value(forKey: "videoUrl") as? String
+
+                // Generate thumbnail from video URL
+                if let urlStr = videoUrl ?? (entity.value(forKey: "thumbnailURL") as? String),
+                   let url = URL(string: urlStr.replacingOccurrences(of: " ", with: "%20")) {
+                    await generateThumbnail(from: url)
+                }
             }
         }
         .fullScreenCover(isPresented: $showVideo) {
@@ -97,6 +99,21 @@ struct HomeExerciseRowView: View {
 
     private var setsLabel: String {
         "\(exercise.sets) x \(exercise.reps)"
+    }
+
+    /// Extracts the first frame from a video URL as a thumbnail
+    private func generateThumbnail(from url: URL) async {
+        let asset = AVURLAsset(url: url)
+        let generator = AVAssetImageGenerator(asset: asset)
+        generator.appliesPreferredTrackTransform = true
+        generator.maximumSize = CGSize(width: 120, height: 120)
+
+        do {
+            let (cgImage, _) = try await generator.image(at: .zero)
+            thumbnailImage = UIImage(cgImage: cgImage)
+        } catch {
+            // Silent failure — placeholder stays
+        }
     }
 }
 
