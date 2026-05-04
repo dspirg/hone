@@ -40,7 +40,7 @@ struct SessionView: View {
     @State private var showAbandonAlert = false
 
     var body: some View {
-        ZStack(alignment: .topLeading) {
+        ZStack(alignment: .topTrailing) {
             if let vm = viewModel {
                 sessionContent(vm: vm)
             } else {
@@ -49,7 +49,7 @@ struct SessionView: View {
                     .task { await setupSession() }
             }
 
-            // X button overlay — always visible during active session
+            // X button overlay — top right, always visible during active session
             if viewModel != nil && !(viewModel?.isSessionComplete ?? true) {
                 Button {
                     showAbandonAlert = true
@@ -61,7 +61,7 @@ struct SessionView: View {
                         .background(Theme.surfaceElevated)
                         .clipShape(Circle())
                 }
-                .padding(.leading, 16)
+                .padding(.trailing, 16)
                 .padding(.top, 8)
                 .accessibilityLabel("Session options")
             }
