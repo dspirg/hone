@@ -113,12 +113,10 @@ serve(async (req: Request): Promise<Response> => {
   let exerciseNameList = "";
   try {
     const db = createClient(supabaseUrl, supabaseServiceKey);
-    const { data: exercises } = await db
-      .from("exercises")
-      .select("name")
-      .not("video_url", "is", null)
-      .order("name");
-    if (exercises && exercises.length > 0) {
+    const { data: b1 } = await db.from("exercises").select("name").not("video_url", "is", null).order("name").range(0, 999);
+    const { data: b2 } = await db.from("exercises").select("name").not("video_url", "is", null).order("name").range(1000, 2999);
+    const exercises = [...(b1 ?? []), ...(b2 ?? [])];
+    if (exercises.length > 0) {
       exerciseNameList = exercises.map((e: { name: string }) => e.name).join(", ");
     }
   } catch {
@@ -172,7 +170,22 @@ ${exerciseNameList}`;
 
 SAFETY: You are not a medical professional. Do not diagnose conditions, prescribe treatments, or provide medical advice. If the user mentions pain, injury, or health concerns, recommend they consult a physician before training.`;
 
-  // Call OpenAI with Structured Outputs and SSE streaming
+  // Build exercise name lookup set for server-side validation
+  const db = createClient(supabaseUrl, supabaseServiceKey);
+  const exerciseNameSet = new Set<string>();
+  const exerciseNameLower = new Map<string, string>(); // lowercase -> exact DB name
+  try {
+    // Fetch ALL exercises (Supabase default limit is 1000, we have ~2000)
+    const { data: batch1 } = await db.from("exercises").select("name").not("video_url", "is", null).range(0, 999);
+    const { data: batch2 } = await db.from("exercises").select("name").not("video_url", "is", null).range(1000, 2999);
+    const allExercises = [...(batch1 ?? []), ...(batch2 ?? [])];
+    for (const e of allExercises) {
+      exerciseNameSet.add(e.name);
+      exerciseNameLower.set(e.name.toLowerCase(), e.name);
+    }
+  } catch { /* continue without validation */ }
+
+  // Call OpenAI with Structured Outputs — NON-streaming so we can validate
   const openAIResponse = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: {
@@ -180,8 +193,8 @@ SAFETY: You are not a medical professional. Do not diagnose conditions, prescrib
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "gpt-4o-2024-08-06",  // minimum version for Structured Outputs
-      stream: true,
+      model: "gpt-4o-2024-08-06",
+      stream: false,
       response_format: {
         type: "json_schema",
         json_schema: {
@@ -197,25 +210,99 @@ SAFETY: You are not a medical professional. Do not diagnose conditions, prescrib
     }),
   });
 
-  // On OpenAI API error, return error JSON — not a 200 with error text in the stream
   if (!openAIResponse.ok) {
     const errorBody = await openAIResponse.text();
     console.error(`generate-plan: OpenAI API error ${openAIResponse.status}: ${errorBody}`);
     return new Response(
-      JSON.stringify({
-        error: "OpenAI API error",
-        status: openAIResponse.status,
-        detail: errorBody,
-      }),
-      {
-        status: openAIResponse.status,
-        headers: { "Content-Type": "application/json" },
-      }
+      JSON.stringify({ error: "OpenAI API error", status: openAIResponse.status, detail: errorBody }),
+      { status: openAIResponse.status, headers: { "Content-Type": "application/json" } }
     );
   }
 
-  // Forward the SSE stream directly to the client (passthrough)
-  return new Response(openAIResponse.body, {
+  // Parse the complete response
+  const result = await openAIResponse.json();
+  const planJSON = result.choices?.[0]?.message?.content ?? "{}";
+
+  // Validate and correct exercise names against the database
+  let plan;
+  try {
+    plan = JSON.parse(planJSON);
+  } catch {
+    return new Response(
+      JSON.stringify({ error: "Failed to parse AI response" }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
+  }
+
+  if (plan.weekly_days && exerciseNameSet.size > 0) {
+    for (const day of plan.weekly_days) {
+      if (!day.exercises) continue;
+      for (const exercise of day.exercises) {
+        const aiName = exercise.exercise_name;
+        if (!aiName) continue;
+
+        // Already exact match
+        if (exerciseNameSet.has(aiName)) continue;
+
+        // Case-insensitive match
+        const lowerMatch = exerciseNameLower.get(aiName.toLowerCase());
+        if (lowerMatch) {
+          exercise.exercise_name = lowerMatch;
+          continue;
+        }
+
+        // Word-based search: find an exercise containing all significant words (any order)
+        const words = aiName.split(/\s+/).filter((w: string) => w.length > 2).map((w: string) => w.toLowerCase());
+        let found = false;
+        for (const [dbLower, dbName] of exerciseNameLower) {
+          if (words.every((w: string) => dbLower.includes(w))) {
+            exercise.exercise_name = dbName;
+            found = true;
+            break;
+          }
+        }
+        if (found) continue;
+
+        // Drop last word and retry
+        if (words.length > 1) {
+          const fewerWords = words.slice(0, -1);
+          for (const [dbLower, dbName] of exerciseNameLower) {
+            if (fewerWords.every((w: string) => dbLower.includes(w))) {
+              exercise.exercise_name = dbName;
+              break;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Re-serialize the corrected plan and stream it as SSE (client expects SSE format)
+  const correctedJSON = JSON.stringify(plan);
+  const encoder = new TextEncoder();
+
+  const stream = new ReadableStream({
+    start(controller) {
+      // Send the plan in chunks to simulate streaming (client shows progressive text)
+      const chunkSize = 20;
+      for (let i = 0; i < correctedJSON.length; i += chunkSize) {
+        const chunk = correctedJSON.slice(i, i + chunkSize);
+        const sseChunk = {
+          choices: [{ delta: { content: chunk }, index: 0, finish_reason: null }],
+        };
+        controller.enqueue(encoder.encode(`data: ${JSON.stringify(sseChunk)}\n\n`));
+      }
+      // Send finish + [DONE]
+      const finishChunk = {
+        choices: [{ delta: {}, index: 0, finish_reason: "stop" }],
+      };
+      controller.enqueue(encoder.encode(`data: ${JSON.stringify(finishChunk)}\n\n`));
+      controller.enqueue(encoder.encode("data: [DONE]\n\n"));
+      controller.close();
+    },
+  });
+
+  return new Response(stream, {
     headers: {
       "Content-Type": "text/event-stream",
       "Cache-Control": "no-cache",

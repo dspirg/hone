@@ -102,10 +102,7 @@ final class PlanGenerationService {
                                 )
                             )
                         }
-                        let rawPlan = try JSONDecoder().decode(WorkoutPlan.self, from: jsonData)
-
-                        // Correct exercise names to match database exactly
-                        let plan = await Self.correctExerciseNames(in: rawPlan)
+                        let plan = try JSONDecoder().decode(WorkoutPlan.self, from: jsonData)
 
                         // PERSIST — strict sequential order per Pitfall 4.
                         // Step 1: Write plan to Supabase workout_plans table.
@@ -267,103 +264,4 @@ final class PlanGenerationService {
             .execute()
     }
 
-    // MARK: - Exercise Name Correction
-
-    /// Corrects AI-generated exercise names to match the Supabase database exactly.
-    /// Queries Supabase directly (not CoreData) so it works on first launch.
-    /// For each exercise: exact match → ilike match → word-based search → keep original.
-    private static func correctExerciseNames(in plan: WorkoutPlan) async -> WorkoutPlan {
-        var correctedDays: [WorkoutDay] = []
-
-        for day in plan.weeklyDays {
-            var correctedExercises: [PlannedExercise] = []
-
-            for exercise in day.exercises {
-                let correctedName = await findExactDBName(for: exercise.exerciseName)
-                if correctedName != exercise.exerciseName {
-                    correctedExercises.append(PlannedExercise(
-                        exerciseName: correctedName,
-                        sets: exercise.sets,
-                        reps: exercise.reps,
-                        restSeconds: exercise.restSeconds,
-                        rationale: exercise.rationale
-                    ))
-                } else {
-                    correctedExercises.append(exercise)
-                }
-            }
-
-            correctedDays.append(WorkoutDay(
-                dayLabel: day.dayLabel,
-                sessionName: day.sessionName,
-                exercises: correctedExercises
-            ))
-        }
-
-        return WorkoutPlan(
-            planName: plan.planName,
-            goalSummary: plan.goalSummary,
-            weeklyDays: correctedDays
-        )
-    }
-
-    /// Queries Supabase for the best matching exercise name.
-    /// 1. Exact match (eq)
-    /// 2. Case-insensitive match (ilike exact)
-    /// 3. Word-based search: split into keywords and search for exercises containing all of them
-    /// Returns the matched DB name, or the original if no match found.
-    private static func findExactDBName(for aiName: String) async -> String {
-        struct NameRow: Decodable { let name: String }
-
-        // 1. Exact match
-        if let rows: [NameRow] = try? await supabase
-            .from("exercises")
-            .select("name")
-            .eq("name", value: aiName)
-            .limit(1)
-            .execute()
-            .value,
-           let match = rows.first {
-            return match.name
-        }
-
-        // 2. Case-insensitive exact match
-        if let rows: [NameRow] = try? await supabase
-            .from("exercises")
-            .select("name")
-            .ilike("name", pattern: aiName)
-            .limit(1)
-            .execute()
-            .value,
-           let match = rows.first {
-            return match.name
-        }
-
-        // 3. Word-based search: find exercises containing ALL significant words (any order)
-        let words = aiName.components(separatedBy: .whitespaces)
-            .filter { $0.count > 2 }  // skip short words like "to", "on", "of"
-
-        if !words.isEmpty {
-            // Try all words first, then progressively drop words until match
-            for dropCount in 0..<min(words.count, 3) {
-                let searchWords = Array(words.dropLast(dropCount))
-                // Each word gets its own ilike filter — matches any order in the name
-                var query = supabase
-                    .from("exercises")
-                    .select("name")
-                for word in searchWords {
-                    query = query.ilike("name", pattern: "%\(word)%")
-                }
-                if let rows: [NameRow] = try? await query
-                    .limit(1)
-                    .execute()
-                    .value,
-                   let match = rows.first {
-                    return match.name
-                }
-            }
-        }
-
-        return aiName
-    }
 }
