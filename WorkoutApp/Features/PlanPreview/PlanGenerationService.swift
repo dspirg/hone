@@ -269,62 +269,101 @@ final class PlanGenerationService {
 
     // MARK: - Exercise Name Correction
 
-    /// Corrects AI-generated exercise names to match the database exactly.
-    /// Uses case-insensitive matching, then CONTAINS fallback.
-    /// Returns the plan with corrected names; unmatched names are kept as-is.
+    /// Corrects AI-generated exercise names to match the Supabase database exactly.
+    /// Queries Supabase directly (not CoreData) so it works on first launch.
+    /// For each exercise: exact match → ilike match → word-based search → keep original.
     private static func correctExerciseNames(in plan: WorkoutPlan) async -> WorkoutPlan {
-        // Build a lookup set of all exercise names from CoreData
-        let repo = ExerciseRepository.shared
-        let allExercises = repo.loadFromCoreData()
-        let nameSet = Set(allExercises.map { $0.name })
-        let lowercaseMap = Dictionary(allExercises.map { ($0.name.lowercased(), $0.name) },
-                                      uniquingKeysWith: { first, _ in first })
+        var correctedDays: [WorkoutDay] = []
 
-        let correctedDays = plan.weeklyDays.map { day in
-            let correctedExercises = day.exercises.map { exercise in
-                let name = exercise.exerciseName
+        for day in plan.weeklyDays {
+            var correctedExercises: [PlannedExercise] = []
 
-                // Exact match — no correction needed
-                if nameSet.contains(name) { return exercise }
-
-                // Case-insensitive match
-                if let match = lowercaseMap[name.lowercased()] {
-                    return PlannedExercise(
-                        exerciseName: match,
+            for exercise in day.exercises {
+                let correctedName = await findExactDBName(for: exercise.exerciseName)
+                if correctedName != exercise.exerciseName {
+                    correctedExercises.append(PlannedExercise(
+                        exerciseName: correctedName,
                         sets: exercise.sets,
                         reps: exercise.reps,
                         restSeconds: exercise.restSeconds,
                         rationale: exercise.rationale
-                    )
+                    ))
+                } else {
+                    correctedExercises.append(exercise)
                 }
-
-                // CONTAINS fallback — find first exercise whose name contains or is contained by the AI name
-                if let match = allExercises.first(where: {
-                    $0.name.localizedCaseInsensitiveContains(name) ||
-                    name.localizedCaseInsensitiveContains($0.name)
-                }) {
-                    return PlannedExercise(
-                        exerciseName: match.name,
-                        sets: exercise.sets,
-                        reps: exercise.reps,
-                        restSeconds: exercise.restSeconds,
-                        rationale: exercise.rationale
-                    )
-                }
-
-                // No match found — keep original (will show placeholder)
-                return exercise
             }
-            return WorkoutDay(
+
+            correctedDays.append(WorkoutDay(
                 dayLabel: day.dayLabel,
                 sessionName: day.sessionName,
                 exercises: correctedExercises
-            )
+            ))
         }
+
         return WorkoutPlan(
             planName: plan.planName,
             goalSummary: plan.goalSummary,
             weeklyDays: correctedDays
         )
+    }
+
+    /// Queries Supabase for the best matching exercise name.
+    /// 1. Exact match (eq)
+    /// 2. Case-insensitive match (ilike exact)
+    /// 3. Word-based search: split into keywords and search for exercises containing all of them
+    /// Returns the matched DB name, or the original if no match found.
+    private static func findExactDBName(for aiName: String) async -> String {
+        struct NameRow: Decodable { let name: String }
+
+        // 1. Exact match
+        if let rows: [NameRow] = try? await supabase
+            .from("exercises")
+            .select("name")
+            .eq("name", value: aiName)
+            .limit(1)
+            .execute()
+            .value,
+           let match = rows.first {
+            return match.name
+        }
+
+        // 2. Case-insensitive exact match
+        if let rows: [NameRow] = try? await supabase
+            .from("exercises")
+            .select("name")
+            .ilike("name", pattern: aiName)
+            .limit(1)
+            .execute()
+            .value,
+           let match = rows.first {
+            return match.name
+        }
+
+        // 3. Word-based search: find exercises containing ALL significant words (any order)
+        let words = aiName.components(separatedBy: .whitespaces)
+            .filter { $0.count > 2 }  // skip short words like "to", "on", "of"
+
+        if !words.isEmpty {
+            // Try all words first, then progressively drop words until match
+            for dropCount in 0..<min(words.count, 3) {
+                let searchWords = Array(words.dropLast(dropCount))
+                // Each word gets its own ilike filter — matches any order in the name
+                var query = supabase
+                    .from("exercises")
+                    .select("name")
+                for word in searchWords {
+                    query = query.ilike("name", pattern: "%\(word)%")
+                }
+                if let rows: [NameRow] = try? await query
+                    .limit(1)
+                    .execute()
+                    .value,
+                   let match = rows.first {
+                    return match.name
+                }
+            }
+        }
+
+        return aiName
     }
 }
