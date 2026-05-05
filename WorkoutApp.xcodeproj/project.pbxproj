@@ -146,6 +146,8 @@
 		B011000100000006 /* ContextCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B011000000000006 /* ContextCardView.swift */; };
 		B011001100000001 /* HomeViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B011001000000001 /* HomeViewModelTests.swift */; };
 		B0SWAP00002 /* ExerciseSwapSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0SWAP00001 /* ExerciseSwapSheet.swift */; };
+		B0TIME00002 /* SessionLengthCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0TIME00001 /* SessionLengthCardView.swift */; };
+		B0TIME00004 /* SessionTimePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0TIME00003 /* SessionTimePicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -308,6 +310,8 @@
 		B011000000000006 /* ContextCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCardView.swift; sourceTree = "<group>"; };
 		B011001000000001 /* HomeViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModelTests.swift; sourceTree = "<group>"; };
 		B0SWAP00001 /* ExerciseSwapSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseSwapSheet.swift; sourceTree = "<group>"; };
+		B0TIME00001 /* SessionLengthCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionLengthCardView.swift; sourceTree = "<group>"; };
+		B0TIME00003 /* SessionTimePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionTimePicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -494,6 +498,7 @@
 				B003000000000006 /* GoalCardView.swift */,
 				B003000000000007 /* FitnessLevelCardView.swift */,
 				B003000000000008 /* DaysPerWeekCardView.swift */,
+				B0TIME00001 /* SessionLengthCardView.swift */,
 				B003000000000009 /* EquipmentCardView.swift */,
 				B00300000000000A /* InjuriesCardView.swift */,
 			);
@@ -537,6 +542,7 @@
 				B004003000000003 /* SetLogRow.swift */,
 				B004003000000004 /* ExerciseCardView.swift */,
 				B0SWAP00001 /* ExerciseSwapSheet.swift */,
+				B0TIME00003 /* SessionTimePicker.swift */,
 				B004003000000006 /* SessionSummaryView.swift */,
 				B004003000000007 /* ConfettiView.swift */,
 				B011000000000006 /* ContextCardView.swift */,
@@ -990,6 +996,7 @@
 				B003000100000006 /* GoalCardView.swift in Sources */,
 				B003000100000007 /* FitnessLevelCardView.swift in Sources */,
 				B003000100000008 /* DaysPerWeekCardView.swift in Sources */,
+				B0TIME00002 /* SessionLengthCardView.swift in Sources */,
 				B003000100000009 /* EquipmentCardView.swift in Sources */,
 				B00300010000000A /* InjuriesCardView.swift in Sources */,
 				B003A00100000001 /* WorkoutPlan.swift in Sources */,
@@ -1024,6 +1031,7 @@
 				B004003100000003 /* SetLogRow.swift in Sources */,
 				B004003100000004 /* ExerciseCardView.swift in Sources */,
 				B0SWAP00002 /* ExerciseSwapSheet.swift in Sources */,
+				B0TIME00004 /* SessionTimePicker.swift in Sources */,
 				B004003100000006 /* SessionSummaryView.swift in Sources */,
 				B004003100000007 /* ConfettiView.swift in Sources */,
 				B004003100000005 /* SessionView.swift in Sources */,

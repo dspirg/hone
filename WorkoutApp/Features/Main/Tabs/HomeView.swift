@@ -27,6 +27,8 @@ struct HomeView: View {
     @Environment(\.managedObjectContext) var context
     @State private var viewModel = HomeViewModel()
     @State private var showPaywall = false
+    @State private var showTimePicker = false
+    @State private var pendingSessionDay: WorkoutDay? = nil
 
     var body: some View {
         NavigationStack {
@@ -181,6 +183,18 @@ struct HomeView: View {
                     .environment(appState)
                 }
             }
+            .sheet(isPresented: $showTimePicker) {
+                SessionTimePicker { minutes in
+                    showTimePicker = false
+                    if let day = pendingSessionDay {
+                        appState.activeSessionDay = day
+                        appState.activeSessionPlanId = viewModel.activePlanId
+                        appState.sessionMinutesOverride = minutes
+                        appState.showSession = true
+                    }
+                }
+                .presentationDetents([.height(320)])
+            }
         }
     }
 
@@ -249,9 +263,8 @@ struct HomeView: View {
 
             // Start Workout CTA (D-13)
             Button {
-                appState.activeSessionDay = day
-                appState.activeSessionPlanId = viewModel.activePlanId
-                appState.showSession = true
+                pendingSessionDay = day
+                showTimePicker = true
             } label: {
                 Text("Start Workout")
                     .font(.body.weight(.bold))

@@ -17,6 +17,7 @@ struct UserProfile: Codable, Equatable, Sendable {
     let goal: String
     let fitnessLevel: String
     let daysPerWeek: Int
+    let sessionMinutes: Int
     let equipment: [String]
     let injuries: String  // empty string = no injuries (Structured Outputs requires non-optional)
 
@@ -24,6 +25,7 @@ struct UserProfile: Codable, Equatable, Sendable {
         case goal
         case fitnessLevel = "fitness_level"
         case daysPerWeek = "days_per_week"
+        case sessionMinutes = "session_minutes"
         case equipment, injuries
     }
 }

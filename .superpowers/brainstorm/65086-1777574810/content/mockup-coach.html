@@ -1,0 +1,121 @@
+<h2>3. Coach Chat: Richer Message Bubbles</h2>
+<p class="subtitle">Formatted AI responses with markdown rendering and styled exercise mentions</p>
+
+<div class="mockup" style="max-width:420px;margin:0 auto;">
+  <div class="mockup-header">Proposed Coach Chat</div>
+  <div class="mockup-body" style="background:#0a0a0a;padding:0;font-family:-apple-system,system-ui,sans-serif;">
+
+    <!-- Coach header -->
+    <div style="padding:16px 20px;border-bottom:1px solid #1f1f1f;display:flex;align-items:center;gap:10px;">
+      <div style="width:36px;height:36px;border-radius:18px;background:linear-gradient(135deg,#f59e0b,#f97316);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#000;">H</div>
+      <div>
+        <div style="font-size:17px;font-weight:600;color:#fff;">Hone</div>
+        <div style="font-size:12px;color:#34d399;">Online</div>
+      </div>
+    </div>
+
+    <div style="padding:16px 20px;display:flex;flex-direction:column;gap:12px;">
+
+      <!-- Date header -->
+      <div style="text-align:center;font-size:12px;color:#555;margin:4px 0;">Today</div>
+
+      <!-- User message -->
+      <div style="display:flex;justify-content:flex-end;">
+        <div style="background:rgba(245,158,11,0.15);border-radius:16px 16px 4px 16px;padding:12px 16px;max-width:75%;font-size:15px;color:#fff;line-height:1.5;">
+          What should I focus on today? My shoulders were sore from Monday.
+        </div>
+      </div>
+
+      <!-- Coach message - RICH FORMATTING -->
+      <div style="display:flex;gap:8px;align-items:flex-start;">
+        <div style="width:28px;height:28px;border-radius:14px;background:linear-gradient(135deg,#f59e0b,#f97316);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#000;flex-shrink:0;margin-top:2px;">H</div>
+        <div style="background:#161616;border-radius:4px 16px 16px 16px;padding:14px 16px;max-width:80%;font-size:15px;color:#ddd;line-height:1.6;">
+          <div style="margin-bottom:10px;">Since your shoulders are still recovering, let's <strong style="color:#fff;">skip overhead pressing</strong> today and focus on pulls and legs instead. Here's what I'd suggest:</div>
+
+          <!-- Formatted list -->
+          <div style="margin-bottom:12px;">
+            <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:6px;">
+              <div style="color:#f59e0b;font-weight:600;min-width:18px;">1.</div>
+              <div><strong style="color:#fff;">Warm up</strong> with 5 min light cardio + band pull-aparts</div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:6px;">
+              <div style="color:#f59e0b;font-weight:600;min-width:18px;">2.</div>
+              <div><strong style="color:#fff;">Heavy pulls</strong> &mdash; barbell rows and lat pulldowns</div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:6px;">
+              <div style="color:#f59e0b;font-weight:600;min-width:18px;">3.</div>
+              <div><strong style="color:#fff;">Legs</strong> &mdash; squats and Romanian deadlifts</div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:flex-start;">
+              <div style="color:#f59e0b;font-weight:600;min-width:18px;">4.</div>
+              <div><strong style="color:#fff;">Finish</strong> with core work and stretching</div>
+            </div>
+          </div>
+
+          <!-- Inline exercise card -->
+          <div style="background:#1e1e1e;border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px;margin-bottom:8px;border:1px solid #2a2a2a;">
+            <div style="width:44px;height:44px;background:#252525;border-radius:8px;display:flex;align-items:center;justify-content:center;">
+              <div style="width:36px;height:36px;background:#333;border-radius:6px;"></div>
+            </div>
+            <div style="flex:1;">
+              <div style="font-size:14px;font-weight:600;color:#fff;">Barbell Row</div>
+              <div style="font-size:12px;color:#888;">Back &middot; 4 &times; 8-10</div>
+            </div>
+            <div style="font-size:12px;color:#f59e0b;">View &rsaquo;</div>
+          </div>
+
+          <div style="background:#1e1e1e;border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px;border:1px solid #2a2a2a;">
+            <div style="width:44px;height:44px;background:#252525;border-radius:8px;display:flex;align-items:center;justify-content:center;">
+              <div style="width:36px;height:36px;background:#333;border-radius:6px;"></div>
+            </div>
+            <div style="flex:1;">
+              <div style="font-size:14px;font-weight:600;color:#fff;">Romanian Deadlift</div>
+              <div style="font-size:12px;color:#888;">Back &middot; 3 &times; 10-12</div>
+            </div>
+            <div style="font-size:12px;color:#f59e0b;">View &rsaquo;</div>
+          </div>
+
+          <div style="margin-top:10px;font-size:14px;color:#999;">
+            Your shoulders should be good to go by Thursday. I'll keep pressing movements in your next session. &#128170;
+          </div>
+        </div>
+      </div>
+
+      <!-- User followup -->
+      <div style="display:flex;justify-content:flex-end;">
+        <div style="background:rgba(245,158,11,0.15);border-radius:16px 16px 4px 16px;padding:12px 16px;max-width:75%;font-size:15px;color:#fff;line-height:1.5;">
+          Sounds good, let's do it
+        </div>
+      </div>
+
+      <!-- Coach short reply -->
+      <div style="display:flex;gap:8px;align-items:flex-start;">
+        <div style="width:28px;height:28px;border-radius:14px;background:linear-gradient(135deg,#f59e0b,#f97316);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#000;flex-shrink:0;margin-top:2px;">H</div>
+        <div style="background:#161616;border-radius:4px 16px 16px 16px;padding:14px 16px;max-width:80%;font-size:15px;color:#ddd;line-height:1.6;">
+          Let's get after it. &#128293; I've updated your plan for today &mdash; head to the <strong style="color:#fff;">Home tab</strong> to start your session.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Message input -->
+    <div style="padding:12px 20px;border-top:1px solid #1f1f1f;display:flex;gap:10px;align-items:center;">
+      <div style="flex:1;background:#161616;border-radius:20px;padding:10px 16px;font-size:15px;color:#555;">Message Hone...</div>
+      <div style="width:36px;height:36px;border-radius:18px;background:#f59e0b;display:flex;align-items:center;justify-content:center;">
+        <div style="font-size:16px;color:#000;">&#8593;</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top:20px;padding:16px;background:#161616;border-radius:12px;max-width:420px;margin-left:auto;margin-right:auto;">
+  <h3 style="margin:0 0 8px;color:#f59e0b;">Key Changes</h3>
+  <ul style="margin:0;padding-left:20px;color:#ccc;font-size:14px;line-height:1.8;">
+    <li><strong>Numbered lists:</strong> Amber numbers with bold headings for structured advice</li>
+    <li><strong>Bold emphasis:</strong> Key words in white against #ddd body text</li>
+    <li><strong>Exercise mini-cards:</strong> Tappable cards with thumbnail, name, sets, and "View" link</li>
+    <li><strong>User bubbles:</strong> Subtle amber tint instead of solid accent (less overwhelming)</li>
+    <li><strong>Rounded send button:</strong> Amber circle with arrow icon</li>
+    <li><strong>"Online" status:</strong> Green dot under coach name adds life</li>
+  </ul>
+</div>

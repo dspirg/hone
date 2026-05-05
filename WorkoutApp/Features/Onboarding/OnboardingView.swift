@@ -100,8 +100,9 @@ struct OnboardingView: View {
         case 0: GoalCardView(viewModel: viewModel)
         case 1: FitnessLevelCardView(viewModel: viewModel)
         case 2: DaysPerWeekCardView(viewModel: viewModel)
-        case 3: EquipmentCardView(viewModel: viewModel)
-        case 4: InjuriesCardView(viewModel: viewModel)
+        case 3: SessionLengthCardView(viewModel: viewModel)
+        case 4: EquipmentCardView(viewModel: viewModel)
+        case 5: InjuriesCardView(viewModel: viewModel)
         default: EmptyView()
         }
     }

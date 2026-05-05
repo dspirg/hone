@@ -42,6 +42,8 @@ final class AppState {
     var activeSessionPlanId: String = ""
     /// Controls fullScreenCover presentation of SessionView
     var showSession: Bool = false
+    /// Per-session time override (set from time picker before starting)
+    var sessionMinutesOverride: Int? = nil
 
     // MARK: - Auth State Listener
     // Subscribes to Supabase authStateChanges AsyncStream

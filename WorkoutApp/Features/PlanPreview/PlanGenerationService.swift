@@ -178,6 +178,7 @@ final class PlanGenerationService {
                 "goal": AnyJSON.string(profile.goal),
                 "fitness_level": AnyJSON.string(profile.fitnessLevel),
                 "days_per_week": AnyJSON.integer(profile.daysPerWeek),
+                "session_minutes": AnyJSON.integer(profile.sessionMinutes),
                 "equipment": AnyJSON.array(profile.equipment.map { AnyJSON.string($0) }),
                 "injuries": AnyJSON.string(profile.injuries)
             ])

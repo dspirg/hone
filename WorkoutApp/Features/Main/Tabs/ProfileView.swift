@@ -18,7 +18,7 @@ import RevenueCatUI
 struct ProfileView: View {
     @Environment(AppState.self) var appState
     @State private var showCustomerCenter = false
-    @State private var currentProfile = UserProfile(goal: "", fitnessLevel: "", daysPerWeek: 3, equipment: [], injuries: "")
+    @State private var currentProfile = UserProfile(goal: "", fitnessLevel: "", daysPerWeek: 3, sessionMinutes: 45, equipment: [], injuries: "")
     @State private var showRegenConfirm = false
 
     var body: some View {
@@ -123,18 +123,20 @@ struct ProfileView: View {
             let goal: String?
             let fitnessLevel: String?
             let daysPerWeek: Int?
+            let sessionMinutes: Int?
             let equipment: [String]?
             let injuries: String?
             enum CodingKeys: String, CodingKey {
                 case goal
                 case fitnessLevel = "fitness_level"
                 case daysPerWeek = "days_per_week"
+                case sessionMinutes = "session_minutes"
                 case equipment, injuries
             }
         }
         let rows: [ProfileRow] = try await supabase
             .from("profiles")
-            .select("goal, fitness_level, days_per_week, equipment, injuries")
+            .select("goal, fitness_level, days_per_week, session_minutes, equipment, injuries")
             .eq("id", value: userId.uuidString)
             .limit(1)
             .execute()
@@ -144,6 +146,7 @@ struct ProfileView: View {
             goal: row?.goal ?? "",
             fitnessLevel: row?.fitnessLevel ?? "",
             daysPerWeek: row?.daysPerWeek ?? 3,
+            sessionMinutes: row?.sessionMinutes ?? 45,
             equipment: row?.equipment ?? [],
             injuries: row?.injuries ?? ""
         )

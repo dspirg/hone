@@ -18,6 +18,7 @@ final class OnboardingViewModel {
     var selectedGoal: String? = nil
     var selectedFitnessLevel: String? = nil
     var selectedDaysPerWeek: Int? = nil
+    var selectedSessionMinutes: Int? = nil
     var selectedEquipment: Set<String> = []
     var injuriesText: String = ""
 
@@ -28,7 +29,7 @@ final class OnboardingViewModel {
 
     // MARK: - Computed Properties
 
-    var totalSteps: Int { 5 }
+    var totalSteps: Int { 6 }
 
     /// Progress fraction 0.2 (step 0) through 1.0 (step 4) for the progress bar fill
     var progressFraction: Double { Double(currentStep + 1) / Double(totalSteps) }
@@ -62,6 +63,13 @@ final class OnboardingViewModel {
         }
     }
 
+    func selectSessionMinutes(_ minutes: Int) {
+        selectedSessionMinutes = minutes
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.12) { [weak self] in
+            self?.advance()
+        }
+    }
+
     // MARK: - Equipment Multi-Select (mutual exclusivity per UI-SPEC EquipmentCardView contract)
 
     func toggleEquipment(_ item: String) {
@@ -82,7 +90,7 @@ final class OnboardingViewModel {
     // MARK: - Navigation
 
     func advance() {
-        guard currentStep < 4 else { return }
+        guard currentStep < 5 else { return }
         isGoingForward = true
         withAnimation(.spring(duration: 0.35, bounce: 0.1)) {
             currentStep += 1
@@ -109,6 +117,7 @@ final class OnboardingViewModel {
             goal: selectedGoal ?? "",
             fitnessLevel: selectedFitnessLevel ?? "",
             daysPerWeek: selectedDaysPerWeek ?? 3,
+            sessionMinutes: selectedSessionMinutes ?? 45,
             equipment: Array(selectedEquipment),
             injuries: injuriesText
         )

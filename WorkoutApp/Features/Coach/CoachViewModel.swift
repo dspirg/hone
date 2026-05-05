@@ -116,6 +116,7 @@ final class CoachViewModel {
                 let goal: String?
                 let fitness_level: String?
                 let days_per_week: Int?
+                let session_minutes: Int?
                 let equipment: [String]?
                 let injuries: String?
                 let display_name: String?
@@ -123,7 +124,7 @@ final class CoachViewModel {
 
             let response: [ProfileRow] = try await supabase
                 .from("profiles")
-                .select("goal, fitness_level, days_per_week, equipment, injuries, display_name")
+                .select("goal, fitness_level, days_per_week, session_minutes, equipment, injuries, display_name")
                 .eq("id", value: userId.uuidString)
                 .execute()
                 .value
@@ -133,6 +134,7 @@ final class CoachViewModel {
                     goal: row.goal ?? "",
                     fitnessLevel: row.fitness_level ?? "",
                     daysPerWeek: row.days_per_week ?? 3,
+                    sessionMinutes: row.session_minutes ?? 45,
                     equipment: row.equipment ?? [],
                     injuries: row.injuries ?? ""
                 )

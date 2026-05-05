@@ -1,0 +1,152 @@
+<h2>2. Session: Progress Bar & Set Completion Polish</h2>
+<p class="subtitle">Adding micro-animations and haptic feedback to make completing sets feel rewarding</p>
+
+<div class="split">
+  <div class="mockup">
+    <div class="mockup-header">Current</div>
+    <div class="mockup-body" style="background:#0a0a0a;padding:20px;font-family:-apple-system,system-ui,sans-serif;">
+
+      <!-- Progress bar -->
+      <div style="text-align:center;font-size:13px;color:#888;margin-bottom:8px;">Exercise 2 of 5</div>
+      <div style="display:flex;gap:4px;margin-bottom:20px;">
+        <div style="flex:1;height:6px;background:#f59e0b;border-radius:3px;"></div>
+        <div style="flex:1;height:6px;background:#f59e0b;border-radius:3px;"></div>
+        <div style="flex:1;height:6px;background:#1e1e1e;border-radius:3px;border:1px solid #333;"></div>
+        <div style="flex:1;height:6px;background:#1e1e1e;border-radius:3px;"></div>
+        <div style="flex:1;height:6px;background:#1e1e1e;border-radius:3px;"></div>
+      </div>
+
+      <!-- Video placeholder -->
+      <div style="background:#1a1a1a;border-radius:16px;height:120px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
+        <div style="color:#444;font-size:32px;">&#9654;</div>
+      </div>
+
+      <!-- Exercise info -->
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px;">
+        <div>
+          <div style="font-size:20px;font-weight:600;color:#fff;">Overhead Press</div>
+          <div style="font-size:15px;color:#f59e0b;">3 sets &times; 8-10 reps</div>
+        </div>
+        <div style="font-size:15px;color:#888;">Set 2 of 3</div>
+      </div>
+
+      <!-- Set rows - current style (instant state, no animation) -->
+      <div style="display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid #1f1f1f;">
+        <div style="width:36px;height:36px;border-radius:18px;background:#f59e0b;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#000;">1</div>
+        <div style="flex:1;display:flex;align-items:center;gap:8px;">
+          <div style="background:#1e1e1e;border-radius:8px;padding:8px 16px;font-size:20px;font-weight:600;color:#fff;min-width:72px;text-align:center;">10</div>
+          <div style="font-size:13px;color:#888;">Target: 8-10</div>
+        </div>
+        <div style="width:44px;height:44px;border-radius:22px;background:#f59e0b;display:flex;align-items:center;justify-content:center;font-size:18px;color:#000;">&#10003;</div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid #1f1f1f;">
+        <div style="width:36px;height:36px;border-radius:18px;background:#1e1e1e;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#fff;border:1px solid #333;">2</div>
+        <div style="flex:1;display:flex;align-items:center;gap:8px;">
+          <div style="background:#1e1e1e;border-radius:8px;padding:8px 16px;font-size:20px;font-weight:600;color:#fff;min-width:72px;text-align:center;">8</div>
+          <div style="font-size:13px;color:#888;">Target: 8-10</div>
+        </div>
+        <div style="width:44px;height:44px;border-radius:22px;background:#1e1e1e;display:flex;align-items:center;justify-content:center;font-size:18px;color:#666;border:1px solid #333;">&#10003;</div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:12px;padding:14px 0;">
+        <div style="width:36px;height:36px;border-radius:18px;background:#1e1e1e;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#fff;border:1px solid #333;">3</div>
+        <div style="flex:1;display:flex;align-items:center;gap:8px;">
+          <div style="background:#1e1e1e;border-radius:8px;padding:8px 16px;font-size:20px;font-weight:600;color:#fff;min-width:72px;text-align:center;">8</div>
+          <div style="font-size:13px;color:#888;">Target: 8-10</div>
+        </div>
+        <div style="width:44px;height:44px;border-radius:22px;background:#1e1e1e;display:flex;align-items:center;justify-content:center;font-size:18px;color:#666;border:1px solid #333;">&#10003;</div>
+      </div>
+
+      <!-- CTA -->
+      <div style="margin-top:20px;">
+        <div style="background:#f59e0b;color:#000;font-weight:600;text-align:center;padding:16px;border-radius:12px;font-size:17px;">Complete Set</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mockup">
+    <div class="mockup-header">Proposed</div>
+    <div class="mockup-body" style="background:#0a0a0a;padding:20px;font-family:-apple-system,system-ui,sans-serif;">
+
+      <!-- Enhanced progress bar with glow on active -->
+      <div style="text-align:center;font-size:13px;color:#888;margin-bottom:8px;">Exercise 2 of 5</div>
+      <div style="display:flex;gap:4px;margin-bottom:20px;">
+        <div style="flex:1;height:6px;background:#f59e0b;border-radius:3px;box-shadow:0 0 6px rgba(245,158,11,0.4);"></div>
+        <div style="flex:1;height:6px;background:linear-gradient(90deg,#f59e0b 60%,#1e1e1e 60%);border-radius:3px;box-shadow:0 0 6px rgba(245,158,11,0.2);"></div>
+        <div style="flex:1;height:6px;background:#1e1e1e;border-radius:3px;"></div>
+        <div style="flex:1;height:6px;background:#1e1e1e;border-radius:3px;"></div>
+        <div style="flex:1;height:6px;background:#1e1e1e;border-radius:3px;"></div>
+      </div>
+
+      <!-- Video placeholder -->
+      <div style="background:#1a1a1a;border-radius:16px;height:120px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
+        <div style="color:#444;font-size:32px;">&#9654;</div>
+      </div>
+
+      <!-- Exercise info -->
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px;">
+        <div>
+          <div style="font-size:20px;font-weight:600;color:#fff;">Overhead Press</div>
+          <div style="font-size:15px;color:#f59e0b;">3 sets &times; 8-10 reps</div>
+        </div>
+        <div style="font-size:15px;color:#888;">Set 2 of 3</div>
+      </div>
+
+      <!-- Set rows - PROPOSED: completed set has glow + scale effect -->
+      <div style="display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid #1f1f1f;">
+        <div style="width:36px;height:36px;border-radius:18px;background:#f59e0b;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#000;box-shadow:0 0 12px rgba(245,158,11,0.4);">1</div>
+        <div style="flex:1;display:flex;align-items:center;gap:8px;">
+          <div style="background:#1e1e1e;border-radius:8px;padding:8px 16px;font-size:20px;font-weight:600;color:#fff;min-width:72px;text-align:center;">10</div>
+          <div style="font-size:13px;color:#34d399;">&#10003; Done</div>
+        </div>
+        <div style="width:44px;height:44px;border-radius:22px;background:#f59e0b;display:flex;align-items:center;justify-content:center;font-size:18px;color:#000;box-shadow:0 0 16px rgba(245,158,11,0.3);">&#10003;</div>
+      </div>
+
+      <!-- Active set - highlighted border -->
+      <div style="display:flex;align-items:center;gap:12px;padding:14px;border:1px solid rgba(245,158,11,0.3);border-radius:12px;background:rgba(245,158,11,0.03);margin:4px -4px;">
+        <div style="width:36px;height:36px;border-radius:18px;background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#f59e0b;border:2px solid #f59e0b;">2</div>
+        <div style="flex:1;display:flex;align-items:center;gap:8px;">
+          <div style="background:#1e1e1e;border:1px solid #333;border-radius:8px;padding:8px 16px;font-size:20px;font-weight:600;color:#fff;min-width:72px;text-align:center;">8</div>
+          <div style="font-size:13px;color:#f59e0b;">&#9654; Current</div>
+        </div>
+        <div style="width:44px;height:44px;border-radius:22px;background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;font-size:18px;color:#f59e0b;border:2px solid #f59e0b;">&#10003;</div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:12px;padding:14px 0;">
+        <div style="width:36px;height:36px;border-radius:18px;background:#1e1e1e;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#555;">3</div>
+        <div style="flex:1;display:flex;align-items:center;gap:8px;">
+          <div style="background:#1e1e1e;border-radius:8px;padding:8px 16px;font-size:20px;font-weight:600;color:#555;min-width:72px;text-align:center;">8</div>
+          <div style="font-size:13px;color:#555;">Upcoming</div>
+        </div>
+        <div style="width:44px;height:44px;border-radius:22px;background:#1e1e1e;display:flex;align-items:center;justify-content:center;font-size:18px;color:#444;">&#10003;</div>
+      </div>
+
+      <!-- CTA with glow -->
+      <div style="margin-top:20px;">
+        <div style="background:linear-gradient(135deg,#f59e0b,#f97316);color:#000;font-weight:700;text-align:center;padding:16px;border-radius:12px;font-size:17px;box-shadow:0 4px 20px rgba(245,158,11,0.3);">Complete Set</div>
+      </div>
+
+      <!-- Behavior notes -->
+      <div style="margin-top:16px;padding:12px;background:#161616;border-radius:8px;font-size:12px;color:#888;">
+        <div style="color:#f59e0b;font-weight:600;margin-bottom:4px;">&#9889; Runtime behaviors (not visible in screenshot):</div>
+        &bull; Haptic feedback (UIImpactFeedbackGenerator.medium) on checkmark tap<br>
+        &bull; Spring scale animation (1.0 → 1.15 → 1.0) on set complete<br>
+        &bull; Progress bar segment fills with 0.3s ease animation<br>
+        &bull; Completed set number circle pulses amber glow once
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top:20px;padding:16px;background:#161616;border-radius:12px;">
+  <h3 style="margin:0 0 8px;color:#f59e0b;">Key Changes</h3>
+  <ul style="margin:0;padding-left:20px;color:#ccc;font-size:14px;line-height:1.8;">
+    <li><strong>Active set highlight:</strong> Amber border + subtle tinted background marks the current set</li>
+    <li><strong>Completed sets glow:</strong> Amber shadow on number circle and checkmark</li>
+    <li><strong>Status labels:</strong> "Done" (green), "Current" (amber), "Upcoming" (dimmed) replaces silent state</li>
+    <li><strong>Progress bar:</strong> Partial fill on current exercise segment + glow on completed segments</li>
+    <li><strong>CTA button:</strong> Gradient + glow shadow (matches Home screen CTA)</li>
+    <li><strong>Haptic + animation:</strong> Spring bounce + haptic on set completion (runtime only)</li>
+  </ul>
+</div>

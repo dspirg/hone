@@ -6,6 +6,7 @@ struct EditProfileView: View {
     @State private var goal: String
     @State private var fitnessLevel: String
     @State private var daysPerWeek: Int
+    @State private var sessionMinutes: Int
     @State private var equipment: Set<String>
     @State private var injuries: String
     @State private var isSaving = false
@@ -14,12 +15,14 @@ struct EditProfileView: View {
     private let goalOptions = ["Build Muscle", "Lose Fat", "Get Fitter", "Athletic Performance"]
     private let levelOptions = ["Beginner", "Intermediate", "Advanced"]
     private let dayOptions = [2, 3, 4, 5, 6]
+    private let timeOptions = [(label: "30 min", value: 30), (label: "45 min", value: 45), (label: "60 min", value: 60), (label: "90 min", value: 90)]
     private let equipmentOptions = ["No equipment", "Dumbbells", "Barbell", "Machines", "Resistance Bands", "Full Gym"]
 
     init(profile: UserProfile) {
         _goal = State(initialValue: profile.goal)
         _fitnessLevel = State(initialValue: profile.fitnessLevel)
         _daysPerWeek = State(initialValue: profile.daysPerWeek)
+        _sessionMinutes = State(initialValue: profile.sessionMinutes)
         _equipment = State(initialValue: Set(profile.equipment))
         _injuries = State(initialValue: profile.injuries)
     }
@@ -73,6 +76,25 @@ struct EditProfileView: View {
                                 .frame(width: 44, height: 44)
                                 .background(daysPerWeek == day ? Theme.accent : Theme.surface)
                                 .foregroundStyle(daysPerWeek == day ? .black : .primary)
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                        }
+                    }
+                }
+                .listRowBackground(Color.clear)
+            }
+
+            Section("Session Length") {
+                HStack(spacing: 8) {
+                    ForEach(timeOptions, id: \.value) { option in
+                        Button {
+                            sessionMinutes = option.value
+                        } label: {
+                            Text(option.label)
+                                .font(.caption.weight(.semibold))
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 40)
+                                .background(sessionMinutes == option.value ? Theme.accent : Theme.surface)
+                                .foregroundStyle(sessionMinutes == option.value ? .black : .primary)
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
                         }
                     }
@@ -153,6 +175,7 @@ struct EditProfileView: View {
             goal: goal,
             fitnessLevel: fitnessLevel,
             daysPerWeek: daysPerWeek,
+            sessionMinutes: sessionMinutes,
             equipment: Array(equipment),
             injuries: injuries
         )

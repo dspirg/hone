@@ -228,7 +228,7 @@ struct PlanPreviewView: View {
             )
         ]
     ))
-    let profile = UserProfile(goal: "Build Muscle", fitnessLevel: "Intermediate", daysPerWeek: 4, equipment: ["Barbell"], injuries: "")
+    let profile = UserProfile(goal: "Build Muscle", fitnessLevel: "Intermediate", daysPerWeek: 4, sessionMinutes: 45, equipment: ["Barbell"], injuries: "")
     let vm = PlanPreviewViewModel(service: service, profile: profile)
     return PlanPreviewView(viewModel: vm) { }
 }

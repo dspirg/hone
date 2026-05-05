@@ -73,6 +73,9 @@
             ReferencedContainer = "container:WorkoutApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <StoreKitConfigurationFileReference
+         identifier = "../../WorkoutApp/Configuration/WorkoutAppProducts.storekit">
+      </StoreKitConfigurationFileReference>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

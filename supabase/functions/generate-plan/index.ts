@@ -53,6 +53,7 @@ serve(async (req: Request): Promise<Response> => {
     goal: string;
     fitness_level: string;
     days_per_week: number;
+    session_minutes: number;
     equipment: string[];
     injuries: string;
   };
@@ -130,12 +131,15 @@ serve(async (req: Request): Promise<Response> => {
     ? profile.equipment.slice(0, 20).join(", ")
     : String(profile.equipment);
 
+  const sessionMinutes = profile.session_minutes || 45;
+
   let systemPrompt = `You are a professional fitness coach. Generate a personalized ${profile.days_per_week}-day weekly workout plan.
 
 User profile:
 - Goal: ${safeGoal}
 - Fitness Level: ${safeLevel}
 - Training Days: ${profile.days_per_week} days per week
+- Session Length: ${sessionMinutes} minutes per session
 - Available Equipment: ${equipmentList}`;
 
   // Only include injuries section when the user provided input (SAFE-02, D-12)
@@ -149,11 +153,12 @@ For each exercise, provide a rationale explaining why it was chosen for this use
 
 Generate exactly ${profile.days_per_week} training days.
 
-VOLUME REQUIREMENTS:
-- Each training day MUST have 6-8 exercises.
-- Include 2-3 compound movements (3-4 sets each) and 3-5 isolation/accessory exercises (3 sets each).
-- A typical day should total 20-25 working sets.
-- Beginners: lean toward 6 exercises per day. Intermediate/Advanced: 7-8 exercises per day.`;
+VOLUME REQUIREMENTS — fit each session into ${sessionMinutes} minutes:
+- 30 min sessions: 4-5 exercises, 12-16 total sets, favor compound supersets, shorter rest (45-60s)
+- 45 min sessions: 5-6 exercises, 16-20 total sets, 2-3 compounds + 2-3 accessories, 60-90s rest
+- 60 min sessions: 6-8 exercises, 20-25 total sets, 2-3 compounds (3-4 sets) + 3-5 accessories (3 sets), 60-90s rest
+- 90 min sessions: 8-10 exercises, 25-32 total sets, 3-4 compounds (4 sets) + 4-6 accessories (3 sets), 90-120s rest on compounds
+Choose the row matching ${sessionMinutes} minutes. Adjust rest_seconds per exercise accordingly.`;
 
   // Constrain exercise names to database entries (ensures videos/thumbnails exist)
   if (exerciseNameList) {
