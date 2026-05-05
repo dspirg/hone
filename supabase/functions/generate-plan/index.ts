@@ -147,7 +147,13 @@ User profile:
 
 For each exercise, provide a rationale explaining why it was chosen for this user's specific goal and available equipment. This rationale will be displayed to the user as a coach note.
 
-Generate exactly ${profile.days_per_week} training days.`;
+Generate exactly ${profile.days_per_week} training days.
+
+VOLUME REQUIREMENTS:
+- Each training day MUST have 6-8 exercises.
+- Include 2-3 compound movements (3-4 sets each) and 3-5 isolation/accessory exercises (3 sets each).
+- A typical day should total 20-25 working sets.
+- Beginners: lean toward 6 exercises per day. Intermediate/Advanced: 7-8 exercises per day.`;
 
   // Constrain exercise names to database entries (ensures videos/thumbnails exist)
   if (exerciseNameList) {
