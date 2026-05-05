@@ -28,7 +28,7 @@ struct SessionLengthCardView: View {
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 16)
 
-            Text("We'll build workouts that fit your time")
+            Text("You can change this before each workout")
                 .font(.body)
                 .foregroundStyle(.secondary)
 

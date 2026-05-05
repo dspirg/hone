@@ -17,11 +17,13 @@ struct SessionTimePicker: View {
             VStack(spacing: 4) {
                 Text("How much time do you have?")
                     .font(.title3.weight(.semibold))
-                Text("We'll adjust your workout to fit")
+                Text("Pick for today — you can choose differently next time")
                     .font(.body)
                     .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
             }
             .padding(.top, 24)
+            .padding(.horizontal, 20)
 
             VStack(spacing: 10) {
                 ForEach(options, id: \.minutes) { option in
