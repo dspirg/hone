@@ -49,6 +49,8 @@ struct ExerciseCardView: View {
 
     // Per-set rep counts — initialized from exercise.reps target (e.g., "8-12" → 8, "10" → 10)
     @State private var repCounts: [Int]
+    @State private var weightPerSet: [Double]
+    @State private var equipmentTag: String = "Bodyweight"
 
     init(exercise: PlannedExercise, exerciseIndex: Int, viewModel: SessionViewModel) {
         self.exercise = exercise
@@ -64,6 +66,7 @@ struct ExerciseCardView: View {
                 ?? 8
         ) ?? 8
         _repCounts = State(initialValue: Array(repeating: defaultReps, count: exercise.sets))
+        _weightPerSet = State(initialValue: Array(repeating: 0.0, count: exercise.sets))
     }
 
     var body: some View {
@@ -150,10 +153,14 @@ struct ExerciseCardView: View {
                             isCompleted: isCompleted,
                             isActive: setIndex == completedSetCount && !isCompleted,
                             repsLogged: $repCounts[setIndex],
+                            weightLogged: $weightPerSet[setIndex],
+                            showWeight: equipmentTag != "Bodyweight",
+                            weightUnit: viewModel.weightUnit,
                             onComplete: {
                                 viewModel.completeSet(
                                     setIndex: setIndex,
-                                    repsLogged: repCounts[setIndex]
+                                    repsLogged: repCounts[setIndex],
+                                    weightLogged: weightPerSet[setIndex]
                                 )
                             }
                         )
@@ -187,6 +194,7 @@ struct ExerciseCardView: View {
         .task(id: exerciseIndex) {
             await lookupVideo()
             await loadContextData()
+            await loadWeightData()
         }
         .sheet(isPresented: $showSwapSheet) {
             ExerciseSwapSheet(currentExercise: exercise) { replacement in
@@ -245,6 +253,26 @@ struct ExerciseCardView: View {
             }
         } catch {
             // Silent failure — placeholder is the fallback
+        }
+    }
+
+    // MARK: - Weight Data
+
+    /// Loads equipment tag and last-used weight for pre-filling weight inputs.
+    private func loadWeightData() async {
+        let repo = ExerciseRepository.shared
+
+        // Resolve equipment tag from exercise library
+        if let entity = try? repo.fetchByName(exercise.exerciseName) ?? repo.fetchByNameContains(exercise.exerciseName) {
+            equipmentTag = entity.value(forKey: "equipmentTag") as? String ?? "Bodyweight"
+        }
+
+        // Pre-fill with last-used weight from CoreData
+        if let lastWeight = try? viewModel.repository.fetchLastWeight(
+            exerciseName: exercise.exerciseName,
+            userId: viewModel.userId
+        ), lastWeight > 0 {
+            weightPerSet = Array(repeating: lastWeight, count: exercise.sets)
         }
     }
 

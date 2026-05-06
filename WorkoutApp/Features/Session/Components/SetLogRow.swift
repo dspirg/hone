@@ -23,9 +23,13 @@ struct SetLogRow: View {
     let isCompleted: Bool
     var isActive: Bool = false
     @Binding var repsLogged: Int
+    @Binding var weightLogged: Double
+    let showWeight: Bool      // false for bodyweight exercises
+    let weightUnit: String    // "lbs" or "kg"
     let onComplete: () -> Void
 
     @State private var showNumberPad = false
+    @State private var showWeightPad = false
 
     var body: some View {
         HStack(spacing: 0) {
@@ -54,6 +58,24 @@ struct SetLogRow: View {
                         Circle().stroke(isActive && !isCompleted ? Theme.accent : .clear, lineWidth: 2)
                     )
                     .shadow(color: isCompleted ? Theme.accent.opacity(0.4) : .clear, radius: 6)
+
+                if showWeight {
+                    Button {
+                        showWeightPad = true
+                    } label: {
+                        Text(weightLogged > 0 ? "\(Int(weightLogged)) \(weightUnit)" : "-- \(weightUnit)")
+                            .font(.subheadline.weight(.medium))
+                            .monospacedDigit()
+                            .foregroundStyle(isCompleted ? .secondary : .primary)
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 6)
+                            .background(Theme.surfaceElevated)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                    }
+                    .disabled(isCompleted)
+                    .contentShape(Rectangle())
+                    .accessibilityLabel(weightLogged > 0 ? "\(Int(weightLogged)) \(weightUnit), tap to edit" : "No weight, tap to enter")
+                }
 
                 Spacer()
 
@@ -130,6 +152,10 @@ struct SetLogRow: View {
             NumberPadSheet(reps: $repsLogged)
                 .presentationDetents([.height(300)])
         }
+        .sheet(isPresented: $showWeightPad) {
+            WeightPadSheet(weight: $weightLogged, unit: weightUnit)
+                .presentationDetents([.height(300)])
+        }
     }
 }
 
@@ -170,6 +196,43 @@ private struct NumberPadSheet: View {
     }
 }
 
+// MARK: - Weight Pad Sheet
+
+/// Bottom sheet for direct weight entry.
+/// Validates 0–9999 range before writing to binding.
+private struct WeightPadSheet: View {
+    @Binding var weight: Double
+    let unit: String
+    @Environment(\.dismiss) private var dismiss
+    @State private var input: String = ""
+
+    var body: some View {
+        NavigationStack {
+            VStack {
+                TextField("Weight (\(unit))", text: $input)
+                    .keyboardType(.decimalPad)
+                    .font(.title)
+                    .multilineTextAlignment(.center)
+                    .padding()
+                Spacer()
+            }
+            .navigationTitle("Enter Weight (\(unit))")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") {
+                        if let value = Double(input), value >= 0, value <= 9999 {
+                            weight = value
+                        }
+                        dismiss()
+                    }
+                }
+            }
+        }
+        .onAppear { input = weight > 0 ? "\(Int(weight))" : "" }
+    }
+}
+
 // MARK: - Preview
 
 #if DEBUG
@@ -180,6 +243,9 @@ private struct NumberPadSheet: View {
             targetReps: "8-12",
             isCompleted: false,
             repsLogged: .constant(10),
+            weightLogged: .constant(135),
+            showWeight: true,
+            weightUnit: "lbs",
             onComplete: {}
         )
         Divider()
@@ -188,6 +254,9 @@ private struct NumberPadSheet: View {
             targetReps: "8-12",
             isCompleted: true,
             repsLogged: .constant(10),
+            weightLogged: .constant(135),
+            showWeight: true,
+            weightUnit: "lbs",
             onComplete: {}
         )
     }

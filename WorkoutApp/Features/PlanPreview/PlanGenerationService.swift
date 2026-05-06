@@ -180,7 +180,8 @@ final class PlanGenerationService {
                 "days_per_week": AnyJSON.integer(profile.daysPerWeek),
                 "session_minutes": AnyJSON.integer(profile.sessionMinutes),
                 "equipment": AnyJSON.array(profile.equipment.map { AnyJSON.string($0) }),
-                "injuries": AnyJSON.string(profile.injuries)
+                "injuries": AnyJSON.string(profile.injuries),
+                "weight_unit": AnyJSON.string(profile.weightUnit)
             ])
             .eq("id", value: userId.uuidString)
             .execute()

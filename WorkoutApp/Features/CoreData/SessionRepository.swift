@@ -64,10 +64,12 @@ final class SessionRepository {
         session: CDSessionLog,
         exercise: PlannedExercise,
         setNumber: Int,
-        repsLogged: Int
+        repsLogged: Int,
+        weightLogged: Double = 0
     ) {
         // T-04-01: clamp before write — invalid stepper input or programmatic call
         let clampedReps = min(max(repsLogged, 0), 999)
+        let clampedWeight = max(weightLogged, 0)
         let sessionId = session.id
 
         container.performBackgroundTask { bgCtx in
@@ -78,6 +80,7 @@ final class SessionRepository {
             setLog.setNumber = Int16(min(setNumber, Int(Int16.max)))
             setLog.targetReps = exercise.reps
             setLog.repsLogged = Int16(clampedReps)
+            setLog.weightLogged = clampedWeight
             setLog.completedAt = Date()
             setLog.syncedToSupabase = false
 
@@ -104,9 +107,11 @@ final class SessionRepository {
         session: CDSessionLog,
         exercise: PlannedExercise,
         setNumber: Int,
-        repsLogged: Int
+        repsLogged: Int,
+        weightLogged: Double = 0
     ) throws {
         let clampedReps = min(max(repsLogged, 0), 999)
+        let clampedWeight = max(weightLogged, 0)
 
         let setLog = CDSetLog(context: context)
         setLog.id = UUID()
@@ -115,6 +120,7 @@ final class SessionRepository {
         setLog.setNumber = Int16(min(setNumber, Int(Int16.max)))
         setLog.targetReps = exercise.reps
         setLog.repsLogged = Int16(clampedReps)
+        setLog.weightLogged = clampedWeight
         setLog.completedAt = Date()
         setLog.syncedToSupabase = false
         session.addToSetLogs(setLog)
@@ -250,6 +256,28 @@ final class SessionRepository {
 
         guard !filtered.isEmpty else { return nil }
         return filtered.map { Int($0.repsLogged) }.max()
+    }
+
+    // MARK: - Last Weight Lookup
+
+    /// Returns the most recent weight logged for the given exercise by the given user.
+    /// Used to pre-fill weight inputs with the last-used weight.
+    /// Returns nil if no prior weight data exists.
+    func fetchLastWeight(exerciseName: String, userId: String) throws -> Double? {
+        let userSessionIds = try fetchUserSessionIds(userId: userId)
+        guard !userSessionIds.isEmpty else { return nil }
+
+        let request = CDSetLog.fetchRequest()
+        request.predicate = NSPredicate(format: "exerciseName ==[cd] %@", exerciseName)
+        request.sortDescriptors = [NSSortDescriptor(key: "completedAt", ascending: false)]
+        let allLogs = try context.fetch(request)
+
+        let filtered = allLogs.filter { log in
+            guard let sessionId = log.sessionId else { return false }
+            return userSessionIds.contains(sessionId) && log.weightLogged > 0
+        }
+
+        return filtered.first?.weightLogged
     }
 
     // MARK: - Mark Synced

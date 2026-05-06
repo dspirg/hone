@@ -78,6 +78,7 @@
 		B002004100000002 /* CacheEvictionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B002004000000002 /* CacheEvictionTests.swift */; };
 		B004000100000001 /* SessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B004000000000001 /* SessionRepository.swift */; };
 		B004000100000002 /* SessionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B004000000000002 /* SessionViewModel.swift */; };
+		B004000100000009 /* WeightProgressionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B004000000000009 /* WeightProgressionService.swift */; };
 		B004000100000003 /* SessionSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B004000000000003 /* SessionSyncService.swift */; };
 		B004003100000001 /* RestTimerOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = B004003000000001 /* RestTimerOverlay.swift */; };
 		B004003100000002 /* SessionProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B004003000000002 /* SessionProgressBar.swift */; };
@@ -244,6 +245,7 @@
 		B002004000000002 /* CacheEvictionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheEvictionTests.swift; sourceTree = "<group>"; };
 		B004000000000001 /* SessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionRepository.swift; sourceTree = "<group>"; };
 		B004000000000002 /* SessionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionViewModel.swift; sourceTree = "<group>"; };
+		B004000000000009 /* WeightProgressionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightProgressionService.swift; sourceTree = "<group>"; };
 		B004000000000003 /* SessionSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSyncService.swift; sourceTree = "<group>"; };
 		B004003000000001 /* RestTimerOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestTimerOverlay.swift; sourceTree = "<group>"; };
 		B004003000000002 /* SessionProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionProgressBar.swift; sourceTree = "<group>"; };
@@ -528,6 +530,7 @@
 			isa = PBXGroup;
 			children = (
 				B004000000000002 /* SessionViewModel.swift */,
+				B004000000000009 /* WeightProgressionService.swift */,
 				B004003000000005 /* SessionView.swift */,
 				B004003030000001 /* Components */,
 			);
@@ -1025,6 +1028,7 @@
 				B002004100000001 /* ExerciseCacheManager.swift in Sources */,
 				B004000100000001 /* SessionRepository.swift in Sources */,
 				B004000100000002 /* SessionViewModel.swift in Sources */,
+				B004000100000009 /* WeightProgressionService.swift in Sources */,
 				B004000100000003 /* SessionSyncService.swift in Sources */,
 				B004003100000001 /* RestTimerOverlay.swift in Sources */,
 				B004003100000002 /* SessionProgressBar.swift in Sources */,

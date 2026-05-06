@@ -1,5 +1,6 @@
 import Foundation
 import Observation
+import Supabase
 import UserNotifications
 
 // MARK: - SessionViewModel
@@ -34,11 +35,12 @@ final class SessionViewModel {
 
     /// Per-exercise set tracking: [exerciseIndex: [setIndex: repsLogged]]
     private(set) var completedSets: [Int: [Int: Int]] = [:]
+    private(set) var weightUnit: String = "lbs"
 
     // MARK: - Dependencies
 
     let workoutDay: WorkoutDay
-    private let repository: SessionRepository
+    let repository: SessionRepository
     private var sessionLog: CDSessionLog?
     private let planId: String
     // Phase 11: made internal (not private) so ExerciseCardView.loadContextData can read it
@@ -105,6 +107,29 @@ final class SessionViewModel {
     /// eliminating the race where completeSet fires before sessionLog is set.
     func startSession() async {
         sessionStartDate = Date()
+
+        // Load weight unit preference from Supabase profile
+        do {
+            struct WeightUnitRow: Decodable {
+                let weightUnit: String?
+                enum CodingKeys: String, CodingKey {
+                    case weightUnit = "weight_unit"
+                }
+            }
+            let rows: [WeightUnitRow] = try await supabase
+                .from("profiles")
+                .select("weight_unit")
+                .eq("id", value: userId)
+                .limit(1)
+                .execute()
+                .value
+            if let unit = rows.first?.weightUnit, !unit.isEmpty {
+                weightUnit = unit
+            }
+        } catch {
+            // Non-fatal — default to "lbs"
+        }
+
         do {
             sessionLog = try repository.startSession(
                 day: workoutDay,
@@ -127,7 +152,7 @@ final class SessionViewModel {
     /// - Parameters:
     ///   - setIndex: 0-indexed set position within the current exercise.
     ///   - repsLogged: Actual reps performed (clamped in repository to 0–999).
-    func completeSet(setIndex: Int, repsLogged: Int) {
+    func completeSet(setIndex: Int, repsLogged: Int, weightLogged: Double = 0) {
         guard let exercise = currentExercise else { return }
         guard let session = sessionLog else {
             // If setup definitively failed, the error banner in SessionView should already
@@ -150,8 +175,21 @@ final class SessionViewModel {
             session: session,
             exercise: exercise,
             setNumber: setIndex + 1,
-            repsLogged: repsLogged
+            repsLogged: repsLogged,
+            weightLogged: weightLogged
         )
+
+        // Upsert last-used weight to Supabase for progression tracking
+        if weightLogged > 0 {
+            Task {
+                await WeightProgressionService.upsertWeight(
+                    exerciseName: exercise.exerciseName,
+                    weight: weightLogged,
+                    weightUnit: weightUnit,
+                    userId: userId
+                )
+            }
+        }
 
         let isLastSetOfCurrentExercise = (setIndex + 1) >= exercise.sets
         let isLastExercise = currentExerciseIndex == exercises.count - 1
@@ -306,6 +344,17 @@ final class SessionViewModel {
             try repository.saveDifficultyRating(rating, for: session)
         } catch {
             print("SessionViewModel: saveDifficultyRating failed: \(error)")
+        }
+
+        // Auto-adjust weights based on difficulty rating
+        Task {
+            await WeightProgressionService.adjustWeights(
+                rating: rating,
+                exercises: exercises,
+                completedSets: completedSets,
+                weightUnit: weightUnit,
+                userId: userId
+            )
         }
     }
 

@@ -134,6 +134,7 @@ final class SessionSyncService {
                         setNumber: Int(sl.setNumber),
                         targetReps: sl.targetReps ?? "",
                         repsLogged: Int(sl.repsLogged),
+                        weightLogged: sl.weightLogged > 0 ? sl.weightLogged : nil,
                         completedAt: completedAt
                     )
                 }
@@ -213,6 +214,7 @@ private struct SetLogPayload: Encodable {
     let setNumber: Int
     let targetReps: String
     let repsLogged: Int
+    let weightLogged: Double?
     let completedAt: Date
 
     enum CodingKeys: String, CodingKey {
@@ -223,6 +225,7 @@ private struct SetLogPayload: Encodable {
         case setNumber = "set_number"
         case targetReps = "target_reps"
         case repsLogged = "reps_logged"
+        case weightLogged = "weight_logged"
         case completedAt = "completed_at"
     }
 }

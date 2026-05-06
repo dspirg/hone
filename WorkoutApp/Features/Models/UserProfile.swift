@@ -20,6 +20,7 @@ struct UserProfile: Codable, Equatable, Sendable {
     let sessionMinutes: Int
     let equipment: [String]
     let injuries: String  // empty string = no injuries (Structured Outputs requires non-optional)
+    var weightUnit: String = "lbs"
 
     enum CodingKeys: String, CodingKey {
         case goal
@@ -27,5 +28,35 @@ struct UserProfile: Codable, Equatable, Sendable {
         case daysPerWeek = "days_per_week"
         case sessionMinutes = "session_minutes"
         case equipment, injuries
+        case weightUnit = "weight_unit"
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        goal = try container.decode(String.self, forKey: .goal)
+        fitnessLevel = try container.decode(String.self, forKey: .fitnessLevel)
+        daysPerWeek = try container.decode(Int.self, forKey: .daysPerWeek)
+        sessionMinutes = try container.decode(Int.self, forKey: .sessionMinutes)
+        equipment = try container.decode([String].self, forKey: .equipment)
+        injuries = try container.decode(String.self, forKey: .injuries)
+        weightUnit = try container.decodeIfPresent(String.self, forKey: .weightUnit) ?? "lbs"
+    }
+
+    init(
+        goal: String,
+        fitnessLevel: String,
+        daysPerWeek: Int,
+        sessionMinutes: Int,
+        equipment: [String],
+        injuries: String,
+        weightUnit: String = "lbs"
+    ) {
+        self.goal = goal
+        self.fitnessLevel = fitnessLevel
+        self.daysPerWeek = daysPerWeek
+        self.sessionMinutes = sessionMinutes
+        self.equipment = equipment
+        self.injuries = injuries
+        self.weightUnit = weightUnit
     }
 }

@@ -9,6 +9,7 @@ struct EditProfileView: View {
     @State private var sessionMinutes: Int
     @State private var equipment: Set<String>
     @State private var injuries: String
+    @State private var weightUnit: String
     @State private var isSaving = false
     @State private var showRegenAlert = false
 
@@ -25,6 +26,7 @@ struct EditProfileView: View {
         _sessionMinutes = State(initialValue: profile.sessionMinutes)
         _equipment = State(initialValue: Set(profile.equipment))
         _injuries = State(initialValue: profile.injuries)
+        _weightUnit = State(initialValue: profile.weightUnit)
     }
 
     var body: some View {
@@ -95,6 +97,25 @@ struct EditProfileView: View {
                                 .frame(height: 40)
                                 .background(sessionMinutes == option.value ? Theme.accent : Theme.surface)
                                 .foregroundStyle(sessionMinutes == option.value ? .black : .primary)
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                        }
+                    }
+                }
+                .listRowBackground(Color.clear)
+            }
+
+            Section("Weight Unit") {
+                HStack(spacing: 8) {
+                    ForEach(["lbs", "kg"], id: \.self) { unit in
+                        Button {
+                            weightUnit = unit
+                        } label: {
+                            Text(unit)
+                                .font(.body.weight(.semibold))
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 44)
+                                .background(weightUnit == unit ? Theme.accent : Theme.surface)
+                                .foregroundStyle(weightUnit == unit ? .black : .primary)
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
                         }
                     }
@@ -177,7 +198,8 @@ struct EditProfileView: View {
             daysPerWeek: daysPerWeek,
             sessionMinutes: sessionMinutes,
             equipment: Array(equipment),
-            injuries: injuries
+            injuries: injuries,
+            weightUnit: weightUnit
         )
         let service = PlanGenerationService()
         do {
