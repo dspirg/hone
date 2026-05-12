@@ -28,10 +28,14 @@ struct WeekStreakBar: View {
             }
 
             // MARK: - Streak Label
-            Text("🔥 \(currentStreak) day streak")
-                .font(.body)
-                .foregroundStyle(.secondary)
-                .frame(maxWidth: .infinity, alignment: .center)
+            HStack(spacing: 4) {
+                Image(systemName: "flame.fill")
+                    .foregroundStyle(Theme.accent)
+                Text("\(currentStreak) day streak")
+                    .foregroundStyle(.secondary)
+            }
+            .font(.body)
+            .frame(maxWidth: .infinity, alignment: .center)
         }
     }
 
