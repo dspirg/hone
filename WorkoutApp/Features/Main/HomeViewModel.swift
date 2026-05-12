@@ -69,6 +69,27 @@ final class HomeViewModel {
         }
     }
 
+    // MARK: - Swap Exercise
+
+    /// Persists an exercise swap to CoreData and reloads the plan.
+    func swapExercise(
+        dayLabel: String,
+        exerciseIndex: Int,
+        replacement: PlannedExercise,
+        appState: AppState,
+        adaptationService: AdaptationService,
+        context: NSManagedObjectContext
+    ) async {
+        guard let userId = appState.currentUser?.id.uuidString else { return }
+        do {
+            let repo = WorkoutPlanRepository(context: context)
+            try repo.swapExercise(userId: userId, dayLabel: dayLabel, exerciseIndex: exerciseIndex, replacement: replacement)
+            await load(appState: appState, adaptationService: adaptationService, context: context)
+        } catch {
+            loadError = "Couldn't swap exercise"
+        }
+    }
+
     // MARK: - Time of Day Greeting
 
     var timeOfDayGreeting: String {
