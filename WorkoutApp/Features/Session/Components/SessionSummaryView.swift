@@ -79,8 +79,9 @@ struct SessionSummaryView: View {
                 if !prs.isEmpty {
                     VStack(alignment: .leading, spacing: 8) {
                         HStack(spacing: 8) {
-                            Text("\u{1F3C6}")
+                            Image(systemName: "trophy.fill")
                                 .font(.title3)
+                                .foregroundStyle(Theme.accent)
                             Text("New Records")
                                 .font(.title3.weight(.semibold))
                                 .foregroundStyle(Theme.accent)
@@ -122,14 +123,25 @@ struct SessionSummaryView: View {
                                 selectedRating = rating
                             } label: {
                                 VStack(spacing: 4) {
-                                    Text(rating.emoji)
-                                        .font(.system(size: 44))
+                                    Image(systemName: rating.iconName)
+                                        .font(.system(size: 28, weight: .medium))
+                                        .foregroundStyle(rating.strokeColor)
+                                        .frame(width: 56, height: 56)
+                                        .background(
+                                            LinearGradient(
+                                                colors: rating.gradientColors,
+                                                startPoint: .topLeading,
+                                                endPoint: .bottomTrailing
+                                            )
+                                        )
+                                        .clipShape(Circle())
+                                        .shadow(color: rating.gradientColors.last?.opacity(0.3) ?? .clear, radius: 8)
                                         .opacity(selectedRating == nil || selectedRating == rating ? 1.0 : 0.3)
                                         .scaleEffect(selectedRating == rating ? 1.15 : 1.0)
                                         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: selectedRating)
                                     Text(rating.label)
                                         .font(.caption2)
-                                        .foregroundStyle(selectedRating == rating ? Theme.accent : .secondary)
+                                        .foregroundStyle(selectedRating == rating ? rating.gradientColors.last ?? Theme.accent : .secondary)
                                 }
                             }
                             .accessibilityLabel(rating.label)
