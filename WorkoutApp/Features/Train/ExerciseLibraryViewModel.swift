@@ -25,6 +25,7 @@ final class ExerciseLibraryViewModel {
     var searchText: String = ""
     var activeMuscleGroup: String? = nil   // nil = "All"
     var activeEquipment: String? = nil     // nil = "All"
+    var expandedSections: Set<String> = []
 
     // MARK: - Computed: Filtered Exercises
 
@@ -67,11 +68,42 @@ final class ExerciseLibraryViewModel {
             }
     }
 
+    // MARK: - Section Expand/Collapse
+
+    /// Toggles a section's expanded state.
+    func toggleSection(_ section: String) {
+        if expandedSections.contains(section) {
+            expandedSections.remove(section)
+        } else {
+            expandedSections.insert(section)
+        }
+    }
+
+    /// Returns true if a section should display its exercises.
+    /// Auto-expands when: search is active (all sections), or filter yields single section.
+    func isSectionExpanded(_ section: String) -> Bool {
+        // Search active — show all matches
+        if !searchText.isEmpty {
+            return true
+        }
+        // Single section after filtering — auto-expand it
+        if exerciseSections.count == 1 {
+            return true
+        }
+        // Manual toggle state
+        return expandedSections.contains(section)
+    }
+
     // MARK: - Computed: Empty Search State
 
     /// True when search is active but produces no results.
     var isEmptySearch: Bool {
         !searchText.isEmpty && filteredExercises.isEmpty
+    }
+
+    /// Collapses all sections when filters are cleared back to "All".
+    func collapseAll() {
+        expandedSections.removeAll()
     }
 
     // MARK: - Load
