@@ -29,6 +29,14 @@ struct HomeView: View {
     @State private var showPaywall = false
     @State private var showTimePicker = false
     @State private var pendingSessionDay: WorkoutDay? = nil
+    @State private var swapTarget: SwapTarget? = nil
+
+    struct SwapTarget: Identifiable {
+        let dayLabel: String
+        let exerciseIndex: Int
+        let exercise: PlannedExercise
+        var id: String { "\(dayLabel)-\(exerciseIndex)" }
+    }
 
     var body: some View {
         NavigationStack {
@@ -195,6 +203,21 @@ struct HomeView: View {
                 }
                 .presentationDetents([.height(320)])
             }
+            .sheet(item: $swapTarget) { target in
+                ExerciseSwapSheet(currentExercise: target.exercise) { replacement in
+                    Task {
+                        await viewModel.swapExercise(
+                            dayLabel: target.dayLabel,
+                            exerciseIndex: target.exerciseIndex,
+                            replacement: replacement,
+                            appState: appState,
+                            adaptationService: adaptationService,
+                            context: context
+                        )
+                    }
+                }
+                .presentationDetents([.large])
+            }
         }
     }
 
@@ -253,9 +276,16 @@ struct HomeView: View {
                 .font(.body)
                 .foregroundStyle(.secondary)
 
+            Text("Tap swap to replace with a similar movement")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .italic()
+
             // Exercise rows with dividers (D-04: 40x40 thumbnails via HomeExerciseRowView)
             ForEach(Array(day.exercises.enumerated()), id: \.offset) { index, exercise in
-                HomeExerciseRowView(exercise: exercise)
+                HomeExerciseRowView(exercise: exercise) {
+                    swapTarget = SwapTarget(dayLabel: day.dayLabel, exerciseIndex: index, exercise: exercise)
+                }
                 if index < day.exercises.count - 1 {
                     Divider()
                 }
