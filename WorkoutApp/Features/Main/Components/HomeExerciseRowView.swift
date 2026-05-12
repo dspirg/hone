@@ -14,6 +14,7 @@ import SwiftUI
 
 struct HomeExerciseRowView: View {
     let exercise: PlannedExercise
+    var onSwap: (() -> Void)? = nil
 
     @State private var thumbnailImage: UIImage?
     @State private var videoUrl: String?
@@ -71,6 +72,27 @@ struct HomeExerciseRowView: View {
             }
 
             Spacer()
+
+            if let onSwap {
+                Button(action: onSwap) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "arrow.triangle.swap")
+                            .font(.system(size: 12))
+                        Text("Swap")
+                            .font(.caption)
+                    }
+                    .foregroundStyle(.secondary)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 5)
+                    .background(Theme.surfaceElevated)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Theme.borderSubtle, lineWidth: 1)
+                    )
+                }
+                .buttonStyle(.plain)
+            }
         }
         .task {
             await resolveVideo()
@@ -92,52 +114,61 @@ struct HomeExerciseRowView: View {
         "\(exercise.sets) x \(exercise.reps)"
     }
 
-    /// Resolves video URL and generates thumbnail from first frame
+    /// Resolves video URL and loads thumbnail
     private func resolveVideo() async {
         let repo = ExerciseRepository.shared
+
+        var thumbnailUrlStr: String?
 
         // Try CoreData first
         if let entity = try? repo.fetchByName(exercise.exerciseName) ?? repo.fetchByNameContains(exercise.exerciseName) {
             muxPlaybackId = entity.value(forKey: "muxPlaybackId") as? String
             videoUrl = entity.value(forKey: "videoUrl") as? String
+            thumbnailUrlStr = entity.value(forKey: "thumbnailURL") as? String
         }
 
         // Supabase fallback if CoreData had no video_url
-        if videoUrl == nil {
-            struct VideoResult: Decodable {
+        if videoUrl == nil || thumbnailUrlStr == nil {
+            struct ExerciseResult: Decodable {
                 let videoUrl: String?
-                enum CodingKeys: String, CodingKey { case videoUrl = "video_url" }
+                let thumbnailUrl: String?
+                enum CodingKeys: String, CodingKey {
+                    case videoUrl = "video_url"
+                    case thumbnailUrl = "thumbnail_url"
+                }
             }
-            if let results: [VideoResult] = try? await supabase
+            if let results: [ExerciseResult] = try? await supabase
                 .from("exercises")
-                .select("video_url")
+                .select("video_url, thumbnail_url")
                 .ilike("name", pattern: "%\(exercise.exerciseName)%")
                 .limit(1)
                 .execute()
                 .value,
-               let url = results.first?.videoUrl {
-                videoUrl = url
+               let first = results.first {
+                if videoUrl == nil { videoUrl = first.videoUrl }
+                if thumbnailUrlStr == nil { thumbnailUrlStr = first.thumbnailUrl }
             }
         }
 
-        // Generate thumbnail from video
+        // Load thumbnail from URL (fast, small JPEG)
+        if let urlStr = thumbnailUrlStr,
+           let url = URL(string: urlStr.replacingOccurrences(of: " ", with: "%20")),
+           let (data, _) = try? await URLSession.shared.data(from: url),
+           let img = UIImage(data: data) {
+            thumbnailImage = img
+            return
+        }
+
+        // Fallback: generate thumbnail from video first frame
         if let urlStr = videoUrl,
            let url = URL(string: urlStr.replacingOccurrences(of: " ", with: "%20")) {
-            await generateThumbnail(from: url)
-        }
-    }
-
-    private func generateThumbnail(from url: URL) async {
-        let asset = AVURLAsset(url: url)
-        let generator = AVAssetImageGenerator(asset: asset)
-        generator.appliesPreferredTrackTransform = true
-        generator.maximumSize = CGSize(width: 120, height: 120)
-
-        do {
-            let (cgImage, _) = try await generator.image(at: .zero)
-            thumbnailImage = UIImage(cgImage: cgImage)
-        } catch {
-            // Silent failure — placeholder stays
+            let asset = AVURLAsset(url: url)
+            let generator = AVAssetImageGenerator(asset: asset)
+            generator.appliesPreferredTrackTransform = true
+            generator.maximumSize = CGSize(width: 120, height: 120)
+            if let (cgImage, _) = try? await generator.image(at: .zero) {
+                thumbnailImage = UIImage(cgImage: cgImage)
+            }
         }
     }
 }
