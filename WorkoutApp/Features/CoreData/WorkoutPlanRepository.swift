@@ -96,4 +96,32 @@ final class WorkoutPlanRepository {
             try context.save()
         }
     }
+
+    // MARK: - Swap Exercise
+
+    /// Replaces a single exercise in the active plan and persists the change.
+    /// Rebuilds the immutable WorkoutPlan/WorkoutDay/PlannedExercise chain and re-encodes rawJSON.
+    func swapExercise(userId: String, dayLabel: String, exerciseIndex: Int, replacement: PlannedExercise) throws {
+        let request = CDWorkoutPlan.fetchRequest()
+        request.predicate = NSPredicate(format: "userId == %@ AND isActive == YES", userId)
+        request.sortDescriptors = [NSSortDescriptor(key: "createdAt", ascending: false)]
+        request.fetchLimit = 1
+
+        guard let cdPlan = try context.fetch(request).first,
+              let rawJSON = cdPlan.rawJSON else { return }
+
+        let plan = try JSONDecoder().decode(WorkoutPlan.self, from: rawJSON)
+
+        let updatedDays = plan.weeklyDays.map { day -> WorkoutDay in
+            guard day.dayLabel == dayLabel else { return day }
+            var updatedExercises = day.exercises
+            guard exerciseIndex >= 0, exerciseIndex < updatedExercises.count else { return day }
+            updatedExercises[exerciseIndex] = replacement
+            return WorkoutDay(dayLabel: day.dayLabel, sessionName: day.sessionName, exercises: updatedExercises)
+        }
+
+        let updatedPlan = WorkoutPlan(planName: plan.planName, goalSummary: plan.goalSummary, weeklyDays: updatedDays)
+        cdPlan.rawJSON = try JSONEncoder().encode(updatedPlan)
+        try context.save()
+    }
 }
