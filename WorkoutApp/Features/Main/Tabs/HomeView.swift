@@ -120,22 +120,31 @@ struct HomeView: View {
                     NavigationLink(destination: ExerciseLibraryView()) {
                         HStack(spacing: 12) {
                             Image(systemName: "figure.strengthtraining.traditional")
-                                .foregroundStyle(Theme.accent)
-                            Text("Browse Exercises")
-                                .font(.body.weight(.medium))
-                                .foregroundStyle(.primary)
+                                .font(.title3)
+                                .foregroundStyle(.black)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Browse Exercises")
+                                    .font(.body.weight(.bold))
+                                    .foregroundStyle(.black)
+                                Text("Explore the full exercise library")
+                                    .font(.caption)
+                                    .foregroundStyle(.black.opacity(0.7))
+                            }
                             Spacer()
                             Image(systemName: "chevron.right")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
+                                .font(.body.weight(.semibold))
+                                .foregroundStyle(.black.opacity(0.6))
                         }
                         .padding(16)
-                        .background(Theme.surface)
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(Theme.borderSubtle, lineWidth: 1)
+                        .background(
+                            LinearGradient(
+                                colors: [Theme.accent, Color(red: 249 / 255, green: 115 / 255, blue: 22 / 255)],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
                         )
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .shadow(color: Theme.accent.opacity(0.3), radius: 10, y: 4)
                     }
                     .padding(.horizontal, 20)
                     .padding(.top, Theme.Spacing.lg)
