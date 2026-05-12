@@ -39,10 +39,10 @@ struct SetLogRow: View {
                     .frame(width: 3)
             }
 
-            HStack(spacing: 16) {
+            HStack(spacing: 10) {
                 Text("\(setNumber)")
                     .font(.subheadline.weight(.semibold))
-                    .frame(width: 36, height: 36)
+                    .frame(width: 32, height: 32)
                     .background(
                         isCompleted ? Theme.accent :
                         isActive ? Theme.accent.opacity(0.15) :
@@ -64,11 +64,11 @@ struct SetLogRow: View {
                         showWeightPad = true
                     } label: {
                         Text(weightLogged > 0 ? "\(Int(weightLogged)) \(weightUnit)" : "-- \(weightUnit)")
-                            .font(.subheadline.weight(.medium))
+                            .font(.caption.weight(.medium))
                             .monospacedDigit()
                             .foregroundStyle(isCompleted ? .secondary : .primary)
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 6)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 5)
                             .background(Theme.surfaceElevated)
                             .clipShape(RoundedRectangle(cornerRadius: 8))
                     }
@@ -77,27 +77,27 @@ struct SetLogRow: View {
                     .accessibilityLabel(weightLogged > 0 ? "\(Int(weightLogged)) \(weightUnit), tap to edit" : "No weight, tap to enter")
                 }
 
-                Spacer()
+                Spacer(minLength: 4)
 
-                HStack(spacing: 12) {
+                HStack(spacing: 6) {
                     Button {
                         repsLogged = max(0, repsLogged - 1)
                     } label: {
                         Image(systemName: "minus.circle")
-                            .font(.system(size: 28))
+                            .font(.system(size: 22))
                     }
                     .disabled(isCompleted)
                     .contentShape(Rectangle())
-                    .frame(minWidth: 44, minHeight: 44)
+                    .frame(minWidth: 36, minHeight: 44)
                     .accessibilityLabel("Decrease reps")
 
                     Button {
                         showNumberPad = true
                     } label: {
                         Text("\(repsLogged)")
-                            .font(.title2.weight(.semibold))
+                            .font(.body.weight(.semibold))
                             .monospacedDigit()
-                            .frame(minWidth: 48)
+                            .frame(minWidth: 32)
                             .foregroundStyle(isCompleted ? .secondary : .primary)
                     }
                     .disabled(isCompleted)
@@ -109,34 +109,34 @@ struct SetLogRow: View {
                         repsLogged = min(999, repsLogged + 1)
                     } label: {
                         Image(systemName: "plus.circle")
-                            .font(.system(size: 28))
+                            .font(.system(size: 22))
                     }
                     .disabled(isCompleted)
                     .contentShape(Rectangle())
-                    .frame(minWidth: 44, minHeight: 44)
+                    .frame(minWidth: 36, minHeight: 44)
                     .accessibilityLabel("Increase reps")
                 }
 
-                Text(isCompleted ? "Done" : "Target: \(targetReps)")
-                    .font(.subheadline)
+                Text(isCompleted ? "Done" : targetReps)
+                    .font(.caption)
                     .foregroundStyle(isCompleted ? Theme.successGreen : .secondary)
-                    .frame(minWidth: 70, alignment: .trailing)
+                    .lineLimit(1)
 
                 Button {
                     UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                     onComplete()
                 } label: {
                     Image(systemName: isCompleted ? "checkmark.circle.fill" : "checkmark.circle")
-                        .font(.system(size: 28))
+                        .font(.system(size: 24))
                         .foregroundStyle(isCompleted ? Theme.accent : isActive ? Theme.accent : .secondary)
                         .shadow(color: isCompleted ? Theme.accent.opacity(0.3) : .clear, radius: 8)
                 }
                 .disabled(isCompleted)
                 .contentShape(Rectangle())
-                .frame(width: 44, height: 44)
+                .frame(width: 36, height: 44)
                 .accessibilityLabel(isCompleted ? "Set \(setNumber) complete" : "Mark set \(setNumber) complete")
             }
-            .padding(.horizontal, 16)
+            .padding(.horizontal, 12)
         }
         .frame(minHeight: 52)
         .background(
