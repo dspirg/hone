@@ -13,7 +13,10 @@ struct EquipmentCardView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            OnboardingHeroIcon(symbol: "🏋️")
+            OnboardingHeroIcon(
+                iconName: "figure.strengthtraining.traditional",
+                gradient: [Color(red: 0.06, green: 0.73, blue: 0.51), Color(red: 0.02, green: 0.47, blue: 0.34)]
+            )
 
             Spacer().frame(height: 20)
 

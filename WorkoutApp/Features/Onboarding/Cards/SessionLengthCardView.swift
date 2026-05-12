@@ -17,7 +17,10 @@ struct SessionLengthCardView: View {
         VStack(spacing: 0) {
             Spacer()
 
-            OnboardingHeroIcon(symbol: "\u{23F1}")
+            OnboardingHeroIcon(
+                iconName: "timer",
+                gradient: [Color(red: 0.02, green: 0.71, blue: 0.83), Color(red: 0.05, green: 0.46, blue: 0.56)]
+            )
 
             Spacer().frame(height: 20)
 

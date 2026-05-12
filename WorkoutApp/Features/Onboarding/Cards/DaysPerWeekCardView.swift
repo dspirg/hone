@@ -10,7 +10,10 @@ struct DaysPerWeekCardView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            OnboardingHeroIcon(symbol: "📅")
+            OnboardingHeroIcon(
+                iconName: "calendar",
+                gradient: [Color(red: 0.23, green: 0.51, blue: 0.96), Color(red: 0.11, green: 0.31, blue: 0.85)]
+            )
 
             Spacer().frame(height: 20)
 

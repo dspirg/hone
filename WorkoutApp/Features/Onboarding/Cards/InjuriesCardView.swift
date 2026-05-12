@@ -24,7 +24,10 @@ struct InjuriesCardView: View {
             }
             .padding(.trailing, 16)
 
-            OnboardingHeroIcon(symbol: "🩹")
+            OnboardingHeroIcon(
+                iconName: "heart.text.square",
+                gradient: [Color(red: 0.96, green: 0.25, blue: 0.37), Color(red: 0.75, green: 0.07, blue: 0.24)]
+            )
 
             Spacer().frame(height: 20)
 
