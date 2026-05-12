@@ -1,22 +1,24 @@
 import SwiftUI
 
 struct OnboardingHeroIcon: View {
-    let symbol: String
+    let iconName: String
+    let gradient: [Color]
     @State private var scale: CGFloat = 0.8
 
     var body: some View {
-        Text(symbol)
-            .font(.system(size: 36))
+        Image(systemName: iconName)
+            .font(.system(size: 28, weight: .medium))
+            .foregroundStyle(.white)
             .frame(width: 72, height: 72)
             .background(
                 LinearGradient(
-                    colors: [Theme.accent.opacity(0.15), Theme.accent.opacity(0.05)],
+                    colors: gradient,
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
             )
-            .clipShape(Circle())
-            .shadow(color: Theme.accent.opacity(0.1), radius: 12)
+            .clipShape(RoundedRectangle(cornerRadius: 18))
+            .shadow(color: gradient.first?.opacity(0.35) ?? .clear, radius: 12)
             .scaleEffect(scale)
             .onAppear {
                 withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
