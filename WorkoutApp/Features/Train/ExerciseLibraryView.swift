@@ -34,7 +34,41 @@ struct ExerciseLibraryView: View {
 
                 List {
                     ForEach(viewModel.exerciseSections, id: \.0) { section, exercises in
-                        Section(header: Text(section).textCase(.uppercase)) {
+                        // Tappable section header
+                        Button {
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                                viewModel.toggleSection(section)
+                            }
+                        } label: {
+                            HStack(spacing: 10) {
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .foregroundStyle(viewModel.isSectionExpanded(section) ? Theme.accent : .secondary)
+                                    .rotationEffect(.degrees(viewModel.isSectionExpanded(section) ? 90 : 0))
+
+                                Text(section.uppercased())
+                                    .font(.subheadline.weight(.semibold))
+                                    .foregroundStyle(viewModel.isSectionExpanded(section) ? Theme.accent : .primary)
+
+                                Spacer()
+
+                                Text("\(exercises.count)")
+                                    .font(.caption2)
+                                    .foregroundStyle(.secondary)
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 2)
+                                    .background(Theme.surfaceElevated)
+                                    .clipShape(Capsule())
+                            }
+                            .padding(.vertical, 6)
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("\(section), \(exercises.count) exercises")
+                        .accessibilityHint(viewModel.isSectionExpanded(section) ? "Collapse" : "Expand")
+
+                        // Exercise rows — only when expanded
+                        if viewModel.isSectionExpanded(section) {
                             ForEach(exercises) { exercise in
                                 NavigationLink {
                                     ExerciseDetailView(exercise: exercise)
@@ -52,6 +86,16 @@ struct ExerciseLibraryView: View {
             .navigationTitle("Exercises")
             .refreshable {
                 await viewModel.loadExercises()
+            }
+            .onChange(of: viewModel.activeMuscleGroup) { _, newValue in
+                if newValue == nil && viewModel.activeEquipment == nil {
+                    viewModel.collapseAll()
+                }
+            }
+            .onChange(of: viewModel.activeEquipment) { _, newValue in
+                if newValue == nil && viewModel.activeMuscleGroup == nil {
+                    viewModel.collapseAll()
+                }
             }
             .overlay {
                 if viewModel.isLoading && viewModel.allExercises.isEmpty {
