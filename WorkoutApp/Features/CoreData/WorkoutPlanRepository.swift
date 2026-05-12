@@ -108,7 +108,9 @@ final class WorkoutPlanRepository {
         request.fetchLimit = 1
 
         guard let cdPlan = try context.fetch(request).first,
-              let rawJSON = cdPlan.rawJSON else { return }
+              let rawJSON = cdPlan.rawJSON else {
+            throw NSError(domain: "WorkoutPlanRepository", code: 1, userInfo: [NSLocalizedDescriptionKey: "No active plan found"])
+        }
 
         let plan = try JSONDecoder().decode(WorkoutPlan.self, from: rawJSON)
 
