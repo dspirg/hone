@@ -6,7 +6,7 @@ import SwiftUI
 struct GoalCardView: View {
     var viewModel: OnboardingViewModel
 
-    private let options = ["Build Muscle", "Lose Fat", "Get Fitter", "Athletic Performance"]
+    private let options = ["Build Muscle", "Tone & Sculpt", "Lose Fat", "Get Fitter", "Stay Active", "Athletic Performance"]
 
     var body: some View {
         VStack(spacing: 0) {
