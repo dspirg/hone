@@ -51,14 +51,23 @@ struct ExerciseSwapSheet: View {
                         } label: {
                             HStack(spacing: 12) {
                                 // Thumbnail
-                                RoundedRectangle(cornerRadius: 6)
-                                    .fill(Theme.surface)
-                                    .frame(width: 44, height: 44)
-                                    .overlay {
-                                        Text(String(exercise.name.prefix(1)).uppercased())
-                                            .font(.body.weight(.semibold))
-                                            .foregroundStyle(.secondary)
+                                AsyncImage(url: URL(string: exercise.thumbnailURL ?? "")) { phase in
+                                    switch phase {
+                                    case .success(let image):
+                                        image
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                    default:
+                                        Theme.surface
+                                            .overlay {
+                                                Text(String(exercise.name.prefix(1)).uppercased())
+                                                    .font(.body.weight(.semibold))
+                                                    .foregroundStyle(.secondary)
+                                            }
                                     }
+                                }
+                                .frame(width: 44, height: 44)
+                                .clipShape(RoundedRectangle(cornerRadius: 6))
 
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(exercise.name)
@@ -113,11 +122,13 @@ struct ExerciseSwapSheet: View {
             let primaryMuscle: String
             let equipmentTag: String
             let difficulty: String
+            let thumbnailUrl: String?
             enum CodingKeys: String, CodingKey {
                 case name
                 case primaryMuscle = "primary_muscle"
                 case equipmentTag = "equipment_tag"
                 case difficulty
+                case thumbnailUrl = "thumbnail_url"
             }
         }
 
@@ -126,7 +137,7 @@ struct ExerciseSwapSheet: View {
             if let mg = muscleGroup {
                 rows = try await supabase
                     .from("exercises")
-                    .select("name, primary_muscle, equipment_tag, difficulty")
+                    .select("name, primary_muscle, equipment_tag, difficulty, thumbnail_url")
                     .not("video_url", operator: .is, value: "null")
                     .ilike("primary_muscle", pattern: mg)
                     .order("name")
@@ -136,7 +147,7 @@ struct ExerciseSwapSheet: View {
             } else {
                 rows = try await supabase
                     .from("exercises")
-                    .select("name, primary_muscle, equipment_tag, difficulty")
+                    .select("name, primary_muscle, equipment_tag, difficulty, thumbnail_url")
                     .not("video_url", operator: .is, value: "null")
                     .order("name")
                     .limit(50)
@@ -156,7 +167,7 @@ struct ExerciseSwapSheet: View {
                         howToSteps: [],
                         formTips: nil,
                         muxPlaybackId: nil,
-                        thumbnailURL: nil,
+                        thumbnailURL: $0.thumbnailUrl,
                         localAssetURL: nil,
                         lastViewedAt: nil
                     )

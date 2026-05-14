@@ -94,7 +94,11 @@ struct HomeExerciseRowView: View {
                 .buttonStyle(.plain)
             }
         }
-        .task {
+        .task(id: exercise.exerciseName) {
+            // Reset stale state when exercise changes (e.g. after swap)
+            thumbnailImage = nil
+            videoUrl = nil
+            muxPlaybackId = nil
             await resolveVideo()
         }
         .fullScreenCover(isPresented: $showVideo) {
