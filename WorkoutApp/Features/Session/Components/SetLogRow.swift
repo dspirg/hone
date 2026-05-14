@@ -130,10 +130,10 @@ struct SetLogRow: View {
                         .font(.system(size: 24))
                         .foregroundStyle(isCompleted ? Theme.accent : isActive ? Theme.accent : .secondary)
                         .shadow(color: isCompleted ? Theme.accent.opacity(0.3) : .clear, radius: 8)
+                        .frame(width: 44, height: 44)
+                        .contentShape(Rectangle())
                 }
                 .disabled(isCompleted)
-                .contentShape(Rectangle())
-                .frame(width: 36, height: 44)
                 .accessibilityLabel(isCompleted ? "Set \(setNumber) complete" : "Mark set \(setNumber) complete")
             }
             .padding(.horizontal, 12)
