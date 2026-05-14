@@ -25,6 +25,7 @@ final class SessionViewModel {
 
     private(set) var currentExerciseIndex: Int = 0
     private(set) var isRestTimerActive: Bool = false
+    var skipAllRest: Bool = false
     private(set) var timerEndDate: Date? = nil
     private(set) var isSessionComplete: Bool = false
     private(set) var sessionStartDate: Date = Date()
@@ -212,7 +213,7 @@ final class SessionViewModel {
 
                 isSessionComplete = true
             }
-        } else {
+        } else if !skipAllRest {
             // Start rest timer using plan-specified duration
             let duration = restDuration(for: exercise)
             let endDate = Date().addingTimeInterval(duration)

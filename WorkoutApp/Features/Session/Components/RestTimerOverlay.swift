@@ -18,6 +18,7 @@ struct RestTimerOverlay: View {
     let endDate: Date
     let nextContextLabel: String
     let onSkip: () -> Void
+    let onSkipAll: () -> Void
     let onExtend: () -> Void
     let onExpired: () -> Void
 
@@ -76,6 +77,15 @@ struct RestTimerOverlay: View {
                     .frame(minWidth: 44, minHeight: 44)
                     .accessibilityLabel("Skip rest, go to next set")
                 }
+
+                Button("Skip All Rest") {
+                    expired = false
+                    onSkipAll()
+                }
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .padding(.top, 4)
+                .accessibilityLabel("Disable rest timer for all remaining exercises")
             }
         }
         // Haptic feedback on timer expiry — .sensoryFeedback(.success) per UI-SPEC
@@ -103,6 +113,7 @@ struct RestTimerOverlay: View {
         endDate: Date().addingTimeInterval(60),
         nextContextLabel: "Up next: Set 2 — Bench Press",
         onSkip: {},
+        onSkipAll: {},
         onExtend: {},
         onExpired: {}
     )

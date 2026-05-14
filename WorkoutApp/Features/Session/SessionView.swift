@@ -199,6 +199,10 @@ struct SessionView: View {
                         endDate: endDate,
                         nextContextLabel: vm.nextContextLabel,
                         onSkip: { vm.skipRest() },
+                        onSkipAll: {
+                            vm.skipAllRest = true
+                            vm.skipRest()
+                        },
                         onExtend: { vm.extendRest() },
                         onExpired: { vm.handleTimerExpired() }
                     )
