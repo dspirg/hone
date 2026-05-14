@@ -196,6 +196,15 @@ struct ExerciseCardView: View {
             await loadContextData()
             await loadWeightData()
         }
+        // Auto-populate: when Set 1 weight is entered, copy to remaining sets still at 0
+        .onChange(of: weightPerSet.first ?? 0.0) { _, newWeight in
+            guard newWeight > 0 else { return }
+            for i in 1..<weightPerSet.count {
+                if weightPerSet[i] == 0 {
+                    weightPerSet[i] = newWeight
+                }
+            }
+        }
         .sheet(isPresented: $showSwapSheet) {
             ExerciseSwapSheet(currentExercise: exercise) { replacement in
                 viewModel.substituteExercise(at: exerciseIndex, with: replacement)
