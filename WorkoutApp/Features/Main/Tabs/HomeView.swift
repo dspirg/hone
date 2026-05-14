@@ -223,7 +223,9 @@ struct HomeView: View {
             Text(viewModel.timeOfDayGreeting)
                 .font(.body)
                 .foregroundStyle(.secondary)
-            if let name = appState.currentUser?.email?.components(separatedBy: "@").first, !name.isEmpty {
+            if let name = appState.currentUser?.userMetadata["display_name"]?.stringValue
+                ?? appState.currentUser?.email?.components(separatedBy: "@").first,
+               !name.isEmpty {
                 (Text("Hey ") + Text(name.capitalized).foregroundColor(Theme.accent))
                     .font(.largeTitle.bold())
             } else {
