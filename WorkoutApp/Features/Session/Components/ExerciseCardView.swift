@@ -50,7 +50,7 @@ struct ExerciseCardView: View {
     // Per-set rep counts — initialized from exercise.reps target (e.g., "8-12" → 8, "10" → 10)
     @State private var repCounts: [Int]
     @State private var weightPerSet: [Double]
-    @State private var equipmentTag: String = "Bodyweight"
+    @State private var equipmentTag: String = "Unknown"
 
     init(exercise: PlannedExercise, exerciseIndex: Int, viewModel: SessionViewModel) {
         self.exercise = exercise
