@@ -77,6 +77,8 @@ enum PlanPromptBuilder {
 
         For each exercise, provide a rationale explaining why it was chosen for this user's specific goal and available equipment.
 
+        CARDIO: For goals like Tone & Sculpt, Lose Fat, Get Fitter, or Stay Active, include cardio exercises. For Build Muscle or Athletic Performance, include a 5-min cardio warmup. Cardio uses sets=1, reps as duration with settings (e.g. "20 min — Speed 3, Incline 5"), rest_seconds=0. Use specific machine settings when Full gym is available.
+
         SAFETY: You are not a medical professional. Do not diagnose conditions or prescribe treatments. If the user mentions pain or injury, recommend consulting a physician.
         """
 

@@ -13,6 +13,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { AdaptedPlanSchema } from "../_shared/adaptedPlanSchema.ts";
 import { planSchema } from "../_shared/planSchema.ts";
 import { assertPromptBudget, stripRationale, sanitizeRationale } from "../_shared/promptBuilder.ts";
+import { getAllowedEquipmentTags, fetchFilteredExercises } from "../_shared/equipmentFilter.ts";
 
 // ─── OpenAI response types ────────────────────────────────────────────────────
 
@@ -354,17 +355,14 @@ serve(async (req: Request): Promise<Response> => {
   // Weeks on current plan (approximate from session history)
   const weeksOnPlan = Math.max(1, Math.ceil(sessionLogs.length / 3));
 
-  // Fetch exercise names so AI only uses exercises with videos
+  // Fetch exercise names filtered by user's equipment
+  const allowedTags = getAllowedEquipmentTags(
+    Array.isArray(profile.equipment) ? profile.equipment : []
+  );
   let exerciseNameList = "";
   try {
-    const { data: exercises } = await supabase
-      .from("exercises")
-      .select("name")
-      .not("video_url", "is", null)
-      .order("name");
-    if (exercises && exercises.length > 0) {
-      exerciseNameList = exercises.map((e: { name: string }) => e.name).join(", ");
-    }
+    const result = await fetchFilteredExercises(supabase, allowedTags);
+    exerciseNameList = result.nameList;
   } catch {
     // Continue without constraint
   }
@@ -397,6 +395,16 @@ ADAPTATION RULES:
 5. Exercise continuity: do not replace an exercise the user has been completing at 80%+ unless an adaptation rule requires it. Strength gains are movement-specific.
 
 REGENERATION CONTEXT: This is a weekly plan refresh. Maintain exercise continuity — keep core compound movements (squat, deadlift, bench, row patterns) from the current plan. Rotate accessory exercises only if the user has been on this plan 4+ weeks. Progressive overload: increase volume by no more than 10% week-over-week when ratings indicate 'just right' or 'too easy'.
+
+CARDIO GUIDELINES:
+- For goals like "Tone & Sculpt", "Lose Fat", "Get Fitter", or "Stay Active": include 1-2 cardio exercises per session as a warmup, finisher, or dedicated cardio block.
+- For "Build Muscle" or "Athletic Performance": include a 5-min cardio warmup as the first exercise.
+- Cardio exercises use the existing schema: sets=1, reps="duration and settings" (e.g. "20 min — Speed 3, Incline 5"), rest_seconds=0.
+- If the user has Full gym equipment, use specific machines with settings: Treadmill (speed + incline), Stairclimber (level), Stationary Bike (resistance + RPM), Rowing Machine (pace).
+- If No equipment or limited equipment: use bodyweight cardio like "Jumping Jacks", "High Knees", "Burpees", or "Jump Rope" with timed intervals (e.g. "3 rounds — 40 sec on, 20 sec rest").
+- Cardio exercises do NOT need to match the exercise name database — you may use generic names for cardio machines.
+- Always include specific, actionable settings (speed, incline, resistance, duration) so the user knows exactly what to do.
+- If the current plan already has cardio exercises, maintain them during regeneration unless adaptation rules require changes.
 
 SAFETY: You are not a medical professional. Do not prescribe exercises that could aggravate reported injuries or limitations. Do not frame this as medical advice.` + (exerciseNameList ? `
 

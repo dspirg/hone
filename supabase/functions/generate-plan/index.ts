@@ -11,6 +11,7 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { planSchema } from "../_shared/planSchema.ts";
+import { getAllowedEquipmentTags, fetchFilteredExercises } from "../_shared/equipmentFilter.ts";
 
 serve(async (req: Request): Promise<Response> => {
   // Handle CORS preflight
@@ -108,18 +109,23 @@ serve(async (req: Request): Promise<Response> => {
     ? profile.injuries.slice(0, MAX_INJURIES_LEN)
     : "";
 
-  // Fetch exercise names from database so the AI only uses exercises that have videos
+  // Filter exercises by user's available equipment
+  const userEquipment: string[] = Array.isArray(profile.equipment)
+    ? profile.equipment.map((e: string) => e.trim())
+    : [];
+  const allowedTags = getAllowedEquipmentTags(userEquipment);
+
   const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
   const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
   let exerciseNameList = "";
+  let exerciseNameSet = new Set<string>();
+  let exerciseNameLower = new Map<string, string>();
   try {
     const db = createClient(supabaseUrl, supabaseServiceKey);
-    const { data: b1 } = await db.from("exercises").select("name").not("video_url", "is", null).order("name").range(0, 999);
-    const { data: b2 } = await db.from("exercises").select("name").not("video_url", "is", null).order("name").range(1000, 2999);
-    const exercises = [...(b1 ?? []), ...(b2 ?? [])];
-    if (exercises.length > 0) {
-      exerciseNameList = exercises.map((e: { name: string }) => e.name).join(", ");
-    }
+    const result = await fetchFilteredExercises(db, allowedTags);
+    exerciseNameList = result.nameList;
+    exerciseNameSet = result.nameSet;
+    exerciseNameLower = result.nameLower;
   } catch {
     // If fetch fails, continue without constraint — AI will use generic names
   }
@@ -158,7 +164,16 @@ VOLUME REQUIREMENTS — fit each session into ${sessionMinutes} minutes:
 - 45 min sessions: 5-6 exercises, 16-20 total sets, 2-3 compounds + 2-3 accessories, 60-90s rest
 - 60 min sessions: 6-8 exercises, 20-25 total sets, 2-3 compounds (3-4 sets) + 3-5 accessories (3 sets), 60-90s rest
 - 90 min sessions: 8-10 exercises, 25-32 total sets, 3-4 compounds (4 sets) + 4-6 accessories (3 sets), 90-120s rest on compounds
-Choose the row matching ${sessionMinutes} minutes. Adjust rest_seconds per exercise accordingly.`;
+Choose the row matching ${sessionMinutes} minutes. Adjust rest_seconds per exercise accordingly.
+
+CARDIO GUIDELINES:
+- For goals like "Tone & Sculpt", "Lose Fat", "Get Fitter", or "Stay Active": include 1-2 cardio exercises per session as a warmup, finisher, or dedicated cardio block.
+- For "Build Muscle" or "Athletic Performance": include a 5-min cardio warmup as the first exercise.
+- Cardio exercises use the existing schema: sets=1, reps="duration and settings" (e.g. "20 min — Speed 3, Incline 5"), rest_seconds=0.
+- If the user has Full gym equipment, use specific machines with settings: Treadmill (speed + incline), Stairclimber (level), Stationary Bike (resistance + RPM), Rowing Machine (pace).
+- If No equipment or limited equipment: use bodyweight cardio like "Jumping Jacks", "High Knees", "Burpees", or "Jump Rope" with timed intervals (e.g. "3 rounds — 40 sec on, 20 sec rest").
+- Cardio exercises do NOT need to match the exercise name database — you may use generic names for cardio machines.
+- Always include specific, actionable settings (speed, incline, resistance, duration) so the user knows exactly what to do.`;
 
   // Constrain exercise names to database entries (ensures videos/thumbnails exist)
   if (exerciseNameList) {
@@ -180,21 +195,6 @@ ${exerciseNameList}`;
   systemPrompt += `
 
 SAFETY: You are not a medical professional. Do not diagnose conditions, prescribe treatments, or provide medical advice. If the user mentions pain, injury, or health concerns, recommend they consult a physician before training.`;
-
-  // Build exercise name lookup set for server-side validation
-  const db = createClient(supabaseUrl, supabaseServiceKey);
-  const exerciseNameSet = new Set<string>();
-  const exerciseNameLower = new Map<string, string>(); // lowercase -> exact DB name
-  try {
-    // Fetch ALL exercises (Supabase default limit is 1000, we have ~2000)
-    const { data: batch1 } = await db.from("exercises").select("name").not("video_url", "is", null).range(0, 999);
-    const { data: batch2 } = await db.from("exercises").select("name").not("video_url", "is", null).range(1000, 2999);
-    const allExercises = [...(batch1 ?? []), ...(batch2 ?? [])];
-    for (const e of allExercises) {
-      exerciseNameSet.add(e.name);
-      exerciseNameLower.set(e.name.toLowerCase(), e.name);
-    }
-  } catch { /* continue without validation */ }
 
   // Call OpenAI with Structured Outputs — NON-streaming so we can validate
   const openAIResponse = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -274,15 +274,28 @@ SAFETY: You are not a medical professional. Do not diagnose conditions, prescrib
         }
         if (found) continue;
 
-        // Drop last word and retry
-        if (words.length > 1) {
-          const fewerWords = words.slice(0, -1);
-          for (const [dbLower, dbName] of exerciseNameLower) {
-            if (fewerWords.every((w: string) => dbLower.includes(w))) {
-              exercise.exercise_name = dbName;
-              break;
-            }
+        // Best-overlap match: score each DB exercise by how many AI words it contains,
+        // pick the one with the highest overlap. This handles cases where the AI adds
+        // or changes a word (e.g., "Seated" instead of "Standing").
+        let bestScore = 0;
+        let bestMatch = "";
+        for (const [dbLower, dbName] of exerciseNameLower) {
+          const dbWords = dbLower.split(/\s+/);
+          let score = 0;
+          for (const w of words) {
+            if (dbLower.includes(w)) score += 2; // AI word found in DB name
           }
+          for (const dw of dbWords) {
+            if (dw.length > 2 && words.some((w: string) => w === dw)) score += 1; // exact word match bonus
+          }
+          if (score > bestScore) {
+            bestScore = score;
+            bestMatch = dbName;
+          }
+        }
+        // Require at least half the AI words to match
+        if (bestScore >= words.length && bestMatch) {
+          exercise.exercise_name = bestMatch;
         }
       }
     }

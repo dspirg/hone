@@ -8,6 +8,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { AdaptedPlanSchema } from "../_shared/adaptedPlanSchema.ts";
 import { assertPromptBudget, stripRationale, sanitizeRationale } from "../_shared/promptBuilder.ts";
 import { adaptedPlanJsonSchema } from "../_shared/adaptedPlanJsonSchema.ts";
+import { getAllowedEquipmentTags, fetchFilteredExercises } from "../_shared/equipmentFilter.ts";
 
 // ─── Interfaces ──────────────────────────────────────────────────────────────
 
@@ -156,10 +157,15 @@ ADAPTATION RULES:
 
 In adjustment_summary: write 1-2 sentences in coach voice (second person, no jargon) explaining what changed and why. This text is shown directly to the user. Example: "Pulled back the pressing volume slightly — you rated the last two sessions as too hard. Everything else stays the same."
 
+CARDIO GUIDELINES:
+- Cardio exercises use sets=1, reps="duration and settings" (e.g. "20 min — Speed 3, Incline 5"), rest_seconds=0.
+- Cardio exercises do NOT need to match the exercise name database — you may use generic names for cardio machines.
+- If the current plan has cardio exercises, maintain them unless adaptation rules require changes.
+
 SAFETY: You are not a medical professional. Do not prescribe exercises that could aggravate reported injuries or limitations. Do not frame this as medical advice.` + (exerciseNameList ? `
 
 CRITICAL RULE — EXERCISE NAMES:
-When swapping exercises, you MUST copy exercise names EXACTLY from the list below. Do not paraphrase, abbreviate, or invent names. Every exercise_name must be a verbatim match from this list.
+When swapping exercises, you MUST copy exercise names EXACTLY from the list below. Do not paraphrase, abbreviate, or invent names. Every exercise_name must be a verbatim match from this list. Cardio exercises are exempt from this rule.
 
 Available exercises:
 ${exerciseNameList}` : "");
@@ -392,17 +398,14 @@ serve(async (req: Request): Promise<Response> => {
   // Estimate weeks on current plan (approximate from session_log history)
   const weeksOnPlan = Math.max(1, Math.ceil(sessionLogs.length / 3));
 
-  // Fetch exercise names so AI only uses exercises with videos
+  // Fetch exercise names filtered by user's equipment
+  const allowedTags = getAllowedEquipmentTags(
+    Array.isArray(profile.equipment) ? profile.equipment : []
+  );
   let exerciseNameList: string | undefined;
   try {
-    const { data: exercises } = await supabase
-      .from("exercises")
-      .select("name")
-      .not("video_url", "is", null)
-      .order("name");
-    if (exercises && exercises.length > 0) {
-      exerciseNameList = exercises.map((e: { name: string }) => e.name).join(", ");
-    }
+    const result = await fetchFilteredExercises(supabase, allowedTags);
+    exerciseNameList = result.nameList || undefined;
   } catch {
     // Continue without constraint
   }
