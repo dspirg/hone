@@ -63,7 +63,7 @@ struct SetLogRow: View {
                     Button {
                         showWeightPad = true
                     } label: {
-                        Text(weightLogged > 0 ? "\(Int(weightLogged)) \(weightUnit)" : "Add \(weightUnit)")
+                        Text(weightLogged > 0 ? "\(Int(weightLogged)) \(weightUnit)" : "Enter weight")
                             .font(.caption.weight(.medium))
                             .monospacedDigit()
                             .foregroundStyle(isCompleted ? .secondary : .primary)
