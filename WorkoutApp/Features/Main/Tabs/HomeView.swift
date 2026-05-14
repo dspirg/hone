@@ -212,21 +212,6 @@ struct HomeView: View {
                 }
                 .presentationDetents([.height(320)])
             }
-            .sheet(item: $swapTarget) { target in
-                ExerciseSwapSheet(currentExercise: target.exercise) { replacement in
-                    Task {
-                        await viewModel.swapExercise(
-                            dayLabel: target.dayLabel,
-                            exerciseIndex: target.exerciseIndex,
-                            replacement: replacement,
-                            appState: appState,
-                            adaptationService: adaptationService,
-                            context: context
-                        )
-                    }
-                }
-                .presentationDetents([.large])
-            }
         }
     }
 
@@ -338,6 +323,22 @@ struct HomeView: View {
         )
         .padding(.horizontal, 20)
         .padding(.top, Theme.Spacing.sm)
+        // Swap sheet attached to workout card — avoids conflict with time picker and session sheets
+        .sheet(item: $swapTarget) { target in
+            ExerciseSwapSheet(currentExercise: target.exercise) { replacement in
+                Task {
+                    await viewModel.swapExercise(
+                        dayLabel: target.dayLabel,
+                        exerciseIndex: target.exerciseIndex,
+                        replacement: replacement,
+                        appState: appState,
+                        adaptationService: adaptationService,
+                        context: context
+                    )
+                }
+            }
+            .presentationDetents([.large])
+        }
     }
 
     // MARK: - Streak Card
