@@ -104,59 +104,13 @@ struct ExerciseSwapSheet: View {
         }
     }
 
-    @ViewBuilder
     private func swapRow(exercise: ExerciseModel) -> some View {
-        Button {
-            let replacement = PlannedExercise(
-                exerciseName: exercise.name,
-                sets: currentExercise.sets,
-                reps: currentExercise.reps,
-                restSeconds: currentExercise.restSeconds,
-                rationale: "Substituted for \(currentExercise.exerciseName)"
-            )
-            onSwap(replacement)
-            dismiss()
-        } label: {
-            HStack(spacing: 12) {
-                AsyncImage(url: URL(string: exercise.thumbnailURL ?? "")) { phase in
-                    switch phase {
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                    default:
-                        Theme.surface
-                            .overlay {
-                                Text(String(exercise.name.prefix(1)).uppercased())
-                                    .font(.body.weight(.semibold))
-                                    .foregroundStyle(.secondary)
-                            }
-                    }
-                }
-                .frame(width: 44, height: 44)
-                .clipShape(RoundedRectangle(cornerRadius: 6))
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(exercise.name)
-                        .font(.body.weight(.medium))
-                        .foregroundStyle(.primary)
-                    HStack(spacing: 8) {
-                        Text(exercise.primaryMuscle)
-                            .font(.caption)
-                            .foregroundStyle(Theme.accent)
-                        Text(exercise.equipmentTag)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-
-                Spacer()
-
-                Image(systemName: "arrow.triangle.swap")
-                    .foregroundStyle(Theme.accent)
-                    .font(.caption)
-            }
-        }
+        SwapRowView(
+            exercise: exercise,
+            currentExercise: currentExercise,
+            onSwap: onSwap,
+            dismiss: dismiss
+        )
     }
 
     private func loadAlternatives() async {
@@ -198,12 +152,16 @@ struct ExerciseSwapSheet: View {
             let equipmentTag: String
             let difficulty: String
             let thumbnailUrl: String?
+            let videoUrl: String?
+            let muxPlaybackId: String?
             enum CodingKeys: String, CodingKey {
                 case name
                 case primaryMuscle = "primary_muscle"
                 case equipmentTag = "equipment_tag"
                 case difficulty
                 case thumbnailUrl = "thumbnail_url"
+                case videoUrl = "video_url"
+                case muxPlaybackId = "mux_playback_id"
             }
         }
 
@@ -216,7 +174,7 @@ struct ExerciseSwapSheet: View {
 
             let rows: [ExRow] = try await supabase
                 .from("exercises")
-                .select("name, primary_muscle, equipment_tag, difficulty, thumbnail_url")
+                .select("name, primary_muscle, equipment_tag, difficulty, thumbnail_url, video_url, mux_playback_id")
                 .not("video_url", operator: .is, value: "null")
                 .ilike("primary_muscle", pattern: mg)
                 .order("name")
@@ -235,8 +193,9 @@ struct ExerciseSwapSheet: View {
                         difficulty: $0.difficulty,
                         howToSteps: [],
                         formTips: nil,
-                        muxPlaybackId: nil,
+                        muxPlaybackId: $0.muxPlaybackId,
                         thumbnailURL: $0.thumbnailUrl,
+                        videoUrl: $0.videoUrl,
                         localAssetURL: nil,
                         lastViewedAt: nil
                     )
@@ -246,5 +205,95 @@ struct ExerciseSwapSheet: View {
         }
 
         isLoading = false
+    }
+}
+
+// MARK: - SwapRowView
+// Extracted to own struct so each row can hold @State for video presentation.
+
+private struct SwapRowView: View {
+    let exercise: ExerciseModel
+    let currentExercise: PlannedExercise
+    let onSwap: (PlannedExercise) -> Void
+    let dismiss: DismissAction
+
+    @State private var showVideo = false
+
+    var body: some View {
+        HStack(spacing: 12) {
+            // Thumbnail — tap to preview video
+            AsyncImage(url: URL(string: exercise.thumbnailURL ?? "")) { phase in
+                switch phase {
+                case .success(let image):
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                default:
+                    Theme.surface
+                        .overlay {
+                            Text(String(exercise.name.prefix(1)).uppercased())
+                                .font(.body.weight(.semibold))
+                                .foregroundStyle(.secondary)
+                        }
+                }
+            }
+            .frame(width: 44, height: 44)
+            .clipShape(RoundedRectangle(cornerRadius: 6))
+            .overlay(alignment: .center) {
+                if exercise.hasVideo {
+                    Image(systemName: "play.fill")
+                        .font(.system(size: 10))
+                        .foregroundStyle(.white.opacity(0.8))
+                }
+            }
+            .onTapGesture {
+                guard exercise.hasVideo else { return }
+                showVideo = true
+            }
+
+            // Exercise info + swap button — tap to swap
+            Button {
+                let replacement = PlannedExercise(
+                    exerciseName: exercise.name,
+                    sets: currentExercise.sets,
+                    reps: currentExercise.reps,
+                    restSeconds: currentExercise.restSeconds,
+                    rationale: "Substituted for \(currentExercise.exerciseName)"
+                )
+                onSwap(replacement)
+                dismiss()
+            } label: {
+                HStack {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(exercise.name)
+                            .font(.body.weight(.medium))
+                            .foregroundStyle(.primary)
+                        HStack(spacing: 8) {
+                            Text(exercise.primaryMuscle)
+                                .font(.caption)
+                                .foregroundStyle(Theme.accent)
+                            Text(exercise.equipmentTag)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+
+                    Spacer()
+
+                    Image(systemName: "arrow.triangle.swap")
+                        .foregroundStyle(Theme.accent)
+                        .font(.caption)
+                }
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+        }
+        .fullScreenCover(isPresented: $showVideo) {
+            VideoOverlayView(
+                muxPlaybackId: exercise.muxPlaybackId ?? "",
+                exerciseName: exercise.name,
+                videoUrl: exercise.videoUrl
+            )
+        }
     }
 }
