@@ -10,14 +10,33 @@ struct ExerciseSwapSheet: View {
 
     @Environment(\.dismiss) private var dismiss
     @State private var alternatives: [ExerciseModel] = []
+    @State private var currentEquipment: String = ""
     @State private var searchText = ""
     @State private var isLoading = true
 
-    var filtered: [ExerciseModel] {
+    private var filtered: [ExerciseModel] {
         if searchText.isEmpty { return alternatives }
         return alternatives.filter {
             $0.name.localizedCaseInsensitiveContains(searchText)
         }
+    }
+
+    /// Top 5 suggestions: prioritize same equipment (closest substitute), then same difficulty.
+    private var suggested: [ExerciseModel] {
+        let pool = filtered
+        let ranked = pool.sorted { a, b in
+            let aEquip = a.equipmentTag == currentEquipment
+            let bEquip = b.equipmentTag == currentEquipment
+            if aEquip != bEquip { return aEquip }
+            return a.name < b.name
+        }
+        return Array(ranked.prefix(5))
+    }
+
+    /// Everything after the top 5.
+    private var moreOptions: [ExerciseModel] {
+        let suggestedIds = Set(suggested.map(\.id))
+        return filtered.filter { !suggestedIds.contains($0.id) }
     }
 
     var body: some View {
@@ -37,57 +56,34 @@ struct ExerciseSwapSheet: View {
                     }
                     .frame(maxHeight: .infinity)
                 } else {
-                    List(filtered) { exercise in
-                        Button {
-                            let replacement = PlannedExercise(
-                                exerciseName: exercise.name,
-                                sets: currentExercise.sets,
-                                reps: currentExercise.reps,
-                                restSeconds: currentExercise.restSeconds,
-                                rationale: "Substituted for \(currentExercise.exerciseName)"
-                            )
-                            onSwap(replacement)
-                            dismiss()
-                        } label: {
-                            HStack(spacing: 12) {
-                                // Thumbnail
-                                AsyncImage(url: URL(string: exercise.thumbnailURL ?? "")) { phase in
-                                    switch phase {
-                                    case .success(let image):
-                                        image
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fill)
-                                    default:
-                                        Theme.surface
-                                            .overlay {
-                                                Text(String(exercise.name.prefix(1)).uppercased())
-                                                    .font(.body.weight(.semibold))
-                                                    .foregroundStyle(.secondary)
-                                            }
-                                    }
+                    List {
+                        if !suggested.isEmpty {
+                            Section {
+                                ForEach(suggested) { exercise in
+                                    swapRow(exercise: exercise)
                                 }
-                                .frame(width: 44, height: 44)
-                                .clipShape(RoundedRectangle(cornerRadius: 6))
-
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Text(exercise.name)
-                                        .font(.body.weight(.medium))
-                                        .foregroundStyle(.primary)
-                                    HStack(spacing: 8) {
-                                        Text(exercise.primaryMuscle)
-                                            .font(.caption)
-                                            .foregroundStyle(Theme.accent)
-                                        Text(exercise.equipmentTag)
-                                            .font(.caption)
-                                            .foregroundStyle(.secondary)
-                                    }
+                            } header: {
+                                HStack(spacing: 6) {
+                                    Image(systemName: "sparkles")
+                                        .foregroundStyle(Theme.accent)
+                                    Text("Suggested")
                                 }
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundStyle(.primary)
+                                .textCase(nil)
+                            }
+                        }
 
-                                Spacer()
-
-                                Image(systemName: "arrow.triangle.swap")
-                                    .foregroundStyle(Theme.accent)
-                                    .font(.caption)
+                        if !moreOptions.isEmpty {
+                            Section {
+                                ForEach(moreOptions) { exercise in
+                                    swapRow(exercise: exercise)
+                                }
+                            } header: {
+                                Text("More Options")
+                                    .font(.subheadline.weight(.semibold))
+                                    .foregroundStyle(.primary)
+                                    .textCase(nil)
                             }
                         }
                     }
@@ -108,31 +104,90 @@ struct ExerciseSwapSheet: View {
         }
     }
 
+    @ViewBuilder
+    private func swapRow(exercise: ExerciseModel) -> some View {
+        Button {
+            let replacement = PlannedExercise(
+                exerciseName: exercise.name,
+                sets: currentExercise.sets,
+                reps: currentExercise.reps,
+                restSeconds: currentExercise.restSeconds,
+                rationale: "Substituted for \(currentExercise.exerciseName)"
+            )
+            onSwap(replacement)
+            dismiss()
+        } label: {
+            HStack(spacing: 12) {
+                AsyncImage(url: URL(string: exercise.thumbnailURL ?? "")) { phase in
+                    switch phase {
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                    default:
+                        Theme.surface
+                            .overlay {
+                                Text(String(exercise.name.prefix(1)).uppercased())
+                                    .font(.body.weight(.semibold))
+                                    .foregroundStyle(.secondary)
+                            }
+                    }
+                }
+                .frame(width: 44, height: 44)
+                .clipShape(RoundedRectangle(cornerRadius: 6))
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(exercise.name)
+                        .font(.body.weight(.medium))
+                        .foregroundStyle(.primary)
+                    HStack(spacing: 8) {
+                        Text(exercise.primaryMuscle)
+                            .font(.caption)
+                            .foregroundStyle(Theme.accent)
+                        Text(exercise.equipmentTag)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+
+                Spacer()
+
+                Image(systemName: "arrow.triangle.swap")
+                    .foregroundStyle(Theme.accent)
+                    .font(.caption)
+            }
+        }
+    }
+
     private func loadAlternatives() async {
         // Look up muscle group of current exercise — try CoreData first, then Supabase
         let repo = ExerciseRepository.shared
         var muscleGroup: String?
         if let entity = try? repo.fetchByName(currentExercise.exerciseName) ?? repo.fetchByNameContains(currentExercise.exerciseName) {
             muscleGroup = entity.value(forKey: "primaryMuscle") as? String
+            currentEquipment = (entity.value(forKey: "equipmentTag") as? String) ?? ""
         }
 
-        // Supabase fallback for muscle group lookup when CoreData name doesn't match
+        // Supabase fallback for muscle group + equipment lookup when CoreData name doesn't match
         if muscleGroup == nil {
-            struct MuscleRow: Decodable {
+            struct LookupRow: Decodable {
                 let primaryMuscle: String
+                let equipmentTag: String
                 enum CodingKeys: String, CodingKey {
                     case primaryMuscle = "primary_muscle"
+                    case equipmentTag = "equipment_tag"
                 }
             }
-            if let rows: [MuscleRow] = try? await supabase
+            if let rows: [LookupRow] = try? await supabase
                 .from("exercises")
-                .select("primary_muscle")
+                .select("primary_muscle, equipment_tag")
                 .ilike("name", pattern: "%\(currentExercise.exerciseName)%")
                 .limit(1)
                 .execute()
                 .value,
                let first = rows.first {
                 muscleGroup = first.primaryMuscle
+                currentEquipment = first.equipmentTag
             }
         }
 
