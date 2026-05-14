@@ -109,11 +109,31 @@ struct ExerciseSwapSheet: View {
     }
 
     private func loadAlternatives() async {
-        // Look up muscle group of current exercise
+        // Look up muscle group of current exercise — try CoreData first, then Supabase
         let repo = ExerciseRepository.shared
         var muscleGroup: String?
         if let entity = try? repo.fetchByName(currentExercise.exerciseName) ?? repo.fetchByNameContains(currentExercise.exerciseName) {
             muscleGroup = entity.value(forKey: "primaryMuscle") as? String
+        }
+
+        // Supabase fallback for muscle group lookup when CoreData name doesn't match
+        if muscleGroup == nil {
+            struct MuscleRow: Decodable {
+                let primaryMuscle: String
+                enum CodingKeys: String, CodingKey {
+                    case primaryMuscle = "primary_muscle"
+                }
+            }
+            if let rows: [MuscleRow] = try? await supabase
+                .from("exercises")
+                .select("primary_muscle")
+                .ilike("name", pattern: "%\(currentExercise.exerciseName)%")
+                .limit(1)
+                .execute()
+                .value,
+               let first = rows.first {
+                muscleGroup = first.primaryMuscle
+            }
         }
 
         // Query Supabase for exercises in same muscle group with videos
@@ -133,27 +153,21 @@ struct ExerciseSwapSheet: View {
         }
 
         do {
-            let rows: [ExRow]
-            if let mg = muscleGroup {
-                rows = try await supabase
-                    .from("exercises")
-                    .select("name, primary_muscle, equipment_tag, difficulty, thumbnail_url")
-                    .not("video_url", operator: .is, value: "null")
-                    .ilike("primary_muscle", pattern: mg)
-                    .order("name")
-                    .limit(50)
-                    .execute()
-                    .value
-            } else {
-                rows = try await supabase
-                    .from("exercises")
-                    .select("name, primary_muscle, equipment_tag, difficulty, thumbnail_url")
-                    .not("video_url", operator: .is, value: "null")
-                    .order("name")
-                    .limit(50)
-                    .execute()
-                    .value
+            // Always filter by muscle group — don't show unrelated exercises
+            guard let mg = muscleGroup else {
+                isLoading = false
+                return
             }
+
+            let rows: [ExRow] = try await supabase
+                .from("exercises")
+                .select("name, primary_muscle, equipment_tag, difficulty, thumbnail_url")
+                .not("video_url", operator: .is, value: "null")
+                .ilike("primary_muscle", pattern: mg)
+                .order("name")
+                .limit(50)
+                .execute()
+                .value
 
             alternatives = rows
                 .filter { $0.name != currentExercise.exerciseName }
