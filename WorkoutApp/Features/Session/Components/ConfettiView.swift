@@ -37,7 +37,7 @@ private struct ConfettiParticle: Identifiable {
     let size: Double = .random(in: 4...10)
     let color: Color = [
         Color(red: 245/255, green: 158/255, blue: 11/255),
-        Color(red: 249/255, green: 115/255, blue: 22/255),
+        Color(red: 0.486, green: 0.227, blue: 0.929),
         Color(red: 52/255, green: 211/255, blue: 153/255),
         Color(red: 96/255, green: 165/255, blue: 250/255),
     ].randomElement()!

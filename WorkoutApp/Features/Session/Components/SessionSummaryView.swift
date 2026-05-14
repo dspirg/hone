@@ -44,7 +44,7 @@ struct SessionSummaryView: View {
                     .font(.system(size: 56))
                     .foregroundStyle(
                         LinearGradient(
-                            colors: [Theme.accent, Color(red: 249/255, green: 115/255, blue: 22/255)],
+                            colors: [Theme.accent, Color(red: 0.486, green: 0.227, blue: 0.929)],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )
@@ -159,12 +159,12 @@ struct SessionSummaryView: View {
                 } label: {
                     Text("Done")
                         .font(.body.weight(.bold))
-                        .foregroundStyle(.black)
+                        .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .frame(height: 52)
                         .background(
                             LinearGradient(
-                                colors: [Theme.accent, Color(red: 249/255, green: 115/255, blue: 22/255)],
+                                colors: [Theme.accent, Color(red: 0.486, green: 0.227, blue: 0.929)],
                                 startPoint: .leading,
                                 endPoint: .trailing
                             )

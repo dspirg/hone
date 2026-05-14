@@ -12,7 +12,7 @@ struct GoalCardView: View {
         VStack(spacing: 0) {
             OnboardingHeroIcon(
                 iconName: "scope",
-                gradient: [Color(red: 0.96, green: 0.62, blue: 0.04), Color(red: 0.92, green: 0.35, blue: 0.05)]
+                gradient: [Color(red: 0.655, green: 0.545, blue: 0.980), Color(red: 0.486, green: 0.227, blue: 0.929)]
             )
 
             Spacer().frame(height: 20)

@@ -12,7 +12,7 @@ struct FitnessLevelCardView: View {
         VStack(spacing: 0) {
             OnboardingHeroIcon(
                 iconName: "chart.xyaxis.line",
-                gradient: [Color(red: 0.55, green: 0.36, blue: 0.96), Color(red: 0.43, green: 0.16, blue: 0.85)]
+                gradient: [Color(red: 0.957, green: 0.447, blue: 0.714), Color(red: 0.859, green: 0.153, blue: 0.467)]
             )
 
             Spacer().frame(height: 20)

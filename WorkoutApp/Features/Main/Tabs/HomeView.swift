@@ -121,24 +121,24 @@ struct HomeView: View {
                         HStack(spacing: 12) {
                             Image(systemName: "figure.strengthtraining.traditional")
                                 .font(.title3)
-                                .foregroundStyle(.black)
+                                .foregroundStyle(.white)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("Browse Exercises")
                                     .font(.body.weight(.bold))
-                                    .foregroundStyle(.black)
+                                    .foregroundStyle(.white)
                                 Text("Explore the full exercise library")
                                     .font(.caption)
-                                    .foregroundStyle(.black.opacity(0.7))
+                                    .foregroundStyle(.white.opacity(0.7))
                             }
                             Spacer()
                             Image(systemName: "chevron.right")
                                 .font(.body.weight(.semibold))
-                                .foregroundStyle(.black.opacity(0.6))
+                                .foregroundStyle(.white.opacity(0.6))
                         }
                         .padding(16)
                         .background(
                             LinearGradient(
-                                colors: [Theme.accent, Color(red: 249 / 255, green: 115 / 255, blue: 22 / 255)],
+                                colors: [Theme.accent, Color(red: 0.486, green: 0.227, blue: 0.929)],
                                 startPoint: .leading,
                                 endPoint: .trailing
                             )
@@ -260,7 +260,7 @@ struct HomeView: View {
                 Spacer()
                 Text(day.dayLabel)
                     .font(.caption.weight(.semibold))
-                    .foregroundStyle(.black)
+                    .foregroundStyle(.white)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 2)
                     .background(Theme.accent)
@@ -294,12 +294,12 @@ struct HomeView: View {
             } label: {
                 Text("Start Workout")
                     .font(.body.weight(.bold))
-                    .foregroundStyle(.black)
+                    .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .frame(height: 52)
                     .background(
                         LinearGradient(
-                            colors: [Theme.accent, Color(red: 249 / 255, green: 115 / 255, blue: 22 / 255)],
+                            colors: [Theme.accent, Color(red: 0.486, green: 0.227, blue: 0.929)],
                             startPoint: .leading,
                             endPoint: .trailing
                         )

@@ -18,7 +18,7 @@ enum DifficultyRating: String, CaseIterable, Codable {
     var gradientColors: [Color] {
         switch self {
         case .tooEasy:   return [Color(red: 0.65, green: 0.95, blue: 0.82), Color(red: 0.43, green: 0.91, blue: 0.74)]
-        case .justRight: return [Color(red: 0.99, green: 0.90, blue: 0.54), Color(red: 0.96, green: 0.62, blue: 0.04)]
+        case .justRight: return [Color(red: 0.812, green: 0.769, blue: 0.992), Color(red: 0.655, green: 0.545, blue: 0.980)]
         case .tooHard:   return [Color(red: 0.99, green: 0.79, blue: 0.79), Color(red: 0.97, green: 0.44, blue: 0.44)]
         }
     }
@@ -26,7 +26,7 @@ enum DifficultyRating: String, CaseIterable, Codable {
     var strokeColor: Color {
         switch self {
         case .tooEasy:   return Color(red: 0.02, green: 0.37, blue: 0.27)
-        case .justRight: return Color(red: 0.47, green: 0.21, blue: 0.06)
+        case .justRight: return Color(red: 0.29, green: 0.13, blue: 0.55)
         case .tooHard:   return Color(red: 0.50, green: 0.11, blue: 0.11)
         }
     }

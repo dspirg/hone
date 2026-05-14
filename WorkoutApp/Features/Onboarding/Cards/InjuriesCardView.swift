@@ -26,7 +26,7 @@ struct InjuriesCardView: View {
 
             OnboardingHeroIcon(
                 iconName: "heart.text.square",
-                gradient: [Color(red: 0.96, green: 0.25, blue: 0.37), Color(red: 0.75, green: 0.07, blue: 0.24)]
+                gradient: [Color(red: 0.984, green: 0.573, blue: 0.235), Color(red: 0.918, green: 0.345, blue: 0.047)]
             )
 
             Spacer().frame(height: 20)

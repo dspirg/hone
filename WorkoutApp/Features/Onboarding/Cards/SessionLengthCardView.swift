@@ -19,7 +19,7 @@ struct SessionLengthCardView: View {
 
             OnboardingHeroIcon(
                 iconName: "timer",
-                gradient: [Color(red: 0.02, green: 0.71, blue: 0.83), Color(red: 0.05, green: 0.46, blue: 0.56)]
+                gradient: [Color(red: 0.220, green: 0.741, blue: 0.973), Color(red: 0.008, green: 0.522, blue: 0.780)]
             )
 
             Spacer().frame(height: 20)

@@ -15,7 +15,7 @@ struct EquipmentCardView: View {
         VStack(spacing: 0) {
             OnboardingHeroIcon(
                 iconName: "figure.strengthtraining.traditional",
-                gradient: [Color(red: 0.06, green: 0.73, blue: 0.51), Color(red: 0.02, green: 0.47, blue: 0.34)]
+                gradient: [Color(red: 0.176, green: 0.831, blue: 0.749), Color(red: 0.051, green: 0.580, blue: 0.533)]
             )
 
             Spacer().frame(height: 20)
