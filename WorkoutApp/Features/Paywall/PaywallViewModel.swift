@@ -112,6 +112,16 @@ final class PaywallViewModel {
             if userCancelled { return }
             if customerInfo.entitlements["pro"]?.isActive == true {
                 purchaseCompleted = true
+            } else {
+                // Entitlement may not be immediately active after purchase (Guideline 2.1(a) iPad fix).
+                // Retry once after a short delay to allow RevenueCat backend propagation.
+                try? await Task.sleep(for: .seconds(2))
+                let refreshed = await revenueCatService.refreshEntitlements()
+                if refreshed {
+                    purchaseCompleted = true
+                } else {
+                    errorMessage = "Purchase completed but subscription activation is delayed. Please tap Restore Purchases."
+                }
             }
         } catch {
             errorMessage = error.localizedDescription

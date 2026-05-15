@@ -87,7 +87,17 @@ struct PaywallView: View {
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 32)
                         .padding(.top, 8)
-                        .padding(.bottom, 32)
+
+                    // Terms of Use & Privacy Policy links (Guideline 3.1.2(c) requirement)
+                    HStack(spacing: 4) {
+                        Link("Terms of Use (EULA)", destination: URL(string: "https://dspirg.github.io/hone/terms-of-use.html")!)
+                        Text("and")
+                            .foregroundStyle(Color(UIColor.tertiaryLabel))
+                        Link("Privacy Policy", destination: URL(string: "https://dspirg.github.io/hone/privacy-policy.html")!)
+                    }
+                    .font(.caption)
+                    .padding(.top, 8)
+                    .padding(.bottom, 32)
                 }
             }
         }
@@ -99,7 +109,16 @@ struct PaywallView: View {
         .interactiveDismissDisabled(true)
         .onChange(of: viewModel.purchaseCompleted) { _, newValue in
             if newValue {
-                Task { await appState.refreshEntitlements() }
+                Task {
+                    // Refresh entitlements immediately so isSubscribed is set before
+                    // the user taps "Start Training" (Guideline 2.1(a) iPad fix)
+                    await appState.refreshEntitlements()
+                    // If still not subscribed after purchase, retry once
+                    if !appState.isSubscribed {
+                        try? await Task.sleep(for: .seconds(2))
+                        await appState.refreshEntitlements()
+                    }
+                }
             }
         }
     }

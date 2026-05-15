@@ -23,16 +23,18 @@ struct PricingCardView: View {
         }
     }
 
+    /// Primary price label — always the billed amount (Guideline 3.1.2(c): billed amount must be most prominent)
     private var priceLabel: String {
-        if package.packageType == .annual, let monthly = monthlyEquivalent {
-            return "\(monthly)/month"
+        if package.packageType == .annual {
+            return "\(package.storeProduct.localizedPriceString)/year"
         }
         return "\(package.storeProduct.localizedPriceString)/month"
     }
 
+    /// Subordinate label — monthly equivalent for annual card only
     private var annualSubLabel: String? {
-        guard package.packageType == .annual else { return nil }
-        return "billed \(package.storeProduct.localizedPriceString)/year · ~50% off"
+        guard package.packageType == .annual, let monthly = monthlyEquivalent else { return nil }
+        return "just \(monthly)/month · ~50% off"
     }
 
     var body: some View {

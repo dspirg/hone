@@ -12,8 +12,8 @@ struct SignInWithAppleButton: UIViewRepresentable {
     @Binding var rawNonce: String
 
     func makeUIView(context: Context) -> ASAuthorizationAppleIDButton {
-        // .black style enforced per Apple's Sign In with Apple HIG (system-required dark appearance)
-        let button = ASAuthorizationAppleIDButton(type: style, style: .black)
+        // .whiteOutline style — clear border visible on dark backgrounds (Guideline 4 rejection fix)
+        let button = ASAuthorizationAppleIDButton(type: style, style: .whiteOutline)
         button.addTarget(context.coordinator, action: #selector(Coordinator.handleTap), for: .touchUpInside)
         return button
     }
